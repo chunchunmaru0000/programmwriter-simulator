@@ -1,0 +1,52 @@
+[gd_scene load_steps=6 format=3 uid="uid://vobfo7d6j34y"]
+
+[ext_resource type="Script" path="res://scripts/5.gd" id="1_gvcgx"]
+[ext_resource type="Texture2D" uid="uid://bn10ts4oy204c" path="res://images/back.png" id="2_5qs6m"]
+[ext_resource type="Texture2D" uid="uid://d3ylb5lnyyaho" path="res://images/5back.png" id="2_mxk0l"]
+[ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="3_vbms6"]
+[ext_resource type="Texture2D" uid="uid://crqu7mbvhk7qo" path="res://images/back_hover.png" id="3_yaios"]
+
+[node name="5" type="Node2D"]
+script = ExtResource("1_gvcgx")
+
+[node name="5Back" type="Sprite2D" parent="."]
+position = Vector2(361, 452)
+scale = Vector2(1.12944, 1.18001)
+texture = ExtResource("2_mxk0l")
+metadata/_edit_group_ = true
+
+[node name="5Top" type="Sprite2D" parent="."]
+position = Vector2(-8, -7.70372e-34)
+scale = Vector2(0.681061, 0.576738)
+texture = ExtResource("3_vbms6")
+centered = false
+metadata/_edit_group_ = true
+
+[node name="BackButton" type="TextureButton" parent="."]
+offset_right = 512.0
+offset_bottom = 512.0
+scale = Vector2(0.15, 0.15)
+button_mask = 7
+texture_normal = ExtResource("2_5qs6m")
+texture_pressed = ExtResource("3_yaios")
+texture_hover = ExtResource("3_yaios")
+texture_disabled = ExtResource("2_5qs6m")
+texture_focused = ExtResource("3_yaios")
+
+[node name="ProductsScroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(10, 728)
+offset_left = 8.0
+offset_top = 104.0
+offset_right = 648.0
+offset_bottom = 424.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="ProductGrid" type="GridContainer" parent="ProductsScroll"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+theme_override_constants/h_separation = 48
+theme_override_constants/v_separation = 16
+columns = 2
+
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

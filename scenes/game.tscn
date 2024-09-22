@@ -1,0 +1,125 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6ic2w21tv33y"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_nqbsp"]
+[ext_resource type="SpriteFrames" uid="uid://df7ijmtp3y2vg" path="res://clocks/clocks.tres" id="2_kyemp"]
+
+[sub_resource type="Theme" id="Theme_nw4ga"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_nqbsp")
+
+[node name="StatsHBox" type="HBoxContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 672.0
+offset_right = 108.0
+offset_bottom = 803.0
+grow_vertical = 0
+scale = Vector2(1.21535, 1.21469)
+
+[node name="Info0LabelBox" type="VBoxContainer" parent="StatsHBox"]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="StatsHBox/Info0LabelBox"]
+layout_mode = 2
+text = "Здоровье
+"
+
+[node name="Money" type="Label" parent="StatsHBox/Info0LabelBox"]
+layout_mode = 2
+text = "Рубли
+"
+
+[node name="Hunger" type="Label" parent="StatsHBox/Info0LabelBox"]
+layout_mode = 2
+text = "Голод
+"
+
+[node name="Thirst" type="Label" parent="StatsHBox/Info0LabelBox"]
+layout_mode = 2
+text = "Жажда"
+
+[node name="Sleep" type="Label" parent="StatsHBox/Info0LabelBox"]
+layout_mode = 2
+text = "Сон"
+
+[node name="Info1LabelBox" type="VBoxContainer" parent="StatsHBox"]
+layout_mode = 2
+
+[node name="Hp" type="Label" parent="StatsHBox/Info1LabelBox"]
+layout_mode = 2
+text = "0"
+
+[node name="Money" type="Label" parent="StatsHBox/Info1LabelBox"]
+layout_mode = 2
+text = "0"
+
+[node name="Hunger" type="Label" parent="StatsHBox/Info1LabelBox"]
+layout_mode = 2
+text = "0
+"
+
+[node name="Thirst" type="Label" parent="StatsHBox/Info1LabelBox"]
+layout_mode = 2
+text = "0"
+
+[node name="Sleep" type="Label" parent="StatsHBox/Info1LabelBox"]
+layout_mode = 2
+text = "0"
+
+[node name="ButtonsVBox" type="VBoxContainer" parent="."]
+offset_left = 480.0
+offset_top = 624.0
+offset_right = 598.0
+offset_bottom = 795.0
+scale = Vector2(1.27626, 1.19995)
+
+[node name="5" type="Button" parent="ButtonsVBox"]
+layout_mode = 2
+text = "Пятерочка"
+
+[node name="Fridge" type="Button" parent="ButtonsVBox"]
+layout_mode = 2
+text = "Холодильник"
+
+[node name="Gos" type="Button" parent="ButtonsVBox"]
+layout_mode = 2
+text = "Госуслуги"
+
+[node name="Work" type="Button" parent="ButtonsVBox"]
+layout_mode = 2
+text = "Работа"
+
+[node name="Sleep" type="Button" parent="ButtonsVBox"]
+layout_mode = 2
+text = "Спать"
+
+[node name="Time" type="Label" parent="."]
+offset_left = 424.0
+offset_top = 24.0
+offset_right = 479.0
+offset_bottom = 47.0
+scale = Vector2(1.56829, 1.64659)
+text = "День 0"
+
+[node name="Back" type="Button" parent="."]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 208.0
+offset_bottom = 56.0
+theme = SubResource("Theme_nw4ga")
+text = "Сохранить и выйти"
+
+[node name="ClockAnim" type="AnimatedSprite2D" parent="."]
+position = Vector2(576, 104)
+sprite_frames = ExtResource("2_kyemp")
+speed_scale = 0.2
+
+[connection signal="pressed" from="ButtonsVBox/5" to="." method="_on_5_pressed"]
+[connection signal="pressed" from="ButtonsVBox/Fridge" to="." method="_on_fridge_pressed"]
+[connection signal="pressed" from="ButtonsVBox/Gos" to="." method="_on_gos_pressed"]
+[connection signal="pressed" from="ButtonsVBox/Work" to="." method="_on_work_pressed"]
+[connection signal="pressed" from="ButtonsVBox/Sleep" to="." method="_on_sleep_pressed"]
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

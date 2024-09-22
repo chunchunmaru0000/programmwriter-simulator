@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://cuhny837yqar6"]
+
+[ext_resource type="Script" path="res://scripts/menu.gd" id="1_0h66i"]
+
+[node name="Start" type="Node2D"]
+
+[node name="Menu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 6.0
+offset_right = 650.0
+offset_bottom = 847.0
+script = ExtResource("1_0h66i")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 250.0
+offset_right = 566.0
+offset_bottom = 497.0
+theme_override_constants/separation = 8
+metadata/_edit_group_ = true
+
+[node name="NewGame" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+text = "
+Новая игра
+
+"
+
+[node name="Load" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+text = "
+Загрузить
+
+"
+
+[node name="Quit" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+text = "
+Выйти
+
+"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+position = Vector2i(0, 36)
+size = Vector2i(650, 650)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[connection signal="button_down" from="Menu/VBoxContainer/NewGame" to="Menu" method="_on_newgame_button_down"]
+[connection signal="button_down" from="Menu/VBoxContainer/Load" to="Menu" method="_on_hui_button_down"]
+[connection signal="pressed" from="Menu/VBoxContainer/Load" to="Menu" method="_on_load_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/Quit" to="Menu" method="_on_quit_pressed"]
+[connection signal="file_selected" from="FileDialog" to="Menu" method="_on_file_dialog_file_selected"]

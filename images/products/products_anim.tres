@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=10 format=3 uid="uid://du565bgpokk2n"]
+
+[ext_resource type="Texture2D" uid="uid://bwo2xhyx0q840" path="res://images/products/grech.png" id="1_ujefx"]
+[ext_resource type="Texture2D" uid="uid://dxcscakvshdj3" path="res://images/products/bread_dark-Photoroom.png" id="2_mm6na"]
+[ext_resource type="Texture2D" uid="uid://cn7bk12m4w44b" path="res://images/products/bread_light-transformed.png" id="3_fnjgv"]
+[ext_resource type="Texture2D" uid="uid://846pyqonelfs" path="res://images/products/tea_green-transformed.png" id="4_5o14c"]
+[ext_resource type="Texture2D" uid="uid://dvm8wk6dyss7c" path="res://images/products/tea_dark-transformed.png" id="5_ktcai"]
+[ext_resource type="Texture2D" uid="uid://cluagcbyel82" path="res://images/products/kolbas-transformed.png" id="6_s0n81"]
+[ext_resource type="Texture2D" uid="uid://dq8ddxdmdsmjp" path="res://images/products/kasha_ovsyanaya_bystrogo_prigotovleniya_russkiy_produkt_gerkules_s_ananasom_v_paketikakh_5_50_gs-transformed.png" id="7_7jevn"]
+[ext_resource type="Texture2D" uid="uid://c8ektp5goqmvk" path="res://images/products/kvas-transformed.png" id="8_5a2jw"]
+[ext_resource type="Texture2D" uid="uid://tt4nte6r31vp" path="res://images/products/pivo-transformed.png" id="9_1digt"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ujefx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_mm6na")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_fnjgv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_5o14c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ktcai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_s0n81")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7jevn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_5a2jw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_1digt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
