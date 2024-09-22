@@ -7,10 +7,7 @@ var Product = Singleton.Product
 
 
 func eat_owned_product(but, product) -> void:
-	var at = 0
-	for i in fridge.size():
-		if product == fridge[i]:
-			at = i
+	var at = Singleton.get_product_index(product)
 	
 	if product.eatings == 1:
 		Singleton.remove_fridge_at(at)
@@ -19,14 +16,24 @@ func eat_owned_product(but, product) -> void:
 		product.eatings -= 1
 		Singleton.set_fridge_at(at, product)
 		but.text = "Съесть " + str(product.eatings) + "/" + str(product.eatings_max)
+	
+	#and eat 
+	Singleton.add_hunger(-product.hunger)
+	Singleton.add_thirst(-product.thirst)
+	for effect in product.effects:
+		match effect.stat:
+			"Здоровье":
+				Singleton.add_hp(int(effect.value))
+			"Сон":
+				Singleton.add_sleep(int(effect.value))
+			"Голод":
+				Singleton.add_hunger(int(effect.value))
+			"Жажда":
+				Singleton.add_thirst(int(effect.value))
 		
 		
 func toss_owned_product(but, product) -> void:
-	var at = 0
-	for i in fridge.size():
-		if product == fridge[i]:
-			at = i
-	Singleton.remove_fridge_at(at)
+	Singleton.remove_fridge(product)
 	$ProductsScroll/FridgeBox.remove_child(but.get_parent().get_parent().get_parent())
 
 # Called when the node enters the scene tree for the first time.

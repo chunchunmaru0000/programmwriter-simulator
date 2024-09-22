@@ -130,6 +130,7 @@ func add_time(to) -> void:
 	var hour = int(time.split(":")[1])
 	var day = int(time.split(":")[0])
 	hour += to
+	sleep += to
 	
 	while hour >= 24:
 		hour -= 24
@@ -137,23 +138,50 @@ func add_time(to) -> void:
 		
 	time = str(day) + ":" + str(hour) + ":00"
 	
+	for product in fridge:	
+		(product as Product).expiration_hours -= to
+		while product.expiration_hours < 0:
+			product.expiration_hours += 24
+			product.expiration_days -= 1
+		
+		if (product.expiration_hours == 0 and product.expiration_days == 0) or product.expiration_days < 0:
+			remove_fridge_at(get_product_index(product))
+	
+func add_hunger(to) -> void:
+	hunger += to
+	
+func add_thirst(to) -> void:
+	thirst += to
+	
+func add_hp(to) -> void:
+	hp += to
+	
+func add_sleep(to) -> void:
+	sleep += to
+	
 func get_hour() -> int:
 	return int(time.split(":")[1])
 	
 func get_day() -> int:
 	return int(time.split(":")[0])
 	
+func get_product_index(product) -> int:
+	for i in fridge.size():
+		if product == fridge[i]:
+			return i
+	return -1
+	
 func append_fridge(product) -> void:
-	print(product.name)
 	fridge.append(product)
-	print(fridge.size())
 	
 func remove_fridge_at(index: int) -> void:
 	fridge.remove_at(index)
+	
+func remove_fridge(product) -> void:
+	remove_fridge_at(get_product_index(product))
 
 func set_fridge_at(index: int, product: Product) -> void:
 	fridge[index] = product
-
 
 
 class Effect:
