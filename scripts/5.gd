@@ -1,51 +1,8 @@
 extends Node2D
 
+var Effect = Singleton.Effect
+var Product = Singleton.Product
 
-class Effect:
-	var name: String
-	var stat: String
-	var value
-	
-	func _init(name: String, stat: String, value) -> void:
-		self.name = name
-		self.stat = stat
-		self.value = value
-
-class Product:
-	var name: String
-	var frame: int
-	var price: float
-	var hunger: int
-	var thirst: int
-	var have_discount: bool
-	var discount: float
-	var expiration_days: int
-	var expiration_hours: int
-	var eatings_max: int
-	var eatings: int
-	var effects: Array[Effect]
-	
-	func _init(name: String, frame: int, price: float, hunger: int, thirst: int, eatings_max: int, expiration_days: int, effects: Array[Effect]=[]) -> void:
-		var rnd = RandomNumberGenerator.new()
-		self.name = name
-		self.frame = frame
-		self.hunger = hunger
-		self.thirst = thirst
-		self.effects = effects
-		
-		self.have_discount = rnd.randi_range(0, 100) < 5
-		self.discount = rnd.randi_range(-3, 10) * 5
-		if self.have_discount:
-			self.price = price / 100 * (100 - discount)
-		else:
-			self.price = price
-		if self.discount <= 0:
-			self.discount = rnd.randi_range(5, 10) * 5
-		
-		self.expiration_days = expiration_days
-		self.expiration_hours = 0
-		self.eatings_max = eatings_max
-		self.eatings = eatings_max
 
 var year = 365
 var all_products = [
@@ -65,7 +22,7 @@ var rnd = RandomNumberGenerator.new()
 var products = []
 
 
-func remove_owned_product(but: Button, product: Product) -> void:
+func remove_owned_product(but: Button, product) -> void:
 	var money = Singleton.money
 	if money - product.price < 0:
 		pass

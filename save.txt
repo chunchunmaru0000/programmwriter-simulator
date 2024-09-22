@@ -1,10 +1,16 @@
 hp 1000
-money 9999980338
+money 9999979193
 hunger 50
 thirst 10
 sleep 0
-time 2:3:00
+time 2:4:00
 Чай зеленый<product_param>3<product_param>50<product_param>0<product_param>10<product_param>0<product_param>50<product_param>365<product_param>0<product_param>10<product_param>10<product_param>Бодрость<effect_param>Сон<effect_param>-1
 Чай чёрный<product_param>4<product_param>49<product_param>0<product_param>10<product_param>0<product_param>20<product_param>365<product_param>0<product_param>10<product_param>5<product_param>Бодрость<effect_param>Сон<effect_param>-1
 Пиво<product_param>8<product_param>45<product_param>0<product_param>2<product_param>0<product_param>5<product_param>365<product_param>0<product_param>2<product_param>1<product_param>Сонность<effect_param>Сон<effect_param>1<effects>Вредность<effect_param>Здоровье<effect_param>-1
 Колбаса<product_param>5<product_param>170<product_param>30<product_param>0<product_param>1<product_param>15<product_param>7<product_param>0<product_param>7<product_param>7<product_param>
+Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>45<product_param>7<product_param>0<product_param>7<product_param>7<product_param>
+Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>45<product_param>7<product_param>0<product_param>7<product_param>7<product_param>
+Овсянка в пакетиках<product_param>6<product_param>173<product_param>15<product_param>0<product_param>0<product_param>35<product_param>365<product_param>0<product_param>5<product_param>5<product_param>
+Овсянка в пакетиках<product_param>6<product_param>173<product_param>15<product_param>0<product_param>0<product_param>35<product_param>365<product_param>0<product_param>5<product_param>5<product_param>
+Чай зеленый<product_param>3<product_param>50<product_param>0<product_param>10<product_param>0<product_param>15<product_param>365<product_param>0<product_param>10<product_param>10<product_param>Бодрость<effect_param>Сон<effect_param>-1
+Чай зеленый<product_param>3<product_param>50<product_param>0<product_param>10<product_param>0<product_param>15<product_param>365<product_param>0<product_param>10<product_param>10<product_param>Бодрость<effect_param>Сон<effect_param>-1
