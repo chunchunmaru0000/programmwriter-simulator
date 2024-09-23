@@ -13,10 +13,10 @@ func eat_owned_product(but, product) -> void:
 		Singleton.remove_fridge_at(at)
 		$ProductsScroll/FridgeBox.remove_child(but.get_parent().get_parent().get_parent())
 	else:
-		product.eatings -= 1
-		Singleton.set_fridge_at(at, product)
+		Singleton.fridge[at].eatings -= 1
+		# Singleton.set_fridge_at(at, product)
 		but.text = "Съесть " + str(product.eatings) + "/" + str(product.eatings_max)
-	
+
 	#and eat 
 	Singleton.add_hunger(-product.hunger)
 	Singleton.add_thirst(-product.thirst)

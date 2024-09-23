@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://csdxk08kgcvgy"]
+
+[ext_resource type="Texture2D" uid="uid://ct002nnq3685x" path="res://images/gos errors/default.png" id="1_3nn8d"]
+[ext_resource type="Texture2D" uid="uid://df02550kjc6et" path="res://images/gos errors/log and pass.png" id="2_00fdj"]
+[ext_resource type="Texture2D" uid="uid://b5fdk72pob6gu" path="res://images/gos errors/log.png" id="3_22qrd"]
+[ext_resource type="Texture2D" uid="uid://c714hl4a0tuj2" path="res://images/gos errors/pass.png" id="4_tdjbo"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3nn8d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_00fdj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_22qrd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tdjbo")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

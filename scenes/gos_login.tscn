@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://87duyiwxp6tt"]
+
+[ext_resource type="Script" path="res://scripts/gos_login.gd" id="1_i7hv6"]
+[ext_resource type="Texture2D" uid="uid://bl6pmvh6lu4iy" path="res://images/gos.png" id="2_ylk67"]
+[ext_resource type="SpriteFrames" uid="uid://csdxk08kgcvgy" path="res://images/gos errors/gos_anim.tres" id="4_pbs8e"]
+[ext_resource type="Texture2D" uid="uid://gxaye248acjd" path="res://images/gos errors/bedni.png" id="4_xr1ox"]
+[ext_resource type="Texture2D" uid="uid://84jfanj7j326" path="res://images/gos errors/log_but.png" id="5_ek6q5"]
+
+[node name="GosLogin" type="Node2D"]
+script = ExtResource("1_i7hv6")
+
+[node name="Gos" type="Sprite2D" parent="."]
+position = Vector2(322.513, 422.334)
+scale = Vector2(1.31245, 1.38203)
+texture = ExtResource("2_ylk67")
+
+[node name="login" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+offset_right = 648.0
+offset_bottom = 848.0
+
+[node name="bedni" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = 232.0
+offset_top = 744.0
+offset_right = 424.0
+offset_bottom = 784.0
+
+[node name="err" type="AnimatedSprite2D" parent="."]
+position = Vector2(320, 384)
+scale = Vector2(1.30251, 1.40909)
+sprite_frames = ExtResource("4_pbs8e")
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+initial_position = 1
+size = Vector2i(634, 378)
+
+[node name="Bedni" type="Sprite2D" parent="PopupPanel"]
+position = Vector2(317, 189)
+texture = ExtResource("4_xr1ox")
+
+[node name="LogBut" type="Sprite2D" parent="PopupPanel"]
+position = Vector2(316.845, 310.09)
+scale = Vector2(1.88, 1.88)
+texture = ExtResource("5_ek6q5")
+
+[node name="logbut" type="Button" parent="PopupPanel"]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 630.0
+offset_bottom = 374.0
+
+[connection signal="pressed" from="login" to="." method="_on_login_pressed"]
+[connection signal="pressed" from="bedni" to="." method="_on_bedni_pressed"]
+[connection signal="pressed" from="PopupPanel/logbut" to="." method="_on_logbut_pressed"]

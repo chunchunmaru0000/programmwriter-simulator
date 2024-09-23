@@ -23,11 +23,19 @@ var products = []
 
 
 func remove_owned_product(but: Button, product) -> void:
-	var money = Singleton.money
-	if money - product.price < 0:
-		pass
+	if Singleton.money - product.price < 0:
+		match rnd.randi_range(0, 1):
+			0:
+				if $netdeneg.playing:
+					$netdeneg.stop()
+				$biznes.play()
+			1:
+				if $biznes.playing:
+					$biznes.stop()
+				$netdeneg.play()
 	else:
-		Singleton.set_money(money - product.price)
+		Singleton.set_money(Singleton.money - product.price)
+		$money.text = "Ваши средства: " + str(Singleton.money) + " руб."
 		Singleton.append_fridge(product)
 		
 		var at = 0
@@ -41,6 +49,7 @@ func remove_owned_product(but: Button, product) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$money.text = "Ваши средства: " + str(Singleton.money) + " руб."
 	Singleton.add_time(1)
 	
 	for i in rnd.randi_range(20, 100):

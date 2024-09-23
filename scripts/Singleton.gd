@@ -11,6 +11,18 @@ var time = "0:08:00"
 var money = 5000
 var fridge: Array = []
 
+func clear() -> void:
+	save_file = "save.txt"
+
+	hp = 1000
+	hunger = 50
+	thirst = 10
+	sleep = 1
+	time = "0:08:00"
+	
+	money = 5000
+	fridge = []
+
 func save_progress():
 	var data_str: String = "\n".join([
 		"hp " + str(hp),
@@ -62,11 +74,11 @@ func load_progress(file_path):
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	var lines = file.get_as_text().split('\n')
 	
-	hp = lines[0].split(' ')[1]
-	money = lines[1].split(' ')[1]
-	hunger = lines[2].split(' ')[1]
-	thirst = lines[3].split(' ')[1]
-	sleep = lines[4].split(' ')[1]
+	hp = int(lines[0].split(' ')[1])
+	money = int(lines[1].split(' ')[1])
+	hunger = int(lines[2].split(' ')[1])
+	thirst = int(lines[3].split(' ')[1])
+	sleep = int(lines[4].split(' ')[1])
 	time = lines[5].split(' ')[1]
 	
 	for i in lines.size() - 6:
@@ -148,10 +160,10 @@ func add_time(to) -> void:
 			remove_fridge_at(get_product_index(product))
 	
 func add_hunger(to) -> void:
-	hunger += to
+	hunger += int(to)
 	
 func add_thirst(to) -> void:
-	thirst += to
+	thirst += int(to)
 	
 func add_hp(to) -> void:
 	hp += to

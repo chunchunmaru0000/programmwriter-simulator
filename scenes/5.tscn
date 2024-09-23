@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://vobfo7d6j34y"]
+[gd_scene load_steps=8 format=3 uid="uid://vobfo7d6j34y"]
 
 [ext_resource type="Script" path="res://scripts/5.gd" id="1_gvcgx"]
 [ext_resource type="Texture2D" uid="uid://bn10ts4oy204c" path="res://images/back.png" id="2_5qs6m"]
 [ext_resource type="Texture2D" uid="uid://d3ylb5lnyyaho" path="res://images/5back.png" id="2_mxk0l"]
 [ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="3_vbms6"]
 [ext_resource type="Texture2D" uid="uid://crqu7mbvhk7qo" path="res://images/back_hover.png" id="3_yaios"]
+[ext_resource type="AudioStream" uid="uid://cfs5ww0ql2ndn" path="res://audio/medvedb.mp3" id="6_3xosl"]
+[ext_resource type="AudioStream" uid="uid://5i4bu3tlb8kb" path="res://audio/biznes.mp3" id="7_tb62h"]
 
 [node name="5" type="Node2D"]
 script = ExtResource("1_gvcgx")
@@ -48,5 +50,22 @@ layout_mode = 2
 theme_override_constants/h_separation = 48
 theme_override_constants/v_separation = 16
 columns = 2
+
+[node name="netdeneg" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(324, 0)
+stream = ExtResource("6_3xosl")
+
+[node name="biznes" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(324, 0)
+stream = ExtResource("7_tb62h")
+
+[node name="money" type="Label" parent="."]
+modulate = Color(0, 1, 0, 1)
+offset_left = 336.0
+offset_top = 64.0
+offset_right = 513.0
+offset_bottom = 87.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+text = "Ваши средства: 0 руб."
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

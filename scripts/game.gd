@@ -44,7 +44,7 @@ func _on_sleep_pressed() -> void:
 
 func _on_gos_pressed() -> void:
 	Singleton.save_progress()
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/gos_login.tscn")
 
 
 func _on_5_pressed() -> void:
