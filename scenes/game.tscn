@@ -1,7 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c6ic2w21tv33y"]
+[gd_scene load_steps=8 format=3 uid="uid://c6ic2w21tv33y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_nqbsp"]
+[ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="2_cu53h"]
 [ext_resource type="SpriteFrames" uid="uid://df7ijmtp3y2vg" path="res://clocks/clocks.tres" id="2_kyemp"]
+[ext_resource type="Texture2D" uid="uid://dgm5j2o6fueed" path="res://images/fridge_top.png" id="3_oyk8c"]
+[ext_resource type="Texture2D" uid="uid://bmc58a6abge1d" path="res://images/gos_top_short.png" id="4_3xsn3"]
+[ext_resource type="AudioStream" uid="uid://f6ch0o5rhs2q" path="res://audio/zhirik.mp3" id="6_sppxf"]
 
 [sub_resource type="Theme" id="Theme_nw4ga"]
 
@@ -69,6 +73,21 @@ text = "0"
 layout_mode = 2
 text = "0"
 
+[node name="5Top" type="Sprite2D" parent="."]
+position = Vector2(555.5, 642.5)
+scale = Vector2(0.15551, 0.243421)
+texture = ExtResource("2_cu53h")
+
+[node name="FridgeTop" type="Sprite2D" parent="."]
+position = Vector2(555.5, 684.35)
+scale = Vector2(0.339326, 0.26148)
+texture = ExtResource("3_oyk8c")
+
+[node name="GosTopShort" type="Sprite2D" parent="."]
+position = Vector2(555.5, 726.5)
+scale = Vector2(0.883041, 0.711538)
+texture = ExtResource("4_3xsn3")
+
 [node name="ButtonsVBox" type="VBoxContainer" parent="."]
 offset_left = 480.0
 offset_top = 624.0
@@ -78,7 +97,8 @@ scale = Vector2(1.27626, 1.19995)
 
 [node name="5" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
-text = "Пятерочка"
+text = "
+"
 
 [node name="Fridge" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
@@ -86,7 +106,8 @@ text = "Холодильник"
 
 [node name="Gos" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
-text = "Госуслуги"
+text = "
+"
 
 [node name="Work" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
@@ -116,6 +137,10 @@ text = "Сохранить и выйти"
 position = Vector2(576, 104)
 sprite_frames = ExtResource("2_kyemp")
 speed_scale = 0.2
+
+[node name="audio" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(324, 0)
+stream = ExtResource("6_sppxf")
 
 [connection signal="pressed" from="ButtonsVBox/5" to="." method="_on_5_pressed"]
 [connection signal="pressed" from="ButtonsVBox/Fridge" to="." method="_on_fridge_pressed"]

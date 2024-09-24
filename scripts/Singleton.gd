@@ -63,7 +63,8 @@ func save_progress():
 		str(product.expiration_hours),
 		str(product.eatings_max),
 		str(product.eatings),
-		effects_str
+		effects_str,
+		"<sounds>".join(product.sounds)
 	])
 	
 	var file = FileAccess.open(save_file, FileAccess.WRITE)
@@ -95,8 +96,8 @@ func load_progress(file_path):
 		var expiration_hours: String = line_data[8]
 		var eatings_max: String = line_data[9]
 		var eatings: String = line_data[10]
-		var effect_zip :String = line_data[11]
-		
+		var effect_zip: String = line_data[11]
+		var sounds: String = line_data[12]
 		
 		var product = Product.new(name, int(frame), float(price), int(hunger), int(thirst), int(eatings_max), int(expiration_days))
 		product.price = price
@@ -114,6 +115,9 @@ func load_progress(file_path):
 				effects.append(effect)
 				
 			product.effects = effects
+		
+		if sounds != "":
+			product.sounds = sounds.split("<sounds>")
 		
 		fridge.append(product)
 
@@ -220,14 +224,16 @@ class Product:
 	var eatings_max: int
 	var eatings: int
 	var effects: Array
+	var sounds: Array
 	
-	func _init(name: String, frame: int, price: float, hunger: int, thirst: int, eatings_max: int, expiration_days: int, effects: Array=[]) -> void:
+	func _init(name: String, frame: int, price: float, hunger: int, thirst: int, eatings_max: int, expiration_days: int, effects: Array=[], sounds: Array=[]) -> void:
 		var rnd = RandomNumberGenerator.new()
 		self.name = name
 		self.frame = frame
 		self.hunger = hunger
 		self.thirst = thirst
 		self.effects = effects
+		self.sounds = sounds
 		
 		self.have_discount = rnd.randi_range(0, 100) < 5
 		self.discount = rnd.randi_range(-3, 10) * 5
@@ -242,4 +248,24 @@ class Product:
 		self.expiration_hours = 0
 		self.eatings_max = eatings_max
 		self.eatings = eatings_max
+		
+	func clone() -> Product:
+		var clone: Product = Product.new(self.name, self.frame, self.price, self.hunger, self.thirst, self.eatings_max, self.expiration_days, self.effects)
+		clone.price = self.price
+		clone.have_discount = self.have_discount
+		clone.discount = self.discount
+		clone.eatings = self.eatings
+		clone.expiration_hours = self.expiration_hours
+		
+		var effects: Array = []
+		for effect in self.effects:
+			var effect_clone = Effect.new(effect.name, effect.stat, effect.value)
+			effects.append(effect)
+		
+		clone.effects = effects
+		clone.sounds = [] + self.sounds
+
+		
+		return clone
+		
 		

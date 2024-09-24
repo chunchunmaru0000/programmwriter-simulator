@@ -7,6 +7,9 @@ var Product = Singleton.Product
 
 
 func eat_owned_product(but, product) -> void:
+	if Singleton.hunger - product.hunger < 0 or Singleton.thirst - product.thirst < 0:
+		return
+	
 	var at = Singleton.get_product_index(product)
 	
 	if product.eatings == 1:
@@ -14,12 +17,21 @@ func eat_owned_product(but, product) -> void:
 		$ProductsScroll/FridgeBox.remove_child(but.get_parent().get_parent().get_parent())
 	else:
 		Singleton.fridge[at].eatings -= 1
-		# Singleton.set_fridge_at(at, product)
 		but.text = "Съесть " + str(product.eatings) + "/" + str(product.eatings_max)
 
 	#and eat 
 	Singleton.add_hunger(-product.hunger)
+	$hunger.text = "Ваш голод: " + str(Singleton.hunger)
 	Singleton.add_thirst(-product.thirst)
+	$thirst.text = "Ваша жажда: " + str(Singleton.thirst)
+	
+	if product.sounds.size() > 0:
+		$audio.stop()
+		product.sounds.shuffle()
+		$audio.stream = load(product.sounds[0])
+		$audio.play()
+	
+	
 	for effect in product.effects:
 		match effect.stat:
 			"Здоровье":
@@ -38,6 +50,9 @@ func toss_owned_product(but, product) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$hunger.text = "Ваш голод: " + str(Singleton.hunger)
+	$thirst.text = "Ваша жажда: " + str(Singleton.thirst)
+	
 	fridge = Singleton.fridge
 	var but_height = 24
 	var anim_wide = 112

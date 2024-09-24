@@ -33,12 +33,9 @@ func _on_back_pressed() -> void:
 
 func _on_sleep_pressed() -> void:
 	var sleep_time = 2
-	
-	var sleep = 0 if Singleton.sleep <= 0 or Singleton.sleep - sleep_time <= 0 else Singleton.sleep - sleep_time
-	Singleton.set_sleep(sleep)
-	
 	Singleton.add_time(sleep_time)
-	
+	Singleton.add_sleep(-sleep_time * 2)
+
 	update_labels()
 
 
@@ -57,6 +54,7 @@ func _on_work_pressed() -> void:
 	
 	Singleton.set_sleep(Singleton.sleep + work_time)
 	Singleton.add_time(work_time)
+	Singleton.money += 1000
 	
 	update_labels()
 

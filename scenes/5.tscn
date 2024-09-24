@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://vobfo7d6j34y"]
+[gd_scene load_steps=7 format=3 uid="uid://vobfo7d6j34y"]
 
 [ext_resource type="Script" path="res://scripts/5.gd" id="1_gvcgx"]
 [ext_resource type="Texture2D" uid="uid://bn10ts4oy204c" path="res://images/back.png" id="2_5qs6m"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="3_vbms6"]
 [ext_resource type="Texture2D" uid="uid://crqu7mbvhk7qo" path="res://images/back_hover.png" id="3_yaios"]
 [ext_resource type="AudioStream" uid="uid://cfs5ww0ql2ndn" path="res://audio/medvedb.mp3" id="6_3xosl"]
-[ext_resource type="AudioStream" uid="uid://5i4bu3tlb8kb" path="res://audio/biznes.mp3" id="7_tb62h"]
 
 [node name="5" type="Node2D"]
 script = ExtResource("1_gvcgx")
@@ -41,6 +40,7 @@ offset_left = 8.0
 offset_top = 104.0
 offset_right = 648.0
 offset_bottom = 424.0
+follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
@@ -51,13 +51,9 @@ theme_override_constants/h_separation = 48
 theme_override_constants/v_separation = 16
 columns = 2
 
-[node name="netdeneg" type="AudioStreamPlayer2D" parent="."]
+[node name="audio" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(324, 0)
 stream = ExtResource("6_3xosl")
-
-[node name="biznes" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(324, 0)
-stream = ExtResource("7_tb62h")
 
 [node name="money" type="Label" parent="."]
 modulate = Color(0, 1, 0, 1)
@@ -67,5 +63,13 @@ offset_right = 513.0
 offset_bottom = 87.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Ваши средства: 0 руб."
+
+[node name="PopupPanel" type="PopupPanel" parent="."]
+title = "денег нет"
+position = Vector2i(-100, -100)
+size = Vector2i(200, 8)
+visible = true
+unresizable = false
+borderless = false
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]
