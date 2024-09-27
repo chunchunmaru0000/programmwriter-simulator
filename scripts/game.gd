@@ -45,11 +45,13 @@ func _on_gos_pressed() -> void:
 
 
 func _on_5_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/5.tscn")
+	Singleton.go_to("res://scenes/5.tscn")
 
 
 func _on_work_pressed() -> void:
+	Singleton.save_progress()
+	get_tree().change_scene_to_file("res://scenes/work.tscn")
+	return
 	var work_time = 1
 	
 	Singleton.set_sleep(Singleton.sleep + work_time)

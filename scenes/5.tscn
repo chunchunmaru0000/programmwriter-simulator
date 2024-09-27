@@ -40,7 +40,6 @@ offset_left = 8.0
 offset_top = 104.0
 offset_right = 648.0
 offset_bottom = 424.0
-follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
@@ -64,12 +63,6 @@ offset_bottom = 87.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 text = "Ваши средства: 0 руб."
 
-[node name="PopupPanel" type="PopupPanel" parent="."]
-title = "денег нет"
-position = Vector2i(-100, -100)
-size = Vector2i(200, 8)
-visible = true
-unresizable = false
-borderless = false
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

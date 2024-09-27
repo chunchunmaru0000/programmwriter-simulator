@@ -10,6 +10,12 @@ var time = "0:08:00"
 
 var money = 5000
 var fridge: Array = []
+var uslugi: Array = [
+	Usluga.new("Водоснабжение, водоотведение", 100, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день."),
+	Usluga.new("Электроснабжение", 100, "Тратится постепенно, но иногда больше. На задолженность влияет время работы за компьютером. Обновление увеличения задолженности происходит раз в день."),
+	Usluga.new("Интернет от Рос*елеком", 500, "Тратится, только во время работы за компьютером. Обновление увеличения задолженности происходит в реальном времени."),
+	Usluga.new("Газоснабжение, отопление", 300, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день.")
+]
 
 func clear() -> void:
 	save_file = "save.txt"
@@ -24,13 +30,18 @@ func clear() -> void:
 	fridge = []
 
 func save_progress():
+	var uslugi_strs = []
+	for usluga in uslugi:
+		uslugi_strs.append(str(usluga.debt))
+	
 	var data_str: String = "\n".join([
 		"hp " + str(hp),
 		"money " + str(money),
 		"hunger " + str(hunger),
 		"thirst " + str(thirst),
 		"sleep " + str(sleep),
-		"time " + str(time)
+		"time " + str(time),
+		"uslugi " + "<usluga>".join(uslugi_strs)
 	])
 	for product in fridge:
 		var effects_str: String
@@ -82,8 +93,13 @@ func load_progress(file_path):
 	sleep = int(lines[4].split(' ')[1])
 	time = lines[5].split(' ')[1]
 	
-	for i in lines.size() - 6:
-		var line_data = lines[i + 6].split("<product_param>")
+	var uslugi_strs = lines[6].split(' ')[1].split("<usluga>")
+	for i in range(uslugi_strs.size()):
+		uslugi[i].debt = int(uslugi_strs[i])
+	
+	var lines_was = 7
+	for i in lines.size() - lines_was:
+		var line_data = lines[i + lines_was].split("<product_param>")
 		
 		var name: String = line_data[0]
 		var frame: String = line_data[1]
@@ -198,6 +214,10 @@ func remove_fridge(product) -> void:
 
 func set_fridge_at(index: int, product: Product) -> void:
 	fridge[index] = product
+	
+func go_to(path: String):
+	Singleton.save_progress()
+	get_tree().change_scene_to_file(path)
 
 
 class Effect:
@@ -268,4 +288,14 @@ class Product:
 		
 		return clone
 		
+		
+class Usluga:
+	var name: String
+	var debt: float
+	var desc: String
+	
+	func _init(name: String, debt: float, desc: String) -> void:
+		self.name = name
+		self.debt = debt
+		self.desc = desc
 		

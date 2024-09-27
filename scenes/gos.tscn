@@ -1,3 +1,59 @@
-[gd_scene format=3 uid="uid://yd547adisshl"]
+[gd_scene load_steps=8 format=3 uid="uid://yd547adisshl"]
+
+[ext_resource type="Script" path="res://scripts/gos.gd" id="1_t610p"]
+[ext_resource type="Texture2D" uid="uid://cnnu30kpomfrh" path="res://images/gos_top.png" id="2_6vsxn"]
+[ext_resource type="Texture2D" uid="uid://bdfgkrwr51w6v" path="res://images/white.png" id="3_nfm05"]
+[ext_resource type="Texture2D" uid="uid://bn10ts4oy204c" path="res://images/back.png" id="3_rb6e6"]
+[ext_resource type="Texture2D" uid="uid://crqu7mbvhk7qo" path="res://images/back_hover.png" id="4_a1oug"]
+[ext_resource type="Texture2D" uid="uid://41n3ybxloqe0" path="res://images/ww.png" id="6_iipo2"]
+[ext_resource type="Texture2D" uid="uid://i14hwuieq2f1" path="res://images/www.png" id="7_dmgat"]
 
 [node name="Gos" type="Node2D"]
+script = ExtResource("1_t610p")
+
+[node name="GosTop" type="Sprite2D" parent="."]
+position = Vector2(328, 36)
+scale = Vector2(1.635, 1.635)
+texture = ExtResource("2_6vsxn")
+
+[node name="White2" type="Sprite2D" parent="GosTop"]
+position = Vector2(24.4648, 2.44648)
+rotation = -1.56224
+scale = Vector2(0.0289186, 0.129393)
+texture = ExtResource("3_nfm05")
+
+[node name="BackButton" type="TextureButton" parent="."]
+offset_left = 568.0
+offset_right = 1080.0
+offset_bottom = 512.0
+scale = Vector2(0.15, 0.15)
+button_mask = 7
+texture_normal = ExtResource("3_rb6e6")
+texture_pressed = ExtResource("4_a1oug")
+texture_hover = ExtResource("4_a1oug")
+texture_disabled = ExtResource("3_rb6e6")
+texture_focused = ExtResource("4_a1oug")
+
+[node name="Ww" type="Sprite2D" parent="."]
+position = Vector2(320, 96)
+scale = Vector2(1.1, 1)
+texture = ExtResource("6_iipo2")
+
+[node name="Www" type="Sprite2D" parent="Ww"]
+position = Vector2(7.27271, 376)
+scale = Vector2(2.31818, 16)
+texture = ExtResource("7_dmgat")
+
+[node name="UslugiScroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(10, 752)
+offset_left = 8.0
+offset_top = 88.0
+offset_right = 648.0
+offset_bottom = 816.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="UslugiBox" type="VBoxContainer" parent="UslugiScroll"]
+layout_mode = 2
+
+[connection signal="button_down" from="BackButton" to="." method="_on_back_button_button_down"]

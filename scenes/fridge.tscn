@@ -44,6 +44,7 @@ vertical_scroll_mode = 2
 
 [node name="FridgeBox" type="VBoxContainer" parent="ProductsScroll"]
 layout_mode = 2
+theme_override_constants/separation = 16
 
 [node name="hunger" type="Label" parent="."]
 modulate = Color(0, 0, 1, 1)

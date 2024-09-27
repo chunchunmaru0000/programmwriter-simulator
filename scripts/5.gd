@@ -28,7 +28,12 @@ var all_products = [
 		["res://audio/vsyu-vodku-vyipit-nevozmojo-no-stremitsya-k-etomu-nado.mp3"]),
 	Product.new("Сало",          11,  120,  10,   0,    2,    90, [], 
 		["res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3",
-		 "res://audio/zelen.mp3"])
+		 "res://audio/zelen.mp3"]),
+	Product.new("Сивнина",       12,  99,   25,   0,    2,    1,  [],
+		["res://audio/mjaso.mp3", "res://audio/zelen.mp3"]),
+	Product.new("Кофе",          13,  208,  0,    10,   10,    year,
+		[Effect.new("Бодрость", "Сон", -1)],
+		["res://audio/kofe.mp3"])
 ]
 
 var rnd = RandomNumberGenerator.new()
@@ -45,11 +50,12 @@ func remove_owned_product(but: Button, product) -> void:
 			"res://audio/medvedb.mp3",
 			"res://audio/sovest-est-u-vas.mp3",
 			"res://audio/vyffy.mp3",
-			"res://audio/vyi-rabotat-budete.mp3"
+			"res://audio/vyi-rabotat-budete.mp3",
+			"res://audio/nischee.mp3"
 		]
 		sounds.shuffle()
 		$audio.stream = load(sounds[0])
-		$audio.play()	
+		$audio.play()
 	else:
 		Singleton.set_money(Singleton.money - product.price)
 		$money.text = "Ваши средства: " + str(Singleton.money) + " руб."

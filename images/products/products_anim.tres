@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=13 format=3 uid="uid://du565bgpokk2n"]
+[gd_resource type="SpriteFrames" load_steps=15 format=3 uid="uid://du565bgpokk2n"]
 
 [ext_resource type="Texture2D" uid="uid://bwo2xhyx0q840" path="res://images/products/grech.png" id="1_ujefx"]
 [ext_resource type="Texture2D" uid="uid://dxcscakvshdj3" path="res://images/products/bread_dark-Photoroom.png" id="2_mm6na"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://dhxvwetdn7c35" path="res://images/products/vobla.png" id="10_aehxq"]
 [ext_resource type="Texture2D" uid="uid://bj7mfyy1g6ic7" path="res://images/products/vodka-transformed.png" id="11_ymwvi"]
 [ext_resource type="Texture2D" uid="uid://tpoygqi3u3vq" path="res://images/products/salo-transformed.png" id="12_f6rru"]
+[ext_resource type="Texture2D" uid="uid://da1g77om8p4yw" path="res://images/products/swin-transformed.png" id="13_64nef"]
+[ext_resource type="Texture2D" uid="uid://4v3i28yjofau" path="res://images/products/kofe-transformed.png" id="14_hchrv"]
 
 [resource]
 animations = [{
@@ -51,6 +53,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("12_f6rru")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_64nef")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_hchrv")
 }],
 "loop": true,
 "name": &"default",
