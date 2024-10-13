@@ -65,17 +65,13 @@ func _ready() -> void:
 		garbage_but.text = "Выбросить"
 		garbage_but.custom_minimum_size.x = anim_height
 		garbage_but.custom_minimum_size.y = but_height
-		var da = func():
-			toss_owned_product(garbage_but, product)
-		garbage_but.connect("button_down", da)
+		garbage_but.connect("button_down", func(): toss_owned_product(garbage_but, product))
 		
 		var eat_but = Button.new()
 		eat_but.text = "Съесть " + str(product.eatings) + "/" + str(product.eatings_max)
 		eat_but.custom_minimum_size.x = cont_wide - anim_height
 		eat_but.custom_minimum_size.y = but_height
-		da = func():
-			eat_owned_product(eat_but, product)
-		eat_but.connect("button_down", da)
+		eat_but.connect("button_down", func(): eat_owned_product(eat_but, product))
 		
 		var butsBox = HBoxContainer.new()
 		butsBox.custom_minimum_size.x = cont_wide

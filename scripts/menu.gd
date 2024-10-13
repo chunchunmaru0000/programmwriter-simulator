@@ -36,3 +36,11 @@ func _on_file_dialog_file_selected(path: String) -> void:
 	
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+	
+	
+func _ready() -> void:
+	var res: String = ''
+	res = ProjectSettings.globalize_path("res://")
+	
+	print(res)
+	

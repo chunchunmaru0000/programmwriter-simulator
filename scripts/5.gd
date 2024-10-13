@@ -113,9 +113,7 @@ func _ready() -> void:
 		but.custom_minimum_size.x = column_wide
 		but.custom_minimum_size.y = 24
 		
-		var da = func():
-			remove_owned_product(but, product)
-		but.connect("button_down", da)
+		but.connect("button_down", func(): remove_owned_product(but, product))
 
 		
 		var cont = VBoxContainer.new()

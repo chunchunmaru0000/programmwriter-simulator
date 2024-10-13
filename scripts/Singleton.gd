@@ -17,6 +17,9 @@ var uslugi: Array = [
 	Usluga.new("Газоснабжение, отопление", 300, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день.")
 ]
 
+var hardness: int
+var lang
+
 func clear() -> void:
 	save_file = "save.txt"
 
