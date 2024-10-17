@@ -2,9 +2,12 @@ extends Node2D
 
 var but_height = 24
 var anim_wide = 112
+var mini_wide = 24
 var anim_height = anim_wide
 var cont_wide = 632 - 8
 var info_wide = cont_wide - anim_wide
+var rnd = RandomNumberGenerator.new()
+
 
 class Lang:
 	var name: String
@@ -17,7 +20,40 @@ class Lang:
 		self.img = img
 		self.desc = desc
 		self.exp = exp
-
+		
+		
+class Task:
+	var task: String
+	var money
+	var desc: String
+	var img: String
+	
+	func _init(task: String, money: int, desc: String, img: String) -> void:
+		var rnd = RandomNumberGenerator.new()
+		self.task = task
+		var m = money * 0.1
+		self.money = money + rnd.randi_range(-m, m)
+		self.desc = desc
+		self.img = img
+		
+	func clone():
+		var t: Task = Task.new(self.task, self.money, self.desc, self.img)
+		t.money = self.money
+		return t
+		
+		
+var all_tasks = [
+	Task.new(
+		"Починить код", 1000, 
+		"Некий код был частично утерян и требуется восстановление, некоторые части кода известны, что облегчает задачу", 
+		"res://images/work/images.jpg"
+	),
+	Task.new(
+		"Дописать код", 1500, 
+		"Некий код был частично утерян и требуется восстановление, утерянные части кода не известны, что усложняет задачу", 
+		"res://images/work/write.png"
+	),
+]
 
 var dir = DirAccess.open("res://langs")
 var langs_names: PackedStringArray = dir.get_directories()
@@ -42,23 +78,21 @@ func choose_level(current_lang: Lang) -> void:
 	$BackButton.connect("button_down", re_ready)
 	clear_LangBox()
 
-	var descs: PackedStringArray = [
-		"0",
-		"1",
-		"2",
-		"3",
-		"4"
-	]
+	var tasks = []
 	
-	for i in 5:
+	for i in rnd.randi_range(5, 15):
+		tasks.append(all_tasks[rnd.randi_range(0, all_tasks.size() - 1)].clone())
+	
+	
+	for task in tasks:
 		var eat_but = Button.new()
-		eat_but.text = "Выбрать " + str(i) + " сложность"
+		eat_but.text = task.task + ", Цена: " + str(task.money) # Выбрать " + str(i) + " сложность"
 		eat_but.custom_minimum_size.x = cont_wide
 		eat_but.custom_minimum_size.y = but_height + but_height
 		eat_but.connect("button_down", func():
-			Singleton.hardness = i
 			Singleton.lang = current_lang
-			Singleton.go_to("res://scenes/working.tscn")
+			Singleton.task = task
+			Singleton.go_to("res://scenes/visual_studio.tscn")
 		)
 		
 		var butsBox = HBoxContainer.new()
@@ -72,7 +106,7 @@ func choose_level(current_lang: Lang) -> void:
 		text_butsBox.add_child(butsBox)
 		
 		var anim = TextureRect.new()
-		anim.texture = load(current_lang.img)
+		anim.texture = load(task.img)
 		anim.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		anim.custom_minimum_size.x = anim_wide
 		anim.custom_minimum_size.y = anim_height
@@ -81,18 +115,13 @@ func choose_level(current_lang: Lang) -> void:
 		info.custom_minimum_size.x = info_wide
 		info.custom_minimum_size.y = anim_height
 		#info.text = "\n".join(descs[i - 1].split(' '))
-		info.text = descs[i]
+		info.text = task.desc
 		info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		
-		# print(info.get_theme_font('font').get_string_size('a\na\na'))
-		var x = info.get_theme_font('font').get_string_size('a').x
-		var y = info.get_theme_font('font').get_string_size('').y
-		var result = int(info.text.length() / (info_wide / x)) * y
 		
 		var info_rect = ColorRect.new()
 		info_rect.custom_minimum_size.x = info_wide - 8
-		info_rect.custom_minimum_size.y = result
-		info_rect.color = Color(0.0, 2, 0.0, 0.35)
+		info_rect.custom_minimum_size.y = anim_height
+		info_rect.color = Color(0.2, 0.2, 0.5, 0.5)
 		info_rect.add_child(info)
 		
 		var infoCont = ScrollContainer.new()
@@ -174,14 +203,9 @@ func _ready() -> void:
 		info.text = lang.desc
 		info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		
-		# print(info.get_theme_font('font').get_string_size('a\na\na'))
-		var x = info.get_theme_font('font').get_string_size('a').x
-		var y = info.get_theme_font('font').get_string_size('').y
-		var result = int(info.text.length() / (info_wide / x)) * y
-		
 		var info_rect = ColorRect.new()
 		info_rect.custom_minimum_size.x = info_wide - 8
-		info_rect.custom_minimum_size.y = result
+		info_rect.custom_minimum_size.y = 200
 		info_rect.color = Color(0.0, 0.2, 0.0, 0.35)
 		info_rect.add_child(info)
 		

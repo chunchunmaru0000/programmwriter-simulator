@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://drn7d4sni10aa"]
+
+[ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
+[ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
+[ext_resource type="Texture2D" uid="uid://ce7puja6kc3b6" path="res://pc_images/vs/gray.png" id="2_vfb5r"]
+[ext_resource type="Texture2D" uid="uid://dvcghhw6r0ne8" path="res://pc_images/vs/start_def.png" id="3_7e3th"]
+[ext_resource type="Texture2D" uid="uid://bn10ts4oy204c" path="res://images/back.png" id="4_njnqg"]
+[ext_resource type="Texture2D" uid="uid://crqu7mbvhk7qo" path="res://images/back_hover.png" id="5_sf4ss"]
+[ext_resource type="Texture2D" uid="uid://dfm7we2d8n6qa" path="res://pc_images/vs/but_start_def.png" id="6_t0dmx"]
+[ext_resource type="Texture2D" uid="uid://5onms28lcav4" path="res://pc_images/vs/but_start_act.png" id="7_0i2wh"]
+[ext_resource type="StyleBox" uid="uid://doqfw8m2vgbcx" path="res://pc_images/vs/hover_flat.tres" id="9_pdo0a"]
+[ext_resource type="StyleBox" uid="uid://dbqielejpmuu5" path="res://pc_images/vs/normal_flat.tres" id="10_e1iun"]
+
+[node name="Working" type="Node2D"]
+script = ExtResource("1_injln")
+
+[node name="GrayBack" type="Sprite2D" parent="."]
+position = Vector2(325.75, 424)
+scale = Vector2(3.11751, 2.87582)
+texture = ExtResource("2_lgjs3")
+
+[node name="Gray" type="Sprite2D" parent="."]
+position = Vector2(328, 16)
+scale = Vector2(1.09571, 1.32759)
+texture = ExtResource("2_vfb5r")
+
+[node name="StartDef" type="Sprite2D" parent="."]
+position = Vector2(320, 16)
+texture = ExtResource("3_7e3th")
+
+[node name="TextureButton" type="TextureButton" parent="."]
+offset_left = 189.0
+offset_top = 3.0
+offset_right = 258.0
+offset_bottom = 29.0
+texture_normal = ExtResource("6_t0dmx")
+texture_pressed = ExtResource("7_0i2wh")
+texture_hover = ExtResource("7_0i2wh")
+texture_disabled = ExtResource("6_t0dmx")
+
+[node name="BackButton" type="TextureButton" parent="."]
+offset_left = 112.0
+offset_top = 770.0
+offset_right = 624.0
+offset_bottom = 1282.0
+scale = Vector2(0.15, 0.15)
+button_mask = 7
+texture_normal = ExtResource("4_njnqg")
+texture_pressed = ExtResource("5_sf4ss")
+texture_hover = ExtResource("5_sf4ss")
+texture_disabled = ExtResource("4_njnqg")
+texture_focused = ExtResource("5_sf4ss")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+offset_left = 16.0
+offset_top = 40.0
+offset_right = 632.0
+offset_bottom = 776.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HFlowContainer" type="HFlowContainer" parent="ScrollContainer"]
+custom_minimum_size = Vector2(608, 736)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ScrollContainer/HFlowContainer"]
+layout_mode = 2
+text = "ухй"
+
+[node name="Button2" type="Button" parent="ScrollContainer/HFlowContainer"]
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "ухфвыафывфывафывафывафывафывай"
+
+[node name="Button3" type="Button" parent="ScrollContainer/HFlowContainer"]
+layout_mode = 2
+text = "у                                                 х                                                             й"
+
+[connection signal="button_down" from="BackButton" to="." method="_on_back_button_button_down"]
