@@ -190,7 +190,24 @@ func _on_back_button_button_down() -> void:
 
 func _on_start_but_button_down() -> void:
 	var lines = text.split('\n')
-	var words = []
+	var words: Array = []
 	for line in lines:
-		for word in line.split(''):
-			pass
+		for word in line.split('<w///>'):
+			var stripped_word = word.strip_edges()
+
+			if stripped_word != '' and stripped_word != '\n':
+				words.append(stripped_word.replace('<n///>', ''))
+				if stripped_word.contains('<n///>'):
+					words.append('<n///>')
+	
+	var buts: Array = []
+	for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+		for but: Button in hcont.get_children():
+			buts.append(but.text.strip_edges())
+		buts.append('<n///>')
+	
+	var equal: bool = \
+		Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
+		Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
+
+	print(equal)
