@@ -78,34 +78,52 @@ func but_up(sender: Button) -> void:
 	remove_child(holder0)
 	
 	var was_any: bool = false
-	
 	var m_pos: Vector2 = get_global_mouse_position()
-	for hbox in $ScrollContainer/VBoxContainer.get_children():
+	var gap_y2: int = $ScrollContainer/VBoxContainer.get_theme_constant('separation') / 2
+	var more_than_last_but_width: bool = false
+	
+	for hbox: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
 		if was_any: break
+		var gap_x: int = hbox.get_theme_constant('separation') # / 2
+		var place: int = 0
+		var og: Vector2 = hbox.get_global_transform().origin
 		
-		for but: Button in hbox.get_children():
-			var pos: Vector2 = but.global_position
-			var b_cms: Vector2 = but.size
+		if og.y - gap_y2 <= m_pos.y and og.y + hbox.size.y + gap_y2 >= m_pos.y:
+			var to_place = func():
+				from.get_parent().remove_child(from)
+				hbox.add_child(from)
 			
-			#print(pos.x, '<=', m_pos.x, '|', pos.y, '<=', m_pos.y, '|', pos.x + b_cms.x, '>=', m_pos.x, '|', pos.y + b_cms.y, '>=', m_pos.y)
-			#print(pos.x <= m_pos.x, '|', pos.y <= m_pos.y, '|', pos.x + b_cms.x >= m_pos.x, '|', pos.y + b_cms.y >= m_pos.y)
-			#print('###')
-			
-			if pos.x <= m_pos.x and pos.y <= m_pos.y and pos.x + b_cms.x >= m_pos.x and pos.y + b_cms.y >= m_pos.y:
-				swap_from_to(but)
-				
-				was_any = true
-				break
-		
-		if not was_any and false:
-			# тут короче проверка, еили он конце или может в вначале уже не кнопок, а просто хбокса
-			# то у проверять просто
-			# а еще както сделать проверку ближайшего
-			was_any = true
-			break
-	
+			if hbox.get_child_count() < 1:
+				to_place.call()
+			elif m_pos.x > hbox.get_children()[hbox.get_child_count() - 1].global_position.x + hbox.get_children()[hbox.get_child_count() - 1].size.x:
+				to_place.call()
+			elif m_pos.x < og.x:
+				to_place.call()
+				hbox.move_child(from, 0)
+			else:
+				for but: Button in hbox.get_children():
+					var pos: Vector2 = but.global_position
+					var b_s: Vector2 = but.size
+					
+					if pos.x <= m_pos.x and pos.x + b_s.x >= m_pos.x:
+						swap_from_to(but)
+						
+						was_any = true
+						break
+					
+					if m_pos.x <= pos.x and m_pos.x >= pos.x - gap_x:
+						from.get_parent().remove_child(from)
+						hbox.add_child(from)
+						hbox.move_child(from, place)
+						
+						from = null
+						was_any = true
+						break
+					
+					place += 1
+					
 	holder0 = null
-	
+
 
 func but_down(sender: Button) -> void:
 	holder0 = but_pressed(sender)
@@ -123,15 +141,27 @@ func but_pressed(sender: Button) -> Button:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$ScrollContainer.remove_child($ScrollContainer/HFlowContainer)
+	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
+	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
 	
-	for stroke in strokes:
-		var vcont: HBoxContainer = HBoxContainer.new()
-		vcont.custom_minimum_size = Vector2(608, 32)
-		vcont.add_theme_constant_override('separation', 8)
-		$ScrollContainer/VBoxContainer.add_child(vcont)
+	var i: int = 1
+	var strs: Array = Array(strokes)
+	strs.shuffle()
+	for stroke in strs:
+		var hcont: HBoxContainer = HBoxContainer.new()
+		hcont.custom_minimum_size = Vector2(608, 32)
+		hcont.add_theme_constant_override('separation', 8)
+		$ScrollContainer/VBoxContainer.add_child(hcont)
+		
+		var rect: ColorRect = ColorRect.new()
+		rect.global_position = Vector2(hcont.global_position.x, hcont.global_position.y + 32 * i + 8 * (i - 1) + 2)
+		rect.size = Vector2(608, 2)
+		rect.color = Color(0, 0, 0)
+		add_child(rect)
+		i += 1
 
-		var words: PackedStringArray = stroke.split('<w///>')
+		var words: Array = Array(stroke.split('<w///>'))
+		words.shuffle()
 		for word in words:
 			word = word.replace('\n', '').strip_edges()
 			
@@ -143,7 +173,7 @@ func _ready() -> void:
 				but.connect("button_down", func(): but_down(but))
 				#but.connect("pressed", func(): but_pressed(but))
 				but.connect("button_up", func(): but_up(but))
-				vcont.add_child(but)
+				hcont.add_child(but)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -156,3 +186,11 @@ func _process(delta: float) -> void:
 
 func _on_back_button_button_down() -> void:
 	Singleton.go_to("res://scenes/work.tscn")
+
+
+func _on_start_but_button_down() -> void:
+	var lines = text.split('\n')
+	var words = []
+	for line in lines:
+		for word in line.split(''):
+			pass

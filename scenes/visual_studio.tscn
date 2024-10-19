@@ -28,7 +28,7 @@ texture = ExtResource("2_vfb5r")
 position = Vector2(320, 16)
 texture = ExtResource("3_7e3th")
 
-[node name="TextureButton" type="TextureButton" parent="."]
+[node name="StartBut" type="TextureButton" parent="."]
 offset_left = 189.0
 offset_top = 3.0
 offset_right = 258.0
@@ -57,35 +57,134 @@ offset_top = 40.0
 offset_right = 632.0
 offset_bottom = 776.0
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="HFlowContainer" type="HFlowContainer" parent="ScrollContainer"]
-custom_minimum_size = Vector2(608, 736)
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="Button" type="Button" parent="ScrollContainer/HFlowContainer"]
+[node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "ухй"
-
-[node name="Button2" type="Button" parent="ScrollContainer/HFlowContainer"]
-layout_mode = 2
-theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
-theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
 theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
 theme_override_styles/normal = ExtResource("10_e1iun")
-text = "ухфвыафывфывафывафывафывафывай"
+text = "эээээээээээ''''''"
 
-[node name="Button3" type="Button" parent="ScrollContainer/HFlowContainer"]
+[node name="Button3" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "у                                                 х                                                             й"
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "эээээээээээ"
 
+[node name="Button4" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "ээээээээээээээээээ"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "эээээээээээ''''''ывапвп"
+
+[node name="Button3" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "эээээээээээ"
+
+[node name="Button4" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/focus = ExtResource("9_pdo0a")
+theme_override_styles/disabled_mirrored = ExtResource("10_e1iun")
+theme_override_styles/disabled = ExtResource("10_e1iun")
+theme_override_styles/hover_pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover_pressed = ExtResource("9_pdo0a")
+theme_override_styles/hover_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/hover = ExtResource("9_pdo0a")
+theme_override_styles/pressed_mirrored = ExtResource("9_pdo0a")
+theme_override_styles/pressed = ExtResource("9_pdo0a")
+theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
+theme_override_styles/normal = ExtResource("10_e1iun")
+text = "ээээээээээээээээээ"
+
+[connection signal="button_down" from="StartBut" to="." method="_on_start_but_button_down"]
 [connection signal="button_down" from="BackButton" to="." method="_on_back_button_button_down"]
