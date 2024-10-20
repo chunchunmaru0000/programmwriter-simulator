@@ -1,1 +1,3 @@
-0
+exp=0
+slash_n=0
+tabs=0

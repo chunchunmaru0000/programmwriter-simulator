@@ -19,7 +19,9 @@ var uslugi: Array = [
 
 var lang
 var task
-var task_path: String = "res://text_py_code.txt"
+var task_path: String = "res://text_cs_code00.txt"
+var slash_n: bool = false
+var tabs: bool = false
 
 func clear() -> void:
 	save_file = "save.txt"

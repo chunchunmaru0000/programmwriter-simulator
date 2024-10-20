@@ -11,6 +11,60 @@ var text: String = FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
 
+func estimate_code() -> bool:
+	var equal: bool = false
+	
+	var lines = text.split('\n')
+	var words: Array = []
+	var buts: Array = []
+	
+	for line in lines:
+		for word in line.split('<w///>'):
+			var stripped_word = word.strip_edges()
+			if stripped_word != '' and stripped_word != '\n':
+				words.append(stripped_word.replace('<n///>', ''))
+				
+				if stripped_word.contains('<n///>'):
+					words.append('<n///>')
+	
+	if Singleton.slash_n and Singleton.tabs:	
+		for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+			for but: Button in hcont.get_children():
+				var stripped_but: String = but.text.strip_edges()
+				if stripped_but == '' and but.text.length() == 12:
+					buts.append('<t///>')
+				else:
+					buts.append(stripped_but)
+			buts.append('<n///>')
+		equal = \
+			Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
+			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
+
+#elif not Singleton.slash_n and Singleton.tabs:
+	#pass вероятно не существует
+		
+	elif Singleton.slash_n and not Singleton.tabs:	
+		for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+			for but: Button in hcont.get_children():
+				buts.append(but.text.strip_edges())
+			buts.append('<n///>')
+		equal = \
+			Array(''.join(words).split('<n///>')). \
+				filter(func(word): return word != '' and word != '<t///>'). \
+				map(func(word): return word.replace('<t///>', '')) == \
+			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
+
+	else:
+		buts = $ScrollContainer/VBoxContainer.get_children(). \
+			map(func(hcont: HBoxContainer): return hcont.get_children(). \
+			map(func(but: Button): return but.text.strip_edges().replace('\n', '')))
+		equal = \
+			''.join(words.map(func(word): return word.replace('<t///>', ''))) == \
+			''.join(buts.map(func(line): return ''.join(line)))
+		
+	print(equal)
+	return equal
+
 
 func swap_from_to(sender: Button) -> void:
 	if from == null:
@@ -139,6 +193,16 @@ func but_pressed(sender: Button) -> Button:
 	return clone
 
 
+func create_but(hcont: HBoxContainer, word: String) -> void:
+	var but: Button = Button.new()
+	but.text = '  ' + word + '  '
+	but_add_themes(but)
+	
+	but.connect("button_down", func(): but_down(but))
+	but.connect("button_up", func(): but_up(but))
+	hcont.add_child(but)
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
@@ -166,14 +230,10 @@ func _ready() -> void:
 			word = word.replace('\n', '').strip_edges()
 			
 			if word != '':
-				var but: Button = Button.new()
-				but.text = '  ' + word + '  '
-				but_add_themes(but)
-				
-				but.connect("button_down", func(): but_down(but))
-				#but.connect("pressed", func(): but_pressed(but))
-				but.connect("button_up", func(): but_up(but))
-				hcont.add_child(but)
+				if word == '<t///>':
+					create_but(hcont, '        ')
+				else:
+					create_but(hcont, word)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -189,25 +249,4 @@ func _on_back_button_button_down() -> void:
 
 
 func _on_start_but_button_down() -> void:
-	var lines = text.split('\n')
-	var words: Array = []
-	for line in lines:
-		for word in line.split('<w///>'):
-			var stripped_word = word.strip_edges()
-
-			if stripped_word != '' and stripped_word != '\n':
-				words.append(stripped_word.replace('<n///>', ''))
-				if stripped_word.contains('<n///>'):
-					words.append('<n///>')
-	
-	var buts: Array = []
-	for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
-		for but: Button in hcont.get_children():
-			buts.append(but.text.strip_edges())
-		buts.append('<n///>')
-	
-	var equal: bool = \
-		Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
-		Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
-
-	print(equal)
+	estimate_code()
