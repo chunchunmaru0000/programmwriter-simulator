@@ -20,9 +20,8 @@ func _on_newgame_button_down() -> void:
 		
 		if new_save_file != save_file:
 			Singleton.set_save_file(new_save_file)
-		
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	
+	Singleton.go_to("res://scenes/game.tscn")
 	
 
 func _on_load_pressed() -> void:

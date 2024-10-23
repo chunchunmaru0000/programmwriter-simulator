@@ -27,8 +27,7 @@ func _process(delta: float) -> void:
 
 
 func _on_back_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/start.tscn")
+	Singleton.go_to("res://scenes/start.tscn")
 
 
 func _on_sleep_pressed() -> void:
@@ -40,8 +39,7 @@ func _on_sleep_pressed() -> void:
 
 
 func _on_gos_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/gos_login.tscn")
+	Singleton.go_to("res://scenes/gos_login.tscn")
 
 
 func _on_5_pressed() -> void:
@@ -49,18 +47,8 @@ func _on_5_pressed() -> void:
 
 
 func _on_work_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/work.tscn")
-	return
-	var work_time = 1
-	
-	Singleton.set_sleep(Singleton.sleep + work_time)
-	Singleton.add_time(work_time)
-	Singleton.money += 1000
-	
-	update_labels()
+	Singleton.go_to("res://scenes/desktop.tscn")
 
 
 func _on_fridge_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/fridge.tscn")
+	Singleton.go_to("res://scenes/fridge.tscn")

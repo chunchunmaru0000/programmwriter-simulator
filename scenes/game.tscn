@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c6ic2w21tv33y"]
+[gd_scene load_steps=9 format=3 uid="uid://c6ic2w21tv33y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_nqbsp"]
 [ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="2_cu53h"]
 [ext_resource type="SpriteFrames" uid="uid://df7ijmtp3y2vg" path="res://clocks/clocks.tres" id="2_kyemp"]
 [ext_resource type="Texture2D" uid="uid://dgm5j2o6fueed" path="res://images/fridge_top.png" id="3_oyk8c"]
 [ext_resource type="Texture2D" uid="uid://bmc58a6abge1d" path="res://images/gos_top_short.png" id="4_3xsn3"]
+[ext_resource type="Texture2D" uid="uid://pqplagad618q" path="res://pc_images/pc.jpg" id="5_ad716"]
 [ext_resource type="AudioStream" uid="uid://f6ch0o5rhs2q" path="res://audio/zhirik.mp3" id="6_sppxf"]
 
 [sub_resource type="Theme" id="Theme_nw4ga"]
@@ -79,14 +80,19 @@ scale = Vector2(0.15551, 0.243421)
 texture = ExtResource("2_cu53h")
 
 [node name="FridgeTop" type="Sprite2D" parent="."]
-position = Vector2(555.5, 684.35)
-scale = Vector2(0.339326, 0.26148)
+position = Vector2(555.5, 684.5)
+scale = Vector2(0.339326, 0.25)
 texture = ExtResource("3_oyk8c")
 
 [node name="GosTopShort" type="Sprite2D" parent="."]
 position = Vector2(555.5, 726.5)
 scale = Vector2(0.883041, 0.711538)
 texture = ExtResource("4_3xsn3")
+
+[node name="Pc" type="Sprite2D" parent="."]
+position = Vector2(556, 768.5)
+scale = Vector2(0.932516, 0.220238)
+texture = ExtResource("5_ad716")
 
 [node name="ButtonsVBox" type="VBoxContainer" parent="."]
 offset_left = 480.0
@@ -111,7 +117,7 @@ text = "
 
 [node name="Work" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
-text = "Работа"
+text = "Компьютер"
 
 [node name="Sleep" type="Button" parent="ButtonsVBox"]
 layout_mode = 2

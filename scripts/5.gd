@@ -132,5 +132,4 @@ func _process(delta: float) -> void:
 
 
 func _on_back_button_pressed() -> void:
-	Singleton.save_progress()
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+	Singleton.go_to("res://scenes/game.tscn")

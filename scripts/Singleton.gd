@@ -19,9 +19,9 @@ var uslugi: Array = [
 
 var lang
 var task
-var task_path: String = "res://text_cs_code00.txt"
-var slash_n: bool = false
-var tabs: bool = false
+var task_path: String = "res://langs/Python/codes/text_py_code01.txt"
+var slash_n: bool = true
+var tabs: bool = true
 
 func clear() -> void:
 	save_file = "save.txt"
@@ -221,8 +221,9 @@ func remove_fridge(product) -> void:
 func set_fridge_at(index: int, product: Product) -> void:
 	fridge[index] = product
 	
-func go_to(path: String):
-	Singleton.save_progress()
+func go_to(path: String, save: bool=true):
+	if save:
+		Singleton.save_progress()
 	get_tree().change_scene_to_file(path)
 
 
