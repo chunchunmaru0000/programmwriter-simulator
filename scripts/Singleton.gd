@@ -23,6 +23,8 @@ var task_path: String = "res://langs/Python/codes/text_py_code01.txt"
 var slash_n: bool = true
 var tabs: bool = true
 
+var learn: bool = true
+
 func clear() -> void:
 	save_file = "save.txt"
 

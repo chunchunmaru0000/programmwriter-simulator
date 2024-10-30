@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1e6sgpp6ietv"]
+[gd_scene load_steps=15 format=3 uid="uid://c1e6sgpp6ietv"]
 
 [ext_resource type="Script" path="res://scripts/chrome.gd" id="1_xn36g"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="2_tjwuc"]
@@ -6,6 +6,14 @@
 [ext_resource type="Texture2D" uid="uid://mrc5yo7oj2jh" path="res://pc_images/desktop/start_act.jpg" id="4_fyx77"]
 [ext_resource type="Texture2D" uid="uid://vn3uxytd5fhi" path="res://pc_images/desktop/chrome.png" id="5_kc8b8"]
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="6_tn4g8"]
+[ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="7_nrrp2"]
+[ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="8_7gu00"]
+[ext_resource type="Texture2D" uid="uid://b4aooy8d1femt" path="res://pc_images/chrome/bar_learn_act.png" id="9_kaowd"]
+[ext_resource type="Texture2D" uid="uid://dsm8m68sntu31" path="res://pc_images/chrome/bar_money_def.png" id="10_srpht"]
+[ext_resource type="Texture2D" uid="uid://cpsbqrmvqsq0o" path="res://pc_images/chrome/bar_money_act.png" id="11_kfll8"]
+[ext_resource type="Texture2D" uid="uid://cdaek05o0e1ex" path="res://pc_images/chrome/bar_learn.png" id="12_05tlt"]
+[ext_resource type="Texture2D" uid="uid://psuwg6bmg2il" path="res://pc_images/chrome/bar_learn_def.png" id="12_cwxp7"]
+[ext_resource type="Texture2D" uid="uid://c60gb5y5880kn" path="res://pc_images/chrome/esc_red.png" id="14_t773f"]
 
 [node name="Chrome" type="Node2D"]
 script = ExtResource("1_xn36g")
@@ -47,4 +55,76 @@ texture_focused = ExtResource("6_tn4g8")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="Vs" type="TextureButton" parent="."]
+offset_left = 288.0
+offset_top = 823.0
+offset_right = 473.0
+offset_bottom = 848.0
+texture_normal = ExtResource("7_nrrp2")
+texture_pressed = ExtResource("8_7gu00")
+texture_hover = ExtResource("8_7gu00")
+texture_disabled = ExtResource("7_nrrp2")
+texture_focused = ExtResource("8_7gu00")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Bar2" type="Sprite2D" parent="."]
+position = Vector2(325, 22)
+scale = Vector2(1.043, 1.043)
+texture = ExtResource("12_05tlt")
+
+[node name="MoneyBut" type="TextureButton" parent="."]
+offset_left = 39.0
+offset_top = 3.0
+offset_right = 227.0
+offset_bottom = 43.0
+texture_normal = ExtResource("10_srpht")
+texture_pressed = ExtResource("11_kfll8")
+texture_hover = ExtResource("11_kfll8")
+texture_disabled = ExtResource("10_srpht")
+texture_focused = ExtResource("11_kfll8")
+stretch_mode = 0
+
+[node name="LearnBut" type="TextureButton" parent="."]
+offset_left = 231.0
+offset_right = 419.0
+offset_bottom = 40.0
+texture_normal = ExtResource("12_cwxp7")
+texture_pressed = ExtResource("9_kaowd")
+texture_hover = ExtResource("9_kaowd")
+texture_disabled = ExtResource("12_cwxp7")
+texture_focused = ExtResource("9_kaowd")
+stretch_mode = 0
+
+[node name="EscBut" type="TextureButton" parent="."]
+offset_left = 604.0
+offset_right = 650.0
+offset_bottom = 39.0
+texture_pressed = ExtResource("14_t773f")
+texture_hover = ExtResource("14_t773f")
+texture_focused = ExtResource("14_t773f")
+stretch_mode = 0
+
+[node name="Background" type="TextureRect" parent="."]
+offset_top = 44.0
+offset_right = 648.0
+offset_bottom = 823.0
+expand_mode = 1
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+offset_top = 44.0
+offset_right = 648.0
+offset_bottom = 822.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="Lenta" type="VBoxContainer" parent="Scroll"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
+[connection signal="button_down" from="Vs" to="." method="_on_vs_button_down"]
+[connection signal="button_down" from="MoneyBut" to="." method="_on_money_but_button_down"]
+[connection signal="button_down" from="LearnBut" to="." method="_on_learn_but_button_down"]
+[connection signal="button_down" from="EscBut" to="." method="_on_esc_but_button_down"]

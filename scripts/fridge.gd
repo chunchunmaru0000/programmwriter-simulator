@@ -47,6 +47,8 @@ func eat_owned_product(but, product) -> void:
 func toss_owned_product(but, product) -> void:
 	Singleton.remove_fridge(product)
 	$ProductsScroll/FridgeBox.remove_child(but.get_parent().get_parent().get_parent())
+	but.get_parent().get_parent().get_parent().queue_free()
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

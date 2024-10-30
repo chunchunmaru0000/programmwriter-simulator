@@ -5,7 +5,6 @@ extends Node2D
 func _ready() -> void:
 	var times = Singleton.time.split(':')
 	$Time.text = times[1] + ':' + times[2]
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,3 +18,7 @@ func _on_start_button_down() -> void:
 
 func _on_chrome_button_down() -> void:
 	Singleton.go_to("res://scenes/chrome.tscn")
+
+
+func _on_vs_button_down() -> void:
+	Singleton.go_to("res://scenes/visual_studio.tscn")

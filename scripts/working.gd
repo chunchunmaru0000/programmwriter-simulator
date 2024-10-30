@@ -205,6 +205,9 @@ func create_but(hcont: HBoxContainer, word: String) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var times = Singleton.time.split(':')
+	$Bar/Time.text = times[1] + ':' + times[2]
+	
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
 	
@@ -244,9 +247,13 @@ func _process(delta: float) -> void:
 		holder0.position = but_m_pos(holder0)
 
 
-func _on_back_button_button_down() -> void:
-	Singleton.go_to("res://scenes/work.tscn")
-
-
 func _on_start_but_button_down() -> void:
 	estimate_code()
+
+
+func _on_start_button_down() -> void:
+	Singleton.go_to("res://scenes/game.tscn")
+
+
+func _on_chrome_button_down() -> void:
+	Singleton.go_to("res://scenes/chrome.tscn")
