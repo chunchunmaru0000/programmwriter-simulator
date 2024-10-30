@@ -25,10 +25,21 @@ class Lang:
 		self.codes_paths = codes_paths
 		self.learn_paths = learn_paths
 		self.data = data
+		
 
+class Task:
+	var lang: Lang
+	var path: String
+	var code_name: int
+	
+	func _init(lang: Lang, path: String, code_name: int) -> void:
+		self.lang = lang
+		self.path = path
+		self.code_name = code_name
 
 var langs_names: PackedStringArray = DirAccess.open("res://langs/").get_directories()
 var langs: Array = []
+var levels_plus: int = 5
 
 
 func get_datas_from_langs() -> void:
@@ -39,7 +50,6 @@ func get_datas_from_langs() -> void:
 			var learn_path: String = lang_path + "learn/"
 			
 			var data_text = FileAccess.open(lang_path + "data.txt", FileAccess.READ).get_as_text().split('\n')
-			print(data_text[1].split('=')[1].strip_edges())
 			var lang_data: LangData = LangData.new(
 				int(data_text[0].split('=')[1].strip_edges()),
 				data_text[1].split('=')[1].strip_edges() == '1',
@@ -54,10 +64,10 @@ func get_datas_from_langs() -> void:
 				lang_data
 			)
 			
-			print(lang.name)
-			print('exp=', lang_data.exp, ';slash_n=', lang_data.slash_n, ';tabs=', lang_data.tabs)
-			print(lang.codes_paths)
-			print(lang.learn_paths)
+			#print(lang.name)
+			#print('exp=', lang_data.exp, ';slash_n=', lang_data.slash_n, ';tabs=', lang_data.tabs)
+			#print(lang.codes_paths)
+			#print(lang.learn_paths)
 			langs.append(lang)
 
 
@@ -67,7 +77,8 @@ func draw_learn() -> void:
 		$Scroll/Lenta.remove_child(child)
 		child.queue_free()
 	
-	
+	for lang: Lang in langs:
+		pass
 	
 
 func draw_money() -> void:
@@ -76,7 +87,101 @@ func draw_money() -> void:
 		$Scroll/Lenta.remove_child(child)
 		child.queue_free()
 	
+	var tasks: Array = []
 	
+	for lang: Lang in langs:
+		for code_path in lang.codes_paths:
+			var text: String = code_path.split('/')[-1].split('.')[0].strip_edges()
+			if text.is_valid_int():
+				var code_name: int = int(text)
+				if code_name / 3 <= lang.data.exp + levels_plus:
+					tasks.append(Task.new(lang, code_path, code_name))
+	
+	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
+	#print(tasks.map(func(task: Task): return task.code_name))
+	
+	var panel_style: StyleBoxFlat = load("res://pc_images/chrome/money/panel_style.tres")
+	for task: Task in tasks:
+		var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
+		print(datas)
+		var title_text: String = datas[0]
+		var desc_text: String = datas[1]
+		var price_value: int = int(datas[2])
+		var task_code_text: String = datas[3]
+		
+		
+		var title: Label = Label.new()
+		title.custom_minimum_size = Vector2(530, 0)
+		title.text = title_text
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		
+		title.add_theme_color_override('font_color', Color('#00ff00'))
+		title.add_theme_font_size_override('font_size', 24)
+		
+		
+		var desc: Label = Label.new()
+		desc.custom_minimum_size = Vector2(530, 0)
+		desc.text = desc_text
+		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc.add_theme_color_override('font_color', Color('#000000'))
+		
+		
+		var price_low: Label = Label.new()
+		price_low.text = 'Бюджет: '
+		price_low.add_theme_color_override('font_color', Color('#00ff00'))
+		price_low.add_theme_font_size_override('font_size', 14)
+		var price_big: Label = Label.new()
+		price_big.text = str(price_value) + '₽'
+		price_big.add_theme_color_override('font_color', Color('#00ff00'))
+		price_big.add_theme_font_size_override('font_size', 24)
+		var price: HBoxContainer = HBoxContainer.new()
+		price.add_child(price_low)
+		price.add_child(price_big)
+		
+		var vbox_labels: Label = Label.new()
+		vbox_labels.text = \
+			'Язык программирования: ' + task.lang.name + \
+			'\nСтаж языка: ' + str(task.lang.data.exp) + \
+			'\nСложность задания: ' + str(task.code_name)
+		vbox_labels.add_theme_color_override('font_color', Color('#000000')) 
+		
+		var icon: TextureRect = TextureRect.new()
+		icon.texture = load(task.lang.img)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.custom_minimum_size = Vector2(64, 64)
+		
+		var hbox: HBoxContainer = HBoxContainer.new()
+		hbox.add_child(icon)
+		hbox.add_child(vbox_labels)
+		
+		var to_do_but: Button = Button.new()
+		to_do_but.text = 'ВЫполнить задачу'
+		to_do_but.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		to_do_but.custom_minimum_size.y = 40
+		to_do_but.add_theme_color_override("font_color",  Color("#ffffff"))
+		to_do_but.add_theme_color_override("font_hover_color",  Color("#ffffff"))
+		to_do_but.add_theme_color_override("font_pressed_color",  Color("#ffffff"))
+		to_do_but.add_theme_color_override("font_focus_color",  Color("#ffffff"))
+		to_do_but.add_theme_stylebox_override('hover',         load("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('hover_pressed', load("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('pressed',       load("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('focus',         load("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('normal',        load("res://pc_images/chrome/money/to_do_but_def.tres"))
+		#to_do_but.connect("button_down", func(): eat_owned_product(eat_but, product))
+		
+		var vbox: VBoxContainer = VBoxContainer.new()
+		vbox.add_theme_constant_override('separation', 4)
+		vbox.add_child(title)
+		vbox.add_child(desc)
+		vbox.add_child(price)
+		vbox.add_child(hbox)
+		vbox.add_child(to_do_but)
+		
+		var panel: PanelContainer = PanelContainer.new()
+		panel.add_theme_stylebox_override('panel', panel_style)
+		panel.add_child(vbox)
+		
+		$Scroll/Lenta.add_child(panel)
 	
 
 # Called when the node enters the scene tree for the first time.

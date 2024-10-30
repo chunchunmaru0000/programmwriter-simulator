@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c1e6sgpp6ietv"]
+[gd_scene load_steps=18 format=3 uid="uid://c1e6sgpp6ietv"]
 
 [ext_resource type="Script" path="res://scripts/chrome.gd" id="1_xn36g"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="2_tjwuc"]
@@ -14,6 +14,9 @@
 [ext_resource type="Texture2D" uid="uid://cdaek05o0e1ex" path="res://pc_images/chrome/bar_learn.png" id="12_05tlt"]
 [ext_resource type="Texture2D" uid="uid://psuwg6bmg2il" path="res://pc_images/chrome/bar_learn_def.png" id="12_cwxp7"]
 [ext_resource type="Texture2D" uid="uid://c60gb5y5880kn" path="res://pc_images/chrome/esc_red.png" id="14_t773f"]
+[ext_resource type="StyleBox" uid="uid://cvi84thnff1k0" path="res://pc_images/chrome/money/panel_style.tres" id="15_1btni"]
+[ext_resource type="StyleBox" uid="uid://bdw37l3nla4xn" path="res://pc_images/chrome/money/to_do_but_def.tres" id="16_2csra"]
+[ext_resource type="StyleBox" uid="uid://c6qmogh3yvxk7" path="res://pc_images/chrome/money/to_do_but_act.tres" id="17_amocs"]
 
 [node name="Chrome" type="Node2D"]
 script = ExtResource("1_xn36g")
@@ -112,16 +115,39 @@ offset_bottom = 823.0
 expand_mode = 1
 
 [node name="Scroll" type="ScrollContainer" parent="."]
-offset_top = 44.0
-offset_right = 648.0
+offset_left = 20.0
+offset_top = 64.0
+offset_right = 628.0
 offset_bottom = 822.0
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
 [node name="Lenta" type="VBoxContainer" parent="Scroll"]
-custom_minimum_size = Vector2(640, 0)
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 theme_override_constants/separation = 16
+
+[node name="PanelContainer" type="PanelContainer" parent="Scroll/Lenta"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("15_1btni")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Scroll/Lenta/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "adgaga
+dghj
+dghj"
+
+[node name="Button" type="Button" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/focus = ExtResource("16_2csra")
+theme_override_styles/hover = ExtResource("17_amocs")
+text = "dhsfghsfghsfgh"
 
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Vs" to="." method="_on_vs_button_down"]
