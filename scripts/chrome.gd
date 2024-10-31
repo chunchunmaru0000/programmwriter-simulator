@@ -5,11 +5,13 @@ class LangData:
 	var exp: int
 	var slash_n: bool
 	var tabs: bool
+	var did: Array
 	
-	func _init(exp: int, slash_n: bool, tabs: bool) -> void:
+	func _init(exp: int, slash_n: bool, tabs: bool, did: Array) -> void:
 		self.exp = exp
 		self.slash_n = slash_n
 		self.tabs = tabs
+		self.did = did
 
 
 class Lang:
@@ -18,13 +20,15 @@ class Lang:
 	var codes_paths: Array
 	var learn_paths: Array
 	var data: LangData
+	var data_path: String
 	
-	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData) -> void:
+	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String) -> void:
 		self.name = name
 		self.img = img
 		self.codes_paths = codes_paths
 		self.learn_paths = learn_paths
 		self.data = data
+		self.data_path = data_path
 		
 
 class Task:
@@ -51,21 +55,24 @@ func get_datas_from_langs() -> void:
 			var lang_path: String = Singleton.proj + "langs/" + lang_name + "/"
 			var codes_path: String = lang_path + "codes/"
 			var learn_path: String = lang_path + "learn/"
+			var data_path: String = lang_path + "data.txt"
 			
-			var data_text = FileAccess.open(lang_path + "data.txt", FileAccess.READ).get_as_text().split('\n')
+			var data_text = FileAccess.open(data_path, FileAccess.READ).get_as_text().split('\n')
+			
 			var lang_data: LangData = LangData.new(
 				int(data_text[0].split('=')[1].strip_edges()),
 				data_text[1].split('=')[1].strip_edges() == '1',
-				data_text[2].split('=')[1].strip_edges() == '1'
+				data_text[2].split('=')[1].strip_edges() == '1',
+				[] if data_text[3] == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num))
 			)
-			
 			
 			var lang: Lang = Lang.new(
 				lang_name,
 				load(lang_path + "logo.png"),
 				Array(DirAccess.open(codes_path).get_files()).map(func(s): return codes_path + s),
 				Array(DirAccess.open(learn_path).get_files()).map(func(s): return learn_path + s),
-				lang_data
+				lang_data,
+				data_path
 			)
 			
 			langs.append(lang)
@@ -86,6 +93,7 @@ func take_task(task: Task) -> void:
 	Singleton.tabs = task.lang.data.tabs
 	Singleton.slash_n = task.lang.data.slash_n
 	Singleton.task = task
+	Singleton.did_task = false
 	Singleton.go_to("res://scenes/visual_studio.tscn")
 
 
@@ -126,8 +134,10 @@ func draw_money() -> void:
 	var half_y_padding: int = y_padding / 2
 	
 	for task: Task in tasks:
+		if task.code_name in task.lang.data.did:
+			continue
+		
 		var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
-		#print(datas)
 		var title_text: String = datas[0]
 		var desc_text: String = datas[1]
 		var price_value: int = int(datas[2])

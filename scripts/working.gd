@@ -7,11 +7,14 @@ var from: Button = null
 var to: Button = null
 var holder0: Button = null
 
-var text: String = FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[-1]
+var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
 
 func estimate_code() -> bool:
+	if Singleton.did_task:
+		return false
+		
 	var equal: bool = false
 	
 	var lines = text.split('\n')
@@ -211,6 +214,9 @@ func _ready() -> void:
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
 	
+	if Singleton.did_task:
+		return
+	
 	var i: int = 1
 	var strs: Array = Array(strokes)
 	strs.shuffle()
@@ -248,7 +254,27 @@ func _process(delta: float) -> void:
 
 
 func _on_start_but_button_down() -> void:
-	estimate_code()
+	if estimate_code():
+		var task = Singleton.task
+		var data = task.lang.data
+		var text: String = FileAccess.open(task.lang.data_path, FileAccess.READ).get_as_text()
+
+		var new_text: String = \
+			'exp=' + str(data.exp + 1) + '\n' + \
+			'slash_n=' + ('1' if data.slash_n else '0') + '\n' + \
+			'tabs=' + ('1' if data.tabs else '0') + '\n' + \
+			'did=' + ('' if data.did.size() == 0 else '|'.join(data.did) + '|') + str(task.code_name)
+		var file = FileAccess.open(task.lang.data_path, FileAccess.WRITE)
+		file.store_string(new_text)
+		file.close()
+			
+		Singleton.money += task.price
+		Singleton.did_task = true
+		Singleton.add_time(1)
+		Singleton.go_to("res://scenes/chrome.tscn")
+	else:
+		#может чтото типа вы даун будет не знаю
+		pass
 
 
 func _on_start_button_down() -> void:

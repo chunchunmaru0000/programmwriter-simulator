@@ -18,9 +18,9 @@ var uslugi: Array = [
 	Usluga.new("Газоснабжение, отопление", 300, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день.")
 ]
 
-var lang
 var task
-var task_path: String = "res://langs/Python/codes/text_py_code01.txt"
+var did_task: bool = true
+var task_path: String
 var slash_n: bool = true
 var tabs: bool = true
 
