@@ -78,6 +78,15 @@ func remove_owned_product(but: Button, product) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var vbar: VScrollBar = $ProductsScroll.get_v_scroll_bar()
+	vbar.custom_minimum_size.x = 16
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	
+	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
+	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	
 	$money.text = "Ваши средства: " + str(Singleton.money) + " руб."
 	Singleton.add_time(1)
 	

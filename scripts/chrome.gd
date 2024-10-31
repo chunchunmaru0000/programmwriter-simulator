@@ -71,6 +71,16 @@ func get_datas_from_langs() -> void:
 			langs.append(lang)
 
 
+func get_new_panel(style: StyleBoxFlat, pos: String, padding: int) -> PanelContainer:
+	var panel: PanelContainer = PanelContainer.new()
+	panel.add_theme_stylebox_override('panel', style)
+	if pos == 'x':
+		panel.custom_minimum_size.x = padding
+	else:
+		panel.custom_minimum_size.y = padding
+	return panel
+
+
 func draw_learn() -> void:
 	$Background.texture = load("res://pc_images/chrome/learn/back.png")
 	for child in $Scroll/Lenta.get_children():
@@ -100,10 +110,16 @@ func draw_money() -> void:
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
 	#print(tasks.map(func(task: Task): return task.code_name))
 	
-	var panel_style: StyleBoxFlat = load("res://pc_images/chrome/money/panel_style.tres")
+	var panel_style: StyleBoxFlat = preload("res://pc_images/chrome/money/offer_panel_style.tres")
+	var block_style: StyleBoxFlat = preload("res://pc_images/chrome/money/panel_style.tres")
+	var text_wide: int = 498
+	var x_padding: int = 16
+	var y_padding: int = 12
+	var half_y_padding: int = y_padding / 2
+	
 	for task: Task in tasks:
 		var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
-		print(datas)
+		#print(datas)
 		var title_text: String = datas[0]
 		var desc_text: String = datas[1]
 		var price_value: int = int(datas[2])
@@ -111,29 +127,29 @@ func draw_money() -> void:
 		
 		
 		var title: Label = Label.new()
-		title.custom_minimum_size = Vector2(530, 0)
+		title.custom_minimum_size = Vector2(text_wide, 22)
 		title.text = title_text
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		
-		title.add_theme_color_override('font_color', Color('#00ff00'))
-		title.add_theme_font_size_override('font_size', 24)
+		title.add_theme_color_override('font_color', Color('#009400'))
+		title.add_theme_font_size_override('font_size', 20)
 		
 		
 		var desc: Label = Label.new()
-		desc.custom_minimum_size = Vector2(530, 0)
+		desc.custom_minimum_size = Vector2(text_wide, 0)
 		desc.text = desc_text
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		desc.add_theme_color_override('font_color', Color('#000000'))
+		desc.add_theme_font_size_override('font_size', 14)
 		
 		
 		var price_low: Label = Label.new()
 		price_low.text = 'Бюджет: '
-		price_low.add_theme_color_override('font_color', Color('#00ff00'))
-		price_low.add_theme_font_size_override('font_size', 14)
+		price_low.add_theme_color_override('font_color', Color('#009400'))
+		price_low.add_theme_font_size_override('font_size', 12)
 		var price_big: Label = Label.new()
 		price_big.text = str(price_value) + '₽'
-		price_big.add_theme_color_override('font_color', Color('#00ff00'))
-		price_big.add_theme_font_size_override('font_size', 24)
+		price_big.add_theme_color_override('font_color', Color('#009400'))
+		price_big.add_theme_font_size_override('font_size', 20)
 		var price: HBoxContainer = HBoxContainer.new()
 		price.add_child(price_low)
 		price.add_child(price_big)
@@ -144,6 +160,7 @@ func draw_money() -> void:
 			'\nСтаж языка: ' + str(task.lang.data.exp) + \
 			'\nСложность задания: ' + str(task.code_name)
 		vbox_labels.add_theme_color_override('font_color', Color('#000000')) 
+		vbox_labels.add_theme_font_size_override('font_size', 14)
 		
 		var icon: TextureRect = TextureRect.new()
 		icon.texture = load(task.lang.img)
@@ -155,37 +172,66 @@ func draw_money() -> void:
 		hbox.add_child(vbox_labels)
 		
 		var to_do_but: Button = Button.new()
-		to_do_but.text = 'ВЫполнить задачу'
+		to_do_but.text = 'Выполнить задачу'
 		to_do_but.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		to_do_but.custom_minimum_size.y = 40
 		to_do_but.add_theme_color_override("font_color",  Color("#ffffff"))
 		to_do_but.add_theme_color_override("font_hover_color",  Color("#ffffff"))
 		to_do_but.add_theme_color_override("font_pressed_color",  Color("#ffffff"))
 		to_do_but.add_theme_color_override("font_focus_color",  Color("#ffffff"))
-		to_do_but.add_theme_stylebox_override('hover',         load("res://pc_images/chrome/money/to_do_but_act.tres"))
-		to_do_but.add_theme_stylebox_override('hover_pressed', load("res://pc_images/chrome/money/to_do_but_act.tres"))
-		to_do_but.add_theme_stylebox_override('pressed',       load("res://pc_images/chrome/money/to_do_but_act.tres"))
-		to_do_but.add_theme_stylebox_override('focus',         load("res://pc_images/chrome/money/to_do_but_act.tres"))
-		to_do_but.add_theme_stylebox_override('normal',        load("res://pc_images/chrome/money/to_do_but_def.tres"))
+		to_do_but.add_theme_stylebox_override('hover',         preload("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('hover_pressed', preload("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('pressed',       preload("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('focus',         preload("res://pc_images/chrome/money/to_do_but_act.tres"))
+		to_do_but.add_theme_stylebox_override('normal',        preload("res://pc_images/chrome/money/to_do_but_def.tres"))
 		#to_do_but.connect("button_down", func(): eat_owned_product(eat_but, product))
 		
 		var vbox: VBoxContainer = VBoxContainer.new()
 		vbox.add_theme_constant_override('separation', 4)
+		vbox.add_child(get_new_panel(block_style, 'y', y_padding))
 		vbox.add_child(title)
+		vbox.add_child(get_new_panel(block_style, 'y', half_y_padding))
 		vbox.add_child(desc)
+		vbox.add_child(get_new_panel(block_style, 'y', half_y_padding))
 		vbox.add_child(price)
 		vbox.add_child(hbox)
+		vbox.add_child(get_new_panel(block_style, 'y', half_y_padding))
 		vbox.add_child(to_do_but)
+		vbox.add_child(get_new_panel(block_style, 'y', y_padding + half_y_padding))
+		
 		
 		var panel: PanelContainer = PanelContainer.new()
-		panel.add_theme_stylebox_override('panel', panel_style)
+		panel.add_theme_stylebox_override('panel', block_style)
 		panel.add_child(vbox)
+		panel.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x - $Scroll.get_v_scroll_bar().size.x - x_padding * 2
 		
-		$Scroll/Lenta.add_child(panel)
+		var hgrid: HBoxContainer = HBoxContainer.new()
+		var left: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+		var right: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+		
+		hgrid.add_child(left)
+		hgrid.add_child(panel)
+		hgrid.add_child(right)
+		
+		var main_panel: PanelContainer = PanelContainer.new()
+		main_panel.add_theme_stylebox_override('panel', panel_style)
+		main_panel.add_child(hgrid)
+		
+		#$Scroll/Lenta.add_child(panel)
+		$Scroll/Lenta.add_child(main_panel)
 	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var vbar: VScrollBar = $Scroll.get_v_scroll_bar()
+	vbar.custom_minimum_size.x = 16
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	
+	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
+	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	
 	get_datas_from_langs()
 	var times = Singleton.time.split(':')
 	$Time.text = times[1] + ':' + times[2]

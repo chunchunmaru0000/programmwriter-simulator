@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c1e6sgpp6ietv"]
+[gd_scene load_steps=19 format=3 uid="uid://c1e6sgpp6ietv"]
 
 [ext_resource type="Script" path="res://scripts/chrome.gd" id="1_xn36g"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="2_tjwuc"]
@@ -17,6 +17,7 @@
 [ext_resource type="StyleBox" uid="uid://cvi84thnff1k0" path="res://pc_images/chrome/money/panel_style.tres" id="15_1btni"]
 [ext_resource type="StyleBox" uid="uid://bdw37l3nla4xn" path="res://pc_images/chrome/money/to_do_but_def.tres" id="16_2csra"]
 [ext_resource type="StyleBox" uid="uid://c6qmogh3yvxk7" path="res://pc_images/chrome/money/to_do_but_act.tres" id="17_amocs"]
+[ext_resource type="StyleBox" uid="uid://r6padww208js" path="res://pc_images/chrome/money/scroll_style.tres" id="18_pfuas"]
 
 [node name="Chrome" type="Node2D"]
 script = ExtResource("1_xn36g")
@@ -116,8 +117,8 @@ expand_mode = 1
 
 [node name="Scroll" type="ScrollContainer" parent="."]
 offset_left = 20.0
-offset_top = 64.0
-offset_right = 628.0
+offset_top = 44.0
+offset_right = 648.0
 offset_bottom = 822.0
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
@@ -134,6 +135,7 @@ theme_override_styles/panel = ExtResource("15_1btni")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Scroll/Lenta/PanelContainer"]
 layout_mode = 2
+theme_override_constants/separation = 24
 
 [node name="Label" type="Label" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -148,6 +150,10 @@ layout_mode = 2
 theme_override_styles/focus = ExtResource("16_2csra")
 theme_override_styles/hover = ExtResource("17_amocs")
 text = "dhsfghsfghsfgh"
+
+[node name="VScrollBar" type="VScrollBar" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/scroll = ExtResource("18_pfuas")
 
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Vs" to="." method="_on_vs_button_down"]
