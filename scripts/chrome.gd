@@ -66,9 +66,21 @@ func get_datas_from_langs() -> void:
 				[] if data_text[3] == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num))
 			)
 			
+			var img = Image.new() 
+			var texture = ImageTexture.new() 
+			var file: FileAccess = FileAccess.open(lang_path + "logo.png", FileAccess.READ) 
+			img.load_png_from_buffer(file.get_buffer(file.get_length())) 
+			file.close() 
+			
+			print(texture.get_size())
+			if texture.get_size() == Vector2(0, 0):
+				print("res://reserve_langs/" + lang_name + "/logo.png", '   ', ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"))
+				if ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"):
+					texture = load("res://reserve_langs/" + lang_name + "/logo.png")
+			
 			var lang: Lang = Lang.new(
 				lang_name,
-				load(lang_path + "logo.png"),
+				texture,
 				Array(DirAccess.open(codes_path).get_files()).map(func(s): return codes_path + s),
 				Array(DirAccess.open(learn_path).get_files()).map(func(s): return learn_path + s),
 				lang_data,
