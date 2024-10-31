@@ -14,12 +14,12 @@ class LangData:
 
 class Lang:
 	var name: String
-	var img: String
+	var img: CompressedTexture2D
 	var codes_paths: Array
 	var learn_paths: Array
 	var data: LangData
 	
-	func _init(name: String, img: String, codes_paths: Array, learn_paths: Array, data: LangData) -> void:
+	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData) -> void:
 		self.name = name
 		self.img = img
 		self.codes_paths = codes_paths
@@ -31,13 +31,16 @@ class Task:
 	var lang: Lang
 	var path: String
 	var code_name: int
+	var price: int
 	
-	func _init(lang: Lang, path: String, code_name: int) -> void:
+	func _init(lang: Lang, path: String, code_name: int, price: int=0) -> void:
 		self.lang = lang
 		self.path = path
 		self.code_name = code_name
+		self.price = price
+		
 
-var langs_names: PackedStringArray = DirAccess.open("res://langs/").get_directories()
+var langs_names: PackedStringArray = DirAccess.open(Singleton.proj + "langs/").get_directories()
 var langs: Array = []
 var levels_plus: int = 5
 
@@ -45,7 +48,7 @@ var levels_plus: int = 5
 func get_datas_from_langs() -> void:
 	if langs.size() == 0:
 		for lang_name in langs_names:
-			var lang_path: String = "res://langs/" + lang_name + "/"
+			var lang_path: String = Singleton.proj + "langs/" + lang_name + "/"
 			var codes_path: String = lang_path + "codes/"
 			var learn_path: String = lang_path + "learn/"
 			
@@ -56,18 +59,15 @@ func get_datas_from_langs() -> void:
 				data_text[2].split('=')[1].strip_edges() == '1'
 			)
 			
+			
 			var lang: Lang = Lang.new(
 				lang_name,
-				lang_path + "logo.png",
+				load(lang_path + "logo.png"),
 				Array(DirAccess.open(codes_path).get_files()).map(func(s): return codes_path + s),
 				Array(DirAccess.open(learn_path).get_files()).map(func(s): return learn_path + s),
 				lang_data
 			)
 			
-			#print(lang.name)
-			#print('exp=', lang_data.exp, ';slash_n=', lang_data.slash_n, ';tabs=', lang_data.tabs)
-			#print(lang.codes_paths)
-			#print(lang.learn_paths)
 			langs.append(lang)
 
 
@@ -81,8 +81,16 @@ func get_new_panel(style: StyleBoxFlat, pos: String, padding: int) -> PanelConta
 	return panel
 
 
+func take_task(task: Task) -> void:
+	Singleton.task_path = task.path
+	Singleton.tabs = task.lang.data.tabs
+	Singleton.slash_n = task.lang.data.slash_n
+	Singleton.task = task
+	Singleton.go_to("res://scenes/visual_studio.tscn")
+
+
 func draw_learn() -> void:
-	$Background.texture = load("res://pc_images/chrome/learn/back.png")
+	$Background.texture = preload("res://pc_images/chrome/learn/back.png")
 	for child in $Scroll/Lenta.get_children():
 		$Scroll/Lenta.remove_child(child)
 		child.queue_free()
@@ -92,7 +100,7 @@ func draw_learn() -> void:
 	
 
 func draw_money() -> void:
-	$Background.texture = load("res://pc_images/chrome/money/back.png")
+	$Background.texture = preload("res://pc_images/chrome/money/back.png")
 	for child in $Scroll/Lenta.get_children():
 		$Scroll/Lenta.remove_child(child)
 		child.queue_free()
@@ -124,6 +132,7 @@ func draw_money() -> void:
 		var desc_text: String = datas[1]
 		var price_value: int = int(datas[2])
 		var task_code_text: String = datas[3]
+		task.price = price_value
 		
 		
 		var title: Label = Label.new()
@@ -162,10 +171,12 @@ func draw_money() -> void:
 		vbox_labels.add_theme_color_override('font_color', Color('#000000')) 
 		vbox_labels.add_theme_font_size_override('font_size', 14)
 		
+		
 		var icon: TextureRect = TextureRect.new()
-		icon.texture = load(task.lang.img)
+		icon.texture = task.lang.img
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.custom_minimum_size = Vector2(64, 64)
+		
 		
 		var hbox: HBoxContainer = HBoxContainer.new()
 		hbox.add_child(icon)
@@ -184,7 +195,7 @@ func draw_money() -> void:
 		to_do_but.add_theme_stylebox_override('pressed',       preload("res://pc_images/chrome/money/to_do_but_act.tres"))
 		to_do_but.add_theme_stylebox_override('focus',         preload("res://pc_images/chrome/money/to_do_but_act.tres"))
 		to_do_but.add_theme_stylebox_override('normal',        preload("res://pc_images/chrome/money/to_do_but_def.tres"))
-		#to_do_but.connect("button_down", func(): eat_owned_product(eat_but, product))
+		to_do_but.connect("button_down", func(): take_task(task))
 		
 		var vbox: VBoxContainer = VBoxContainer.new()
 		vbox.add_theme_constant_override('separation', 4)
@@ -217,7 +228,6 @@ func draw_money() -> void:
 		main_panel.add_theme_stylebox_override('panel', panel_style)
 		main_panel.add_child(hgrid)
 		
-		#$Scroll/Lenta.add_child(panel)
 		$Scroll/Lenta.add_child(main_panel)
 	
 

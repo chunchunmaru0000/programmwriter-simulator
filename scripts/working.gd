@@ -7,7 +7,7 @@ var from: Button = null
 var to: Button = null
 var holder0: Button = null
 
-var text: String = FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text()
+var text: String = FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
 

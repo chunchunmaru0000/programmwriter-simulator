@@ -1,6 +1,7 @@
 extends Node
 
 var save_file = "save.txt"
+var proj: String
 
 var hp = 1000
 var hunger = 50
