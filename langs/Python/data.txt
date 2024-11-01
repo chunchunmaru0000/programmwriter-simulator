@@ -1,4 +1,4 @@
-exp=0
+exp=1
 slash_n=1
 tabs=1
 did=

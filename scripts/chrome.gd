@@ -21,14 +21,18 @@ class Lang:
 	var learn_paths: Array
 	var data: LangData
 	var data_path: String
+	var desc: String
+	var learns: Array
 	
-	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String) -> void:
+	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String, desc: String, learns: Array) -> void:
 		self.name = name
 		self.img = img
 		self.codes_paths = codes_paths
 		self.learn_paths = learn_paths
 		self.data = data
 		self.data_path = data_path
+		self.desc = desc
+		self.learns = learns
 		
 
 class Task:
@@ -44,9 +48,20 @@ class Task:
 		self.price = price
 		
 
+class Site:
+	var id: int
+	var theme: String
+	var text: String
+	
+	func _init(id: int, theme: String, text: String) -> void:
+		self.theme = theme
+		self.text = text
+		
+
 var langs_names: PackedStringArray = DirAccess.open(Singleton.proj + "langs/").get_directories()
 var langs: Array = []
 var levels_plus: int = 5
+var combo_box_learns: OptionButton
 
 
 func get_datas_from_langs() -> void:
@@ -78,15 +93,26 @@ func get_datas_from_langs() -> void:
 				if ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"):
 					texture = load("res://reserve_langs/" + lang_name + "/logo.png")
 			
+			var sites: Array = []
+			for site_name in DirAccess.open(lang_path + "learn/").get_files():
+				var spl = site_name.split('.')
+				sites.append(Site.new(
+					int(spl[0]),
+					'.'.join(spl.slice(1, -1)),
+					FileAccess.open(lang_path + "learn/" + site_name, FileAccess.READ).get_as_text()
+				))
+			sites.sort_custom(func(a: Site, b: Site): return a.id < b.id)
+			
 			var lang: Lang = Lang.new(
 				lang_name,
 				texture,
 				Array(DirAccess.open(codes_path).get_files()).map(func(s): return codes_path + s),
 				Array(DirAccess.open(learn_path).get_files()).map(func(s): return learn_path + s),
 				lang_data,
-				data_path
+				data_path,
+				FileAccess.open(lang_path + "desc.txt", FileAccess.READ).get_as_text(),
+				sites
 			)
-			
 			langs.append(lang)
 
 
@@ -109,14 +135,117 @@ func take_task(task: Task) -> void:
 	Singleton.go_to("res://scenes/visual_studio.tscn")
 
 
+func draw_lang_learn(lang: Lang) -> void:
+	for child in $Scroll/Lenta.get_children():
+		if child.name != 'google':
+			$Scroll/Lenta.remove_child(child)
+			child.queue_free()
+			
+	combo_box_learns.clear()
+
+	var block_style: StyleBoxFlat = preload("res://pc_images/chrome/learn/block_style.tres")
+	var text_wide: int = 498
+	var x_padding: int = 16
+	var y_padding: int = 12
+	var half_y_padding: int = y_padding / 2
+	
+	for site: Site in lang.learns:
+		combo_box_learns.add_item(site.theme)
+		
+		var icon: TextureRect = TextureRect.new()
+		icon.texture = lang.img
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.custom_minimum_size = Vector2(32, 24)
+		
+		var name_link: Label = Label.new()
+		name_link.text = \
+			lang.name + '.org\n' + \
+			'https://www.' + lang.name.to_lower() + '/' + site.theme + '.org > doc\n'
+		name_link.add_theme_color_override('font_color', Color(191, 191, 191))
+		name_link.add_theme_font_size_override('font_size', 11)
+		
+		var hup: HBoxContainer = HBoxContainer.new()
+		hup.add_child(icon)
+		hup.add_child(name_link)
+		
+		var title: LinkButton = LinkButton.new()
+		title.text = site.theme + " - Документация по " + lang.name
+		title.add_theme_color_override('font_color', Color('#94bcf6'))
+		title.add_theme_color_override('font_focus_color', Color('#c07ddd'))
+		title.add_theme_color_override('font_pressed_color', Color('#c07ddd'))
+		title.add_theme_color_override('font_hover_color', Color('#c07ddd'))
+		title.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
+		title.add_theme_font_size_override('font_size', 18)
+
+		var desc: Label = Label.new()
+		desc.text = site.text#lang.desc
+		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc.add_theme_color_override('font_color', Color(191, 191, 191))
+		desc.add_theme_font_size_override('font_size', 12)
+		desc.max_lines_visible = 3
+		
+		var vbox: VBoxContainer = VBoxContainer.new()
+		vbox.add_theme_constant_override('separation', 4)
+		vbox.add_child(hup)
+		vbox.add_child(title)
+		vbox.add_child(desc)
+		vbox.add_child(get_new_panel(block_style, 'y', y_padding + half_y_padding))
+		
+		var panel: PanelContainer = PanelContainer.new()
+		panel.add_theme_stylebox_override('panel', block_style)
+		panel.add_child(vbox)
+		panel.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x - $Scroll.get_v_scroll_bar().size.x - x_padding * 2
+		
+		var hgrid: HBoxContainer = HBoxContainer.new()
+		var left: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+		
+		hgrid.add_child(left)
+		hgrid.add_child(panel)
+		
+		$Scroll/Lenta.add_child(hgrid)
+
+
 func draw_learn() -> void:
 	$Background.texture = preload("res://pc_images/chrome/learn/back.png")
 	for child in $Scroll/Lenta.get_children():
 		$Scroll/Lenta.remove_child(child)
 		child.queue_free()
 	
+	var google: TextureRect = TextureRect.new()
+	google.texture = preload("res://pc_images/chrome/learn/google.png")
+	google.name = 'google'
+	google.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x
+	google.custom_minimum_size.y = 80
+	google.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	$Scroll/Lenta.add_child(google)
+	
+	var combo_box_style: StyleBoxFlat = load("res://pc_images/chrome/learn/combo_box_def.tres")
+	var combo_box: OptionButton = OptionButton.new() 
+	combo_box.add_theme_font_size_override('font_size', 12)
+	combo_box.position = Vector2(150, 30)
+	combo_box.custom_minimum_size.x = 80
+	combo_box.add_theme_stylebox_override('normal', combo_box_style)
+	combo_box.connect('item_selected', 
+		func(index: int): draw_lang_learn(langs.filter(
+			func(lang: Lang): return lang.name == combo_box.text)[0]
+		)
+	)
+	
+	combo_box_learns = OptionButton.new() 
+	combo_box_learns.add_theme_font_size_override('font_size', 12)
+	combo_box_learns.position = Vector2(330, 30)
+	combo_box_learns.custom_minimum_size.x = 80
+	combo_box_learns.add_theme_stylebox_override('normal', combo_box_style)
+	
+	langs.sort_custom(func(a: Lang, b: Lang): return a.data.exp > b.data.exp)
 	for lang: Lang in langs:
-		pass
+		combo_box.add_item(lang.name)
+		
+	google.add_child(combo_box)
+	google.add_child(combo_box_learns)
+	
+	if langs.size() > 0:
+		draw_lang_learn(langs[0])
 	
 
 func draw_money() -> void:
