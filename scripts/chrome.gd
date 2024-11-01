@@ -176,6 +176,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		title.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
 		title.add_theme_font_size_override('font_size', 18)
+		#title.connect('button_down', func(site: Site): go_to_learn_site(site))
 
 		var desc: Label = Label.new()
 		desc.text = site.text#lang.desc
@@ -201,6 +202,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		
 		hgrid.add_child(left)
 		hgrid.add_child(panel)
+		hgrid.name = site.theme
 		
 		$Scroll/Lenta.add_child(hgrid)
 
@@ -236,6 +238,18 @@ func draw_learn() -> void:
 	combo_box_learns.position = Vector2(330, 30)
 	combo_box_learns.custom_minimum_size.x = 80
 	combo_box_learns.add_theme_stylebox_override('normal', combo_box_style)
+	combo_box_learns.connect('item_selected', 
+		func(index: int): 
+			var needed_node: HBoxContainer
+			for node in $Scroll/Lenta.get_children():
+				if node.name == combo_box_learns.text:
+					needed_node = node
+					break
+			#for node in $Scroll/Lenta.get_children():
+			#	if node.name != 'google':
+					#if (node as HBoxContainer).global_position.y - needed_node.global_position.y 
+			$Scroll.ensure_control_visible(needed_node)
+	)
 	
 	langs.sort_custom(func(a: Lang, b: Lang): return a.data.exp > b.data.exp)
 	for lang: Lang in langs:
