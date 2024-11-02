@@ -135,6 +135,31 @@ func take_task(task: Task) -> void:
 	Singleton.go_to("res://scenes/visual_studio.tscn")
 
 
+func draw_learn_site(site: Site, lang_was: Lang) -> void:
+	#тут короче сделать просто больше текст можно попробовать, а не новую страницу
+	#типа как показать больше, как разворачиваются статьи на википедии
+	pass
+
+
+func more_text(desc: Label, more: LinkButton) -> void:
+	desc.max_lines_visible = desc.get_line_count()
+	desc.custom_minimum_size.y = desc.max_lines_visible * 15
+	
+	more.text = 'Свернуть'
+	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
+	more.connect('button_down',    func(): less_text(desc, more))
+	
+	
+func less_text(desc: Label, more: LinkButton) -> void:
+	desc.max_lines_visible = 3
+	desc.custom_minimum_size.y = desc.max_lines_visible * 15
+	
+	more.text = 'Подробнее'
+	more.button_down
+	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
+	more.connect('button_down',    func(): more_text(desc, more))
+
+
 func draw_lang_learn(lang: Lang) -> void:
 	for child in $Scroll/Lenta.get_children():
 		if child.name != 'google':
@@ -161,7 +186,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		name_link.text = \
 			lang.name + '.org\n' + \
 			'https://www.' + lang.name.to_lower() + '/' + site.theme + '.org > doc\n'
-		name_link.add_theme_color_override('font_color', Color(191, 191, 191))
+		name_link.add_theme_color_override('font_color', Color('#bfbfbf'))
 		name_link.add_theme_font_size_override('font_size', 11)
 		
 		var hup: HBoxContainer = HBoxContainer.new()
@@ -176,20 +201,32 @@ func draw_lang_learn(lang: Lang) -> void:
 		title.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
 		title.add_theme_font_size_override('font_size', 18)
-		#title.connect('button_down', func(site: Site): go_to_learn_site(site))
+		title.connect('button_down', func(): print(title.text))#draw_learn_site(site, lang))
 
 		var desc: Label = Label.new()
 		desc.text = site.text#lang.desc
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.add_theme_color_override('font_color', Color(191, 191, 191))
-		desc.add_theme_font_size_override('font_size', 12)
+		desc.add_theme_color_override('font_color', Color('#bfbfbf'))
+		desc.add_theme_font_size_override('font_size', 14)
 		desc.max_lines_visible = 3
+		
+		var more: LinkButton = LinkButton.new()
+		more.text = "Подробнее"
+		more.add_theme_color_override('font_color', Color('#94bcf6'))
+		more.add_theme_color_override('font_focus_color', Color('#c07ddd'))
+		more.add_theme_color_override('font_pressed_color', Color('#c07ddd'))
+		more.add_theme_color_override('font_hover_color', Color('#c07ddd'))
+		more.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
+		more.add_theme_font_size_override('font_size', 12)
+		more.connect('button_down', func(): more_text(desc, more))
+		
 		
 		var vbox: VBoxContainer = VBoxContainer.new()
 		vbox.add_theme_constant_override('separation', 4)
 		vbox.add_child(hup)
 		vbox.add_child(title)
 		vbox.add_child(desc)
+		vbox.add_child(more)
 		vbox.add_child(get_new_panel(block_style, 'y', y_padding + half_y_padding))
 		
 		var panel: PanelContainer = PanelContainer.new()
@@ -245,10 +282,7 @@ func draw_learn() -> void:
 				if node.name == combo_box_learns.text:
 					needed_node = node
 					break
-			#for node in $Scroll/Lenta.get_children():
-			#	if node.name != 'google':
-					#if (node as HBoxContainer).global_position.y - needed_node.global_position.y 
-			$Scroll.ensure_control_visible(needed_node)
+			$Scroll/Lenta.move_child(needed_node, 1)
 	)
 	
 	langs.sort_custom(func(a: Lang, b: Lang): return a.data.exp > b.data.exp)

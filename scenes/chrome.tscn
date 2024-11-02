@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://c1e6sgpp6ietv"]
+[gd_scene load_steps=21 format=3 uid="uid://c1e6sgpp6ietv"]
 
 [ext_resource type="Script" path="res://scripts/chrome.gd" id="1_xn36g"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="2_tjwuc"]
@@ -19,6 +19,12 @@
 [ext_resource type="StyleBox" uid="uid://c6qmogh3yvxk7" path="res://pc_images/chrome/money/to_do_but_act.tres" id="17_amocs"]
 [ext_resource type="StyleBox" uid="uid://r6padww208js" path="res://pc_images/chrome/money/scroll_style.tres" id="18_pfuas"]
 [ext_resource type="StyleBox" uid="uid://pwjm30v8f0vw" path="res://pc_images/chrome/learn/block_style.tres" id="19_wcibq"]
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_4tqmk"]
+number_color = Color(0, 0.739174, 0.270299, 1)
+symbol_color = Color(0.74978, 0.74978, 0.74978, 1)
+function_color = Color(0.870372, 0.000129881, 7.09447e-05, 1)
+member_variable_color = Color(0.398642, 0.587427, 1, 1)
 
 [node name="Chrome" type="Node2D"]
 script = ExtResource("1_xn36g")
@@ -168,6 +174,15 @@ popup/item_1/id = 1
 [node name="LinkButton" type="LinkButton" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/outline_size = 20
+
+[node name="TextEdit" type="TextEdit" parent="Scroll/Lenta/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "hui = 1234
+print('asdf')"
+placeholder_text = "hui = 1234
+print('asdf')
+"
+syntax_highlighter = SubResource("CodeHighlighter_4tqmk")
 
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Vs" to="." method="_on_vs_button_down"]
