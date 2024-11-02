@@ -23,8 +23,9 @@ class Lang:
 	var data_path: String
 	var desc: String
 	var learns: Array
+	var lights: Dictionary
 	
-	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String, desc: String, learns: Array) -> void:
+	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String, desc: String, learns: Array, lights: Dictionary) -> void:
 		self.name = name
 		self.img = img
 		self.codes_paths = codes_paths
@@ -33,6 +34,7 @@ class Lang:
 		self.data_path = data_path
 		self.desc = desc
 		self.learns = learns
+		self.lights = lights
 		
 
 class Task:
@@ -103,6 +105,14 @@ func get_datas_from_langs() -> void:
 				))
 			sites.sort_custom(func(a: Site, b: Site): return a.id < b.id)
 			
+			var lights: Dictionary = {}
+			for color in FileAccess.open(lang_path + "lights.txt", FileAccess.READ).get_as_text().replace('\r', '').split('\n[/color]\n'):
+				var words = color.split('\n')
+				
+				for i in range(1, words.size()):
+					if words[i] != '[/color]':
+						lights[words[i]] = words[0]
+				
 			var lang: Lang = Lang.new(
 				lang_name,
 				texture,
@@ -111,7 +121,8 @@ func get_datas_from_langs() -> void:
 				lang_data,
 				data_path,
 				FileAccess.open(lang_path + "desc.txt", FileAccess.READ).get_as_text(),
-				sites
+				sites,
+				lights
 			)
 			langs.append(lang)
 
@@ -135,29 +146,142 @@ func take_task(task: Task) -> void:
 	Singleton.go_to("res://scenes/visual_studio.tscn")
 
 
-func draw_learn_site(site: Site, lang_was: Lang) -> void:
-	#тут короче сделать просто больше текст можно попробовать, а не новую страницу
-	#типа как показать больше, как разворачиваются статьи на википедии
-	pass
-
-
-func more_text(desc: Label, more: LinkButton) -> void:
-	desc.max_lines_visible = desc.get_line_count()
-	desc.custom_minimum_size.y = desc.max_lines_visible * 15
+func more_text(desc: RichTextLabel, more: LinkButton, line_size: int) -> void:
+	#desc.max_lines_visible = desc.get_line_count()
+	#desc.custom_minimum_size.y = desc.max_lines_visible * 15
+	desc.custom_minimum_size.y = desc.get_content_height()
 	
 	more.text = 'Свернуть'
 	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
-	more.connect('button_down',    func(): less_text(desc, more))
+	more.connect('button_down',    func(): less_text(desc, more, line_size))
 	
 	
-func less_text(desc: Label, more: LinkButton) -> void:
-	desc.max_lines_visible = 3
-	desc.custom_minimum_size.y = desc.max_lines_visible * 15
+func less_text(desc: RichTextLabel, more: LinkButton, line_size: int) -> void:
+	#desc.max_lines_visible = 3
+	#desc.custom_minimum_size.y = desc.max_lines_visible * 15
+	desc.custom_minimum_size.y = 3 * line_size
 	
 	more.text = 'Подробнее'
 	more.button_down
 	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
-	more.connect('button_down',    func(): more_text(desc, more))
+	more.connect('button_down',    func(): more_text(desc, more, line_size))
+
+
+class Tokenizator:
+	var code: String
+	var pos: int
+
+	func _init(code: String) -> void:
+		self.code = code
+		self.pos = 0
+		
+	func current() -> String:
+		if pos < code.length():
+			return code[pos]
+		return '<эээ///>'
+		
+	func next() -> void:
+		pos += 1
+	
+	func next_token() -> String:
+		if current() == '<эээ///>':
+			return '<эээ///>'
+		var begin: int = pos
+		var no_need: Array = [
+			' ', '\t', '\n', '+', '-', '*', '=', '/', '%', '[', ']', '(', ')', '{', '}',
+			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!', '#'
+		]
+		if current() in no_need:
+			while current() in no_need:
+				next()
+			return code.substr(begin, pos - begin)
+		if current() == '"':
+			next()
+			var buffer: String = '"'
+			while current() != '"':
+				buffer += current()
+				if current() == '\\':
+					next()
+					if current() == '<эээ///>':
+						return buffer
+					elif current() == '"':
+						next()
+						buffer += '"'
+				else:
+					next()
+			next()
+			buffer += '"'
+			return '[color=#ffeda0]' + buffer + '[/color]'
+		if current() == '`':
+			next()
+			var buffer: String = '`'
+			while current() != '`':
+				buffer += current()
+				if current() == '\\':
+					next()
+					if current() == '<эээ///>':
+						return buffer
+					elif current() == '`':
+						next()
+						buffer += '`'
+				else:
+					next()
+			next()
+			buffer += '`'
+			return '[color=#ffeda0]' + buffer + '[/color]'
+		if current() == "'":
+			next()
+			var buffer: String = "'"
+			while current() != "'":
+				buffer += current()
+				if current() == '\\':
+					next()
+					if current() == '<эээ///>':
+						return buffer
+					elif current() == "'":
+						next()
+						buffer += "'"
+				else:
+					next()
+			next()
+			buffer += "'"
+			return '[color=#ffeda0]' + buffer + '[/color]'
+		if current().is_valid_int():
+			while current().is_valid_int() or current() == '.':
+				next()
+			return '[color=#a0ffe0]' + code.substr(begin, pos - begin) + '[/color]'
+		if current().is_valid_identifier():
+			while current().is_valid_identifier():
+				next()
+			return code.substr(begin, pos - begin)
+		else:
+			var char: String = current()
+			next()
+			return char
+			
+	func tokenize() -> Array:
+		var tokens: Array = []
+		var token = next_token()
+		while token != '<эээ///>':
+			tokens.append(token)
+			token = next_token()
+		return tokens
+
+
+func do_some_text_magic(text: String, lights: Dictionary) -> String:
+	var blocks = text.split('<code///>')
+	if blocks.size() < 2:
+		return text
+	
+	for block in range(1, blocks.size(), 2):
+		var tokens: Array = Tokenizator.new(blocks[block]).tokenize()
+		
+		for i in tokens.size():
+			if tokens[i] in lights:
+				tokens[i] = lights[tokens[i]] + tokens[i] + '[/color]'
+		blocks[block] = ''.join(tokens)
+		
+	return ''.join(blocks)
 
 
 func draw_lang_learn(lang: Lang) -> void:
@@ -184,8 +308,8 @@ func draw_lang_learn(lang: Lang) -> void:
 		
 		var name_link: Label = Label.new()
 		name_link.text = \
-			lang.name + '.org\n' + \
-			'https://www.' + lang.name.to_lower() + '/' + site.theme + '.org > doc\n'
+			lang.name.to_lower().replace(' ', '_') + '.org\n' + \
+			'https://www.' + lang.name.to_lower().replace(' ', '_') + '/' + site.theme.to_lower().replace(' ', '_') + '.org > doc\n'
 		name_link.add_theme_color_override('font_color', Color('#bfbfbf'))
 		name_link.add_theme_font_size_override('font_size', 11)
 		
@@ -201,14 +325,19 @@ func draw_lang_learn(lang: Lang) -> void:
 		title.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
 		title.add_theme_font_size_override('font_size', 18)
-		title.connect('button_down', func(): print(title.text))#draw_learn_site(site, lang))
 
-		var desc: Label = Label.new()
-		desc.text = site.text#lang.desc
+		var desc: RichTextLabel = RichTextLabel.new()
+		desc.remove_child(desc.get_v_scroll_bar())
+		desc.bbcode_enabled = true
+		var desc_line_size: int = 20
+		
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.add_theme_color_override('font_color', Color('#bfbfbf'))
-		desc.add_theme_font_size_override('font_size', 14)
-		desc.max_lines_visible = 3
+		desc.add_theme_color_override('default_color', Color('#bfbfbf'))
+		desc.add_theme_font_size_override('normal_font_size', 14)
+		desc.custom_minimum_size.y = 3 * desc_line_size
+		#desc.max_lines_visible = 3
+		desc.text = do_some_text_magic(site.text.replace('\r', ''), lang.lights)
+		#desc.text = do_some_text_magic(site.text.replace('\r', ''), lang.lights)#site.text.replace('print', "[color=#6696ff]print[/color]")
 		
 		var more: LinkButton = LinkButton.new()
 		more.text = "Подробнее"
@@ -218,7 +347,8 @@ func draw_lang_learn(lang: Lang) -> void:
 		more.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		more.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
 		more.add_theme_font_size_override('font_size', 12)
-		more.connect('button_down', func(): more_text(desc, more))
+		more.connect('button_down', func(): more_text(desc, more, desc_line_size))
+		title.connect('button_down', func(): more_text(desc, more, desc_line_size))
 		
 		
 		var vbox: VBoxContainer = VBoxContainer.new()
