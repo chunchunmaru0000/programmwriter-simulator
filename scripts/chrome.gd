@@ -6,12 +6,14 @@ class LangData:
 	var slash_n: bool
 	var tabs: bool
 	var did: Array
+	var comment: String
 	
-	func _init(exp: int, slash_n: bool, tabs: bool, did: Array) -> void:
+	func _init(exp: int, slash_n: bool, tabs: bool, did: Array, comment: String) -> void:
 		self.exp = exp
 		self.slash_n = slash_n
 		self.tabs = tabs
 		self.did = did
+		self.comment = comment
 
 
 class Lang:
@@ -80,7 +82,8 @@ func get_datas_from_langs() -> void:
 				int(data_text[0].split('=')[1].strip_edges()),
 				data_text[1].split('=')[1].strip_edges() == '1',
 				data_text[2].split('=')[1].strip_edges() == '1',
-				[] if data_text[3] == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num))
+				[] if data_text[3] == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
+				data_text[4].split('=')[1].strip_edges()
 			)
 			
 			var img = Image.new() 
@@ -146,33 +149,35 @@ func take_task(task: Task) -> void:
 	Singleton.go_to("res://scenes/visual_studio.tscn")
 
 
-func more_text(desc: RichTextLabel, more: LinkButton, line_size: int) -> void:
-	#desc.max_lines_visible = desc.get_line_count()
-	#desc.custom_minimum_size.y = desc.max_lines_visible * 15
+func more_text(desc: RichTextLabel, title: LinkButton, more: LinkButton, line_size: int) -> void:
 	desc.custom_minimum_size.y = desc.get_content_height()
 	
 	more.text = 'Свернуть'
 	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
-	more.connect('button_down',    func(): less_text(desc, more, line_size))
+	more.connect('button_down',    func(): less_text(desc, title, more, line_size))
+	title.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
+	title.connect('button_down',    func(): less_text(desc, title, more, line_size))
 	
 	
-func less_text(desc: RichTextLabel, more: LinkButton, line_size: int) -> void:
-	#desc.max_lines_visible = 3
-	#desc.custom_minimum_size.y = desc.max_lines_visible * 15
+func less_text(desc: RichTextLabel, title: LinkButton, more: LinkButton, line_size: int) -> void:
 	desc.custom_minimum_size.y = 3 * line_size
 	
 	more.text = 'Подробнее'
 	more.button_down
 	more.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
-	more.connect('button_down',    func(): more_text(desc, more, line_size))
+	more.connect('button_down',    func(): more_text(desc, title, more, line_size))
+	title.disconnect('button_down', more.get_signal_connection_list('button_down')[0]['callable'])
+	title.connect('button_down',    func(): more_text(desc, title, more, line_size))
 
 
 class Tokenizator:
 	var code: String
+	var comment: String
 	var pos: int
 
-	func _init(code: String) -> void:
+	func _init(code: String, comment: String) -> void:
 		self.code = code
+		self.comment = comment
 		self.pos = 0
 		
 	func current() -> String:
@@ -187,9 +192,13 @@ class Tokenizator:
 		if current() == '<эээ///>':
 			return '<эээ///>'
 		var begin: int = pos
+		if current() == self.comment:
+			while not current() in ['\n', '<эээ///>']:
+				next()
+			return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
 		var no_need: Array = [
 			' ', '\t', '\n', '+', '-', '*', '=', '/', '%', '[', ']', '(', ')', '{', '}',
-			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!', '#'
+			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!'
 		]
 		if current() in no_need:
 			while current() in no_need:
@@ -268,17 +277,17 @@ class Tokenizator:
 		return tokens
 
 
-func do_some_text_magic(text: String, lights: Dictionary) -> String:
+func do_some_text_magic(text: String, lang: Lang) -> String:
 	var blocks = text.split('<code///>')
 	if blocks.size() < 2:
 		return text
 	
 	for block in range(1, blocks.size(), 2):
-		var tokens: Array = Tokenizator.new(blocks[block]).tokenize()
+		var tokens: Array = Tokenizator.new(blocks[block], lang.data.comment).tokenize()
 		
 		for i in tokens.size():
-			if tokens[i] in lights:
-				tokens[i] = lights[tokens[i]] + tokens[i] + '[/color]'
+			if tokens[i] in lang.lights:
+				tokens[i] = lang.lights[tokens[i]] + tokens[i] + '[/color]'
 		blocks[block] = ''.join(tokens)
 		
 	return ''.join(blocks)
@@ -336,7 +345,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		desc.add_theme_font_size_override('normal_font_size', 14)
 		desc.custom_minimum_size.y = 3 * desc_line_size
 		#desc.max_lines_visible = 3
-		desc.text = do_some_text_magic(site.text.replace('\r', ''), lang.lights)
+		desc.text = do_some_text_magic(site.text.replace('\r', ''), lang)
 		#desc.text = do_some_text_magic(site.text.replace('\r', ''), lang.lights)#site.text.replace('print', "[color=#6696ff]print[/color]")
 		
 		var more: LinkButton = LinkButton.new()
@@ -347,8 +356,8 @@ func draw_lang_learn(lang: Lang) -> void:
 		more.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		more.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
 		more.add_theme_font_size_override('font_size', 12)
-		more.connect('button_down', func(): more_text(desc, more, desc_line_size))
-		title.connect('button_down', func(): more_text(desc, more, desc_line_size))
+		more.connect('button_down', func(): more_text(desc, title, more, desc_line_size))
+		title.connect('button_down', func(): more_text(desc, title, more, desc_line_size))
 		
 		
 		var vbox: VBoxContainer = VBoxContainer.new()

@@ -263,7 +263,8 @@ func _on_start_but_button_down() -> void:
 			'exp=' + str(data.exp + 1) + '\n' + \
 			'slash_n=' + ('1' if data.slash_n else '0') + '\n' + \
 			'tabs=' + ('1' if data.tabs else '0') + '\n' + \
-			'did=' + ('' if data.did.size() == 0 else '|'.join(data.did) + '|') + str(task.code_name)
+			'did=' + ('' if data.did.size() == 0 else '|'.join(data.did) + '|') + str(task.code_name) + '\n' + \
+			'comment=' + data.comment
 		var file = FileAccess.open(task.lang.data_path, FileAccess.WRITE)
 		file.store_string(new_text)
 		file.close()
