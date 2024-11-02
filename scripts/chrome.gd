@@ -306,7 +306,7 @@ func draw_lang_learn(lang: Lang) -> void:
 	var x_padding: int = 16
 	var y_padding: int = 12
 	var half_y_padding: int = y_padding / 2
-	
+	lang.learns.sort_custom(func(a: Site, b: Site): return a.id < b.id)
 	for site: Site in lang.learns:
 		combo_box_learns.add_item(site.theme)
 		
