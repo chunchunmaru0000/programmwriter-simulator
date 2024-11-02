@@ -399,9 +399,10 @@ func draw_learn() -> void:
 	
 	var combo_box_style: StyleBoxFlat = load("res://pc_images/chrome/learn/combo_box_def.tres")
 	var combo_box: OptionButton = OptionButton.new() 
+	combo_box.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
 	combo_box.add_theme_font_size_override('font_size', 12)
 	combo_box.position = Vector2(150, 30)
-	combo_box.custom_minimum_size.x = 80
+	combo_box.custom_minimum_size.x = 69
 	combo_box.add_theme_stylebox_override('normal', combo_box_style)
 	combo_box.connect('item_selected', 
 		func(index: int): draw_lang_learn(langs.filter(
@@ -410,9 +411,10 @@ func draw_learn() -> void:
 	)
 	
 	combo_box_learns = OptionButton.new() 
+	combo_box_learns.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
 	combo_box_learns.add_theme_font_size_override('font_size', 12)
-	combo_box_learns.position = Vector2(330, 30)
-	combo_box_learns.custom_minimum_size.x = 80
+	combo_box_learns.position = Vector2(315, 30)
+	combo_box_learns.custom_minimum_size.x = 90
 	combo_box_learns.add_theme_stylebox_override('normal', combo_box_style)
 	combo_box_learns.connect('item_selected', 
 		func(index: int): 
