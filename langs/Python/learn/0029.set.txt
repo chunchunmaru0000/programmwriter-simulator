@@ -1,0 +1,185 @@
+Множество (set) представляют еще один вид набора, который хранит только уникальные элементы. Для определения множества используются фигурные скобки, в которых перечисляются элементы:
+<code///>
+users = {"Tom", "Bob", "Alice", "Tom"}
+print(users)    # {"Alice", "Bob", "Tom"}
+<code///>
+Обратите внимание, что несмотря на то, что функция print вывела один раз элемент "Tom", хотя в определении множества этот элемент содержится два раза. Все потому что множество содержит только уникальные значения.
+
+Также для определения множества может применяться функция set(), в которую передается список или кортеж элементов:
+<code///>	
+people = ["Mike", "Bill", "Ted"]
+users = set(people)
+print(users)    # {"Mike", "Bill", "Ted"}
+<code///>
+Функцию set удобно применять для создания пустого множества:
+<code///>
+users = set()
+<code///>
+Для получения длины множества применяется встроенная функция len():
+<code///>
+users = {"Tom", "Bob", "Alice"}
+print(len(users))       # 3
+<code///>
+Добавление элементов
+
+Для добавления одиночного элемента вызывается метод add():
+<code///>
+users = set()
+users.add("Sam")
+print(users)
+<code///>
+Удаление элементов
+
+Для удаления одного элемента вызывается метод remove(), в который передается удаляемый элемент. Но следует учитывать, что если такого элемента не окажется в множестве, то будет сгенерирована ошибка. Поэтому перед удалением следует проверять на наличие элемента с помощью оператора in:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+ 
+user = "Tom"
+if user in users: 
+    users.remove(user)
+print(users)    # {"Bob", "Alice"}
+<code///>
+Также для удаления можно использовать метод discard(), который не будет генерировать исключения при отсутствии элемента:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+ 
+users.discard("Tim")    # элемент "Tim" отсутствует, и метод ничего не делает
+print(users)    #  {"Tom", "Bob", "Alice"}
+ 
+users.discard("Tom")    # элемент "Tom" есть, и метод удаляет элемент
+print(users)    #  {"Bob", "Alice"}
+<code///>
+Для удаления всех элементов вызывается метод clear():
+<code///>
+users.clear()
+<code///>
+Перебор множества
+
+Для перебора элементов можно использовать цикл for:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+ 
+for user in users:
+    print(user)
+<code///>
+При переборе каждый элемент помещается в переменную user.
+Операции с множествами
+
+С помощью метода copy() можно скопировать содержимое одного множества в другую переменную:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+students = users.copy()
+print(students)     # {"Tom", "Bob", "Alice"}
+<code///>
+Объединение множеств
+
+Метод union() объединяет два множества и возвращает новое множество:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+users3 = users.union(users2)
+print(users3)   # {"Bob", "Alice", "Sam", "Kate", "Tom"}
+<code///>
+Вместо метода union() мы могли бы использовать операцию логического сложения - |:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+print(users | users2)   # {"Bob", "Alice", "Sam", "Kate", "Tom"}
+<code///>
+Пересечение множеств
+
+Пересечение множеств позволяет получить только те элементы, которые есть одновременно в обоих множествах. Метод intersection() производит операцию пересечения множеств и возвращает новое множество:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+users3 = users.intersection(users2)
+print(users3)   # {"Bob"}
+<code///>
+Вместо метода intersection мы могли бы использовать операцию логического умножения:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+print(users & users2)   # {"Bob"}
+<code///>
+В этом случае мы получили бы тот же результат.
+
+Модификация метода - intersection_update() заменяет пересеченными элементами первое множество:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+users.intersection_update(users2)
+print(users)   # {"Bob"}
+<code///>
+Разность множеств
+
+Еще одна операция - разность множеств возвращает те элементы, которые есть в первом множестве, но отсутствуют во втором. Для получения разности множеств можно использовать метод difference или операцию вычитания:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+users3 = users.difference(users2)
+print(users3)           # {"Tom", "Alice"}
+print(users - users2)   # {"Tom", "Alice"}
+<code///>
+Отдельная разновидность разности множеств - симметрическая разность производится с помощью метода symmetric_difference() или с помощью операции ^. Она возвращает все элементы обоих множеств за исключением общих:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+users2 = {"Sam", "Kate", "Bob"}
+ 
+users3 = users.symmetric_difference(users2)
+print(users3)   # {"Tom", "Alice", "Sam", "Kate"}
+ 
+users4 = users ^ users2
+print(users4)   # {"Tom", "Alice", "Sam", "Kate"}
+<code///>
+Отношения между множествами
+
+Метод issubset позволяет выяснить, является ли текущее множество подмножеством (то есть частью) другого множества:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+superusers = {"Sam", "Tom", "Bob", "Alice", "Greg"}
+ 
+print(users.issubset(superusers))   # True
+print(superusers.issubset(users))   # False
+<code///>
+Метод issuperset, наоборот, возвращает True, если текущее множество является надмножеством (то есть содержит) для другого множества:
+<code///>
+users = {"Tom", "Bob", "Alice"}
+superusers = {"Sam", "Tom", "Bob", "Alice", "Greg"}
+ 
+print(users.issuperset(superusers))   # False
+print(superusers.issuperset(users))   # True
+<code///>
+frozen set
+
+Тип frozen set является видом множеств, которое не может быть изменено. Для его создания используется функция frozenset:
+<code///>
+users = frozenset({"Tom", "Bob", "Alice"})
+<code///>
+В функцию frozenset передается набор элементов - список, кортеж, другое множество.
+
+В такое множество мы не можем добавить новые элементы, как и удалить из него уже имеющиеся. Собственно поэтому frozen set поддерживает ограниченный набор операций:
+<code///>
+    len(s): возвращает длину множества
+
+    x in s: возвращает True, если элемент x присутствует в множестве s
+
+    x not in s: возвращает True, если элемент x отсутствует в множестве s
+
+    s.issubset(t): возвращает True, если t содержит множество s
+
+    s.issuperset(t): возвращает True, если t содержится в множестве s
+
+    s.union(t)
+    : возвращает объединение множеств s и t
+
+    s.intersection(t): возвращает пересечение множеств s и t
+
+    s.difference(t): возвращает разность множеств s и t
+
+    s.copy(): возвращает копию множества s
+<code///>
