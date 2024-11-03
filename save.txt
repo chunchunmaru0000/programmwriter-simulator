@@ -1,13 +1,15 @@
 hp 905
-money 405
+money 195
 hunger 100
 thirst 100
-sleep 158
-time 25:0:00
+sleep 160
+time 25:2:00
 uslugi 100<usluga>100<usluga>500<usluga>300
-Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>88<product_param>4<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
-Вобла<product_param>9<product_param>140<product_param>15<product_param>-7<product_param>0<product_param>35<product_param>363<product_param>12<product_param>1<product_param>1<product_param><product_param>res://audio/i-rybku (mp3cut.net).mp3
-Вобла<product_param>9<product_param>140<product_param>15<product_param>-7<product_param>0<product_param>45<product_param>364<product_param>6<product_param>1<product_param>1<product_param><product_param>res://audio/i-rybku (mp3cut.net).mp3
-Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>30<product_param>6<product_param>7<product_param>7<product_param>7<product_param><product_param>
-Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>45<product_param>6<product_param>8<product_param>7<product_param>7<product_param><product_param>
-Водка<product_param>10<product_param>249<product_param>0<product_param>20<product_param>0<product_param>10<product_param>9223372036854775807<product_param>9<product_param>1<product_param>1<product_param>Сонность<effect_param>Сон<effect_param>4<effects>Вредность<effect_param>Здоровье<effect_param>-10<product_param>res://audio/vsyu-vodku-vyipit-nevozmojo-no-stremitsya-k-etomu-nado.mp3
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>88<product_param>2<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Вобла<product_param>9<product_param>140<product_param>15<product_param>-7<product_param>0<product_param>35<product_param>363<product_param>10<product_param>1<product_param>1<product_param><product_param>res://audio/i-rybku (mp3cut.net).mp3
+Вобла<product_param>9<product_param>140<product_param>15<product_param>-7<product_param>0<product_param>45<product_param>364<product_param>4<product_param>1<product_param>1<product_param><product_param>res://audio/i-rybku (mp3cut.net).mp3
+Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>30<product_param>6<product_param>5<product_param>7<product_param>7<product_param><product_param>
+Колбаса<product_param>5<product_param>200<product_param>30<product_param>0<product_param>0<product_param>45<product_param>6<product_param>6<product_param>7<product_param>7<product_param><product_param>
+Водка<product_param>10<product_param>249<product_param>0<product_param>20<product_param>0<product_param>10<product_param>9223372036854775807<product_param>7<product_param>1<product_param>1<product_param>Сонность<effect_param>Сон<effect_param>4<effects>Вредность<effect_param>Здоровье<effect_param>-10<product_param>res://audio/vsyu-vodku-vyipit-nevozmojo-no-stremitsya-k-etomu-nado.mp3
+Вобла<product_param>9<product_param>140<product_param>15<product_param>-7<product_param>0<product_param>40<product_param>365<product_param>0<product_param>1<product_param>1<product_param><product_param>res://audio/i-rybku (mp3cut.net).mp3
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>90<product_param>0<product_param>2<product_param>2<product_param><product_param>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3<sounds>res://audio/zelen.mp3

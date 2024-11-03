@@ -58,6 +58,7 @@ class Site:
 	var text: String
 	
 	func _init(id: int, theme: String, text: String) -> void:
+		self.id = id
 		self.theme = theme
 		self.text = text
 		
@@ -174,11 +175,40 @@ class Tokenizator:
 	var code: String
 	var comment: String
 	var pos: int
+	var no_need: Array
+	
+	var check_comment: bool
+	var long_comment: bool
 
 	func _init(code: String, comment: String) -> void:
 		self.code = code
 		self.comment = comment
 		self.pos = 0
+		
+		self.no_need = [
+			' ', '\t', '\n', '+', '-', '*', '=', '/', '%', '[', ']', '(', ')', '{', '}',
+			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!', '#'
+		]
+		
+		if comment == '':
+			check_comment = false
+		else:
+			check_comment = true
+			if comment.length() > 1:
+				long_comment = true
+				for j in comment.length():
+					for i in no_need.size():
+						if no_need[i] == comment[j]:
+							no_need.remove_at(i)
+							print(no_need)
+							break
+			else:
+				long_comment = false
+				for i in no_need.size():
+					if no_need[i] == comment:
+						no_need.remove_at(i)
+						break
+				
 		
 	func current() -> String:
 		if pos < code.length():
@@ -192,14 +222,20 @@ class Tokenizator:
 		if current() == '<эээ///>':
 			return '<эээ///>'
 		var begin: int = pos
-		if current() == self.comment:
-			while not current() in ['\n', '<эээ///>']:
-				next()
-			return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
-		var no_need: Array = [
-			' ', '\t', '\n', '+', '-', '*', '=', '/', '%', '[', ']', '(', ')', '{', '}',
-			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!'
-		]
+		if check_comment:
+			if long_comment:
+				if pos + comment.length() < code.length():
+					if code.substr(pos, comment.length()) == comment:
+						pos += comment.length()
+						while not current() in ['\n', '<эээ///>']:
+							next()
+						return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
+			else:
+				if current() == comment:
+					while not current() in ['\n', '<эээ///>']:
+						next()
+					return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
+
 		if current() in no_need:
 			while current() in no_need:
 				next()
@@ -260,7 +296,7 @@ class Tokenizator:
 				next()
 			return '[color=#a0ffe0]' + code.substr(begin, pos - begin) + '[/color]'
 		if current().is_valid_identifier():
-			while current().is_valid_identifier():
+			while current().is_valid_identifier() or current().is_valid_int():
 				next()
 			return code.substr(begin, pos - begin)
 		else:
@@ -300,15 +336,15 @@ func draw_lang_learn(lang: Lang) -> void:
 			child.queue_free()
 			
 	combo_box_learns.clear()
-
-	var block_style: StyleBoxFlat = preload("res://pc_images/chrome/learn/block_style.tres")
+	
+	var site_block_style: StyleBoxFlat = preload("res://pc_images/chrome/learn/block_style.tres")
 	var text_wide: int = 498
 	var x_padding: int = 16
 	var y_padding: int = 12
 	var half_y_padding: int = y_padding / 2
 	lang.learns.sort_custom(func(a: Site, b: Site): return a.id < b.id)
 	for site: Site in lang.learns:
-		combo_box_learns.add_item(site.theme)
+		combo_box_learns.add_item(str(site.id) + '.' + site.theme)
 		
 		var icon: TextureRect = TextureRect.new()
 		icon.texture = lang.img
@@ -366,15 +402,15 @@ func draw_lang_learn(lang: Lang) -> void:
 		vbox.add_child(title)
 		vbox.add_child(desc)
 		vbox.add_child(more)
-		vbox.add_child(get_new_panel(block_style, 'y', y_padding + half_y_padding))
+		vbox.add_child(get_new_panel(site_block_style, 'y', y_padding + half_y_padding))
 		
 		var panel: PanelContainer = PanelContainer.new()
-		panel.add_theme_stylebox_override('panel', block_style)
+		panel.add_theme_stylebox_override('panel', site_block_style)
 		panel.add_child(vbox)
 		panel.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x - $Scroll.get_v_scroll_bar().size.x - x_padding * 2
 		
 		var hgrid: HBoxContainer = HBoxContainer.new()
-		var left: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+		var left: PanelContainer = get_new_panel(site_block_style, 'x', x_padding)
 		
 		hgrid.add_child(left)
 		hgrid.add_child(panel)
@@ -420,7 +456,7 @@ func draw_learn() -> void:
 		func(index: int): 
 			var needed_node: HBoxContainer
 			for node in $Scroll/Lenta.get_children():
-				if node.name == combo_box_learns.text:
+				if node.name == '.'.join(combo_box_learns.text.split('.').slice(1)):
 					needed_node = node
 					break
 			$Scroll/Lenta.move_child(needed_node, 1)
