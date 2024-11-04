@@ -199,6 +199,8 @@ func add_hp(to) -> void:
 	
 func add_sleep(to) -> void:
 	sleep += to
+	if sleep < 0:
+		sleep = 0
 	
 func get_hour() -> int:
 	return int(time.split(":")[1])
