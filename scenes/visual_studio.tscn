@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://drn7d4sni10aa"]
+[gd_scene load_steps=18 format=3 uid="uid://drn7d4sni10aa"]
 
 [ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
 [ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dfm7we2d8n6qa" path="res://pc_images/vs/but_start_def.png" id="6_t0dmx"]
 [ext_resource type="Texture2D" uid="uid://5onms28lcav4" path="res://pc_images/vs/but_start_act.png" id="7_0i2wh"]
 [ext_resource type="StyleBox" uid="uid://doqfw8m2vgbcx" path="res://pc_images/vs/hover_flat.tres" id="9_pdo0a"]
+[ext_resource type="StyleBox" uid="uid://0l7y6es1og8k" path="res://pc_images/vs/hbox_style.tres" id="9_wcf76"]
 [ext_resource type="StyleBox" uid="uid://dbqielejpmuu5" path="res://pc_images/vs/normal_flat.tres" id="10_e1iun"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="11_io68t"]
 [ext_resource type="Texture2D" uid="uid://c0prag83l0gl7" path="res://pc_images/desktop/start_def.jpg" id="12_4cday"]
@@ -15,6 +16,12 @@
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="15_5ssuq"]
 [ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="16_sabrv"]
 [ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="17_j4qtc"]
+
+[sub_resource type="Theme" id="Theme_w1crs"]
+Button/styles/disabled = ExtResource("9_wcf76")
+Button/styles/focus = ExtResource("9_wcf76")
+Button/styles/hover = ExtResource("9_wcf76")
+Button/styles/normal = ExtResource("9_wcf76")
 
 [node name="Working" type="Node2D"]
 script = ExtResource("1_injln")
@@ -119,6 +126,7 @@ text = "ээээээээээээээээээ"
 [node name="HBoxContainer2" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme = SubResource("Theme_w1crs")
 theme_override_constants/separation = 8
 
 [node name="Button2" type="Button" parent="ScrollContainer/VBoxContainer/HBoxContainer2"]

@@ -1,6 +1,6 @@
 exp=1
 slash_n=0
 tabs=0
-did=0
+did=
 comment=//
 super_comment=/* */

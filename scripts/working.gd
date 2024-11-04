@@ -31,7 +31,8 @@ func estimate_code() -> bool:
 					words.append('<n///>')
 	
 	if Singleton.slash_n and Singleton.tabs:	
-		for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hcont: HBoxContainer = panel.get_child(0)
 			for but: Button in hcont.get_children():
 				var stripped_but: String = but.text.strip_edges()
 				if stripped_but == '' and but.text.length() == 12:
@@ -44,10 +45,11 @@ func estimate_code() -> bool:
 			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
 
 #elif not Singleton.slash_n and Singleton.tabs:
-	#pass вероятно не существует
+	# вероятно не существует
 		
 	elif Singleton.slash_n and not Singleton.tabs:	
-		for hcont: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hcont: HBoxContainer = panel.get_child(0)
 			for but: Button in hcont.get_children():
 				buts.append(but.text.strip_edges())
 			buts.append('<n///>')
@@ -59,7 +61,7 @@ func estimate_code() -> bool:
 
 	else:
 		buts = $ScrollContainer/VBoxContainer.get_children(). \
-			map(func(hcont: HBoxContainer): return hcont.get_children(). \
+			map(func(panel: PanelContainer): return panel.get_child(0).get_children(). \
 			map(func(but: Button): return but.text.strip_edges().replace('\n', '')))
 		equal = \
 			''.join(words.map(func(word): return word.replace('<t///>', ''))) == \
@@ -139,7 +141,8 @@ func but_up(sender: Button) -> void:
 	var gap_y2: int = $ScrollContainer/VBoxContainer.get_theme_constant('separation') / 2
 	var more_than_last_but_width: bool = false
 	
-	for hbox: HBoxContainer in $ScrollContainer/VBoxContainer.get_children():
+	for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+		var hbox: HBoxContainer = panel.get_child(0)
 		if was_any: break
 		var gap_x: int = hbox.get_theme_constant('separation') # / 2
 		var place: int = 0
@@ -220,18 +223,19 @@ func _ready() -> void:
 	var i: int = 1
 	var strs: Array = Array(strokes)
 	strs.shuffle()
+	var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
+	
 	for stroke in strs:
+		var panel: PanelContainer = PanelContainer.new()
+		panel.custom_minimum_size = Vector2(608, 32)
+		panel.add_theme_stylebox_override('panel', hbox_style)
+		
 		var hcont: HBoxContainer = HBoxContainer.new()
 		hcont.custom_minimum_size = Vector2(608, 32)
 		hcont.add_theme_constant_override('separation', 8)
-		$ScrollContainer/VBoxContainer.add_child(hcont)
 		
-		var rect: ColorRect = ColorRect.new()
-		rect.global_position = Vector2(hcont.global_position.x, hcont.global_position.y + 32 * i + 8 * (i - 1) + 2)
-		rect.size = Vector2(608, 2)
-		rect.color = Color(0, 0, 0)
-		add_child(rect)
-		i += 1
+		panel.add_child(hcont)
+		$ScrollContainer/VBoxContainer.add_child(panel)
 
 		var words: Array = Array(stroke.split('<w///>'))
 		words.shuffle()
