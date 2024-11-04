@@ -7,13 +7,15 @@ class LangData:
 	var tabs: bool
 	var did: Array
 	var comment: String
+	var super_comment: String
 	
-	func _init(exp: int, slash_n: bool, tabs: bool, did: Array, comment: String) -> void:
+	func _init(exp: int, slash_n: bool, tabs: bool, did: Array, comment: String, super_comment: String) -> void:
 		self.exp = exp
 		self.slash_n = slash_n
 		self.tabs = tabs
 		self.did = did
 		self.comment = comment
+		self.super_comment = super_comment
 
 
 class Lang:
@@ -83,8 +85,9 @@ func get_datas_from_langs() -> void:
 				int(data_text[0].split('=')[1].strip_edges()),
 				data_text[1].split('=')[1].strip_edges() == '1',
 				data_text[2].split('=')[1].strip_edges() == '1',
-				[] if data_text[3] == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
-				data_text[4].split('=')[1].strip_edges()
+				[] if data_text[3].strip_edges() == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
+				data_text[4].split('=')[1].strip_edges(),
+				data_text[5].split('=')[1].strip_edges()
 			)
 			
 			var img = Image.new() 
@@ -172,6 +175,7 @@ func less_text(desc: RichTextLabel, title: LinkButton, more: LinkButton, line_si
 
 
 class Tokenizator:
+	var lang: Lang
 	var code: String
 	var comment: String
 	var pos: int
@@ -179,10 +183,24 @@ class Tokenizator:
 	
 	var check_comment: bool
 	var long_comment: bool
+	
+	var check_super_comment: bool
+	var super_comment_l: String
+	var super_comment_r: String
+	var inside_super_comment: bool
+	
+	func remove_from_arr_str(arr: Array, string: String) -> Array:
+		for j in string.length():
+			for i in arr.size():
+				if arr[i] == string[j]:
+					arr.remove_at(i)
+					break
+		return arr
 
-	func _init(code: String, comment: String) -> void:
+	func _init(code: String, lang: Lang) -> void:
+		self.lang = lang
 		self.code = code
-		self.comment = comment
+		self.comment = lang.data.comment
 		self.pos = 0
 		
 		self.no_need = [
@@ -190,24 +208,27 @@ class Tokenizator:
 			'|', '$', '&', '@', ';', ',', '.', ':', '?', '<', '>', '!', '#'
 		]
 		
+		if lang.data.super_comment == '':
+			check_super_comment = false
+		else:
+			check_super_comment = true
+			var super_comment: Array = lang.data.super_comment.split(' ')
+			super_comment_l = super_comment[0]
+			super_comment_r = super_comment[1]
+			
+			no_need = remove_from_arr_str(no_need, super_comment_l)
+			no_need = remove_from_arr_str(no_need, super_comment_r)
+		inside_super_comment = false
+		
 		if comment == '':
 			check_comment = false
 		else:
 			check_comment = true
 			if comment.length() > 1:
 				long_comment = true
-				for j in comment.length():
-					for i in no_need.size():
-						if no_need[i] == comment[j]:
-							no_need.remove_at(i)
-							print(no_need)
-							break
 			else:
 				long_comment = false
-				for i in no_need.size():
-					if no_need[i] == comment:
-						no_need.remove_at(i)
-						break
+			no_need = remove_from_arr_str(no_need, comment)
 				
 		
 	func current() -> String:
@@ -229,13 +250,26 @@ class Tokenizator:
 						pos += comment.length()
 						while not current() in ['\n', '<эээ///>']:
 							next()
+							
 						return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
 			else:
 				if current() == comment:
 					while not current() in ['\n', '<эээ///>']:
 						next()
 					return '[color=#008200]' + code.substr(begin, pos - begin) + '[/color]'
-
+					
+		if check_super_comment:
+			if pos + super_comment_l.length() < code.length():
+				if code.substr(pos, super_comment_l.length()) == super_comment_l:
+					pos += comment.length()
+					inside_super_comment = true
+					return super_comment_l
+			if pos + super_comment_r.length() < code.length():
+				if code.substr(pos, super_comment_r.length()) == super_comment_r:
+					pos += comment.length()
+					inside_super_comment = false
+					return super_comment_r
+					
 		if current() in no_need:
 			while current() in no_need:
 				next()
@@ -256,7 +290,7 @@ class Tokenizator:
 					next()
 			next()
 			buffer += '"'
-			return '[color=#ffeda0]' + buffer + '[/color]'
+			return buffer if inside_super_comment else '[color=#ffeda0]' + buffer + '[/color]' 
 		if current() == '`':
 			next()
 			var buffer: String = '`'
@@ -273,7 +307,7 @@ class Tokenizator:
 					next()
 			next()
 			buffer += '`'
-			return '[color=#ffeda0]' + buffer + '[/color]'
+			return buffer if inside_super_comment else '[color=#ffeda0]' + buffer + '[/color]'
 		if current() == "'":
 			next()
 			var buffer: String = "'"
@@ -290,11 +324,12 @@ class Tokenizator:
 					next()
 			next()
 			buffer += "'"
-			return '[color=#ffeda0]' + buffer + '[/color]'
+			return buffer if inside_super_comment else '[color=#ffeda0]' + buffer + '[/color]'
 		if current().is_valid_int():
 			while current().is_valid_int() or current() == '.':
-				next()
-			return '[color=#a0ffe0]' + code.substr(begin, pos - begin) + '[/color]'
+				next() 
+			var surstr: String = code.substr(begin, pos - begin)
+			return surstr if inside_super_comment else '[color=#a0ffe0]' + surstr + '[/color]'
 		if current().is_valid_identifier():
 			while current().is_valid_identifier() or current().is_valid_int():
 				next()
@@ -304,13 +339,29 @@ class Tokenizator:
 			next()
 			return char
 			
-	func tokenize() -> Array:
+	func tokenize() -> String:
 		var tokens: Array = []
 		var token = next_token()
 		while token != '<эээ///>':
 			tokens.append(token)
 			token = next_token()
-		return tokens
+		
+		var i: int = -1
+		while i < tokens.size() - 1:
+			i += 1
+		#for i in tokens.size():
+			if tokens[i] == super_comment_l:
+				tokens[i] = '[color=#008200]' + tokens[i]
+				while tokens[i] != super_comment_r or i == tokens.size() - 1:
+					i += 1
+				if tokens[i] == super_comment_r:
+					tokens[i] = tokens[i] + '[/color]'
+					i += 1
+				continue
+			if tokens[i] in lang.lights:
+				tokens[i] = lang.lights[tokens[i]] + tokens[i] + '[/color]'
+
+		return ''.join(tokens)
 
 
 func do_some_text_magic(text: String, lang: Lang) -> String:
@@ -319,12 +370,7 @@ func do_some_text_magic(text: String, lang: Lang) -> String:
 		return text
 	
 	for block in range(1, blocks.size(), 2):
-		var tokens: Array = Tokenizator.new(blocks[block], lang.data.comment).tokenize()
-		
-		for i in tokens.size():
-			if tokens[i] in lang.lights:
-				tokens[i] = lang.lights[tokens[i]] + tokens[i] + '[/color]'
-		blocks[block] = ''.join(tokens)
+		blocks[block] = Tokenizator.new(blocks[block], lang).tokenize()
 		
 	return ''.join(blocks)
 

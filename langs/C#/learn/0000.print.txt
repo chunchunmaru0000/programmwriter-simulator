@@ -14,5 +14,16 @@ prin//t("Меня зовут", name, "и мне", age, "лет.")
   /
 adf // asdf
 adsf / asdf//
+
+Console./*WriteLine("ээээ");
+asdf
+asdf  print('adsf', 123)
+asdf
+*/asdfasdf
+asdf
+asdf/**/asdf
+/**/asdf
+asdf  /*  */ asd f  asdf
+
 <code///>
 Этот код выведет сообщение "Меня зовут Вася и мне 25 лет."
