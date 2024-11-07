@@ -1,12 +1,15 @@
-hp 983
-money 55
-hunger 80
-thirst 106
-sleep 3
-time 63:21:00
+hp 872
+money 5190
+hunger 10
+thirst 80
+sleep 0
+time 64:18:00
 uslugi 100<usluga>100<usluga>500<usluga>300
-ills l_dehydration
-Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>49<product_param>7<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
-Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>51<product_param>5<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
-Кофе<product_param>13<product_param>208<product_param>0<product_param>10<product_param>0<product_param>50<product_param>364<product_param>19<product_param>10<product_param>7<product_param>Бодрость<effect_param>Сон<effect_param>-1<product_param>res://audio/kofe.mp3
-Хлеб белый<product_param>2<product_param>32<product_param>5<product_param>-5<product_param>0<product_param>15<product_param>3<product_param>23<product_param>4<product_param>4<product_param><product_param>
+ills l_dehydration<ill>dehydration
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>48<product_param>10<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>50<product_param>8<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Хлеб белый<product_param>2<product_param>32<product_param>5<product_param>-5<product_param>0<product_param>15<product_param>3<product_param>2<product_param>4<product_param>1<product_param><product_param>
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>48<product_param>10<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>50<product_param>8<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Хлеб белый<product_param>2<product_param>32<product_param>5<product_param>-5<product_param>0<product_param>15<product_param>3<product_param>2<product_param>4<product_param>3<product_param><product_param>
+Подорожник<product_param>14<product_param>155<product_param>0<product_param>0<product_param>0<product_param>40<product_param>365<product_param>0<product_param>1<product_param>1<product_param>Оздоровление<effect_param>Здоровье<effect_param>10<product_param>

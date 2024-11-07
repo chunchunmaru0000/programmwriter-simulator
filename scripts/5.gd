@@ -6,6 +6,8 @@ var Product = Singleton.Product
 
 var year = 365
 var all_products = [
+	#           название              цена  -голод      использований
+	#                            фрейм            -жажда      годность    
 	Product.new("Гречка",        0,   36,   20,   0,    8,    year),
 	Product.new("Хлеб чёрный",   1,   52,   6,    -5,   4,    4),
 	Product.new("Хлеб белый",    2,   32,   5,    -5,   4,    4),
@@ -19,12 +21,14 @@ var all_products = [
 	Product.new("Квас",          7,   65,   0,    8,    10,   year, [], 
 		["res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3"]), 
 	Product.new("Пиво",          8,   45,   0,    2,    2,    year, 
-		[Effect.new("Сонность", "Сон", 1), Effect.new("Вредность", "Здоровье", -1)],
+		[Effect.new("Сонность", "Сон", 1), 
+		 Effect.new("Вредность", "Здоровье", -1)],
 		["res://audio/piva-mnogo-pil-v-svobodnoe-vremya.mp3"]),
  	Product.new("Вобла",         9,   140,  15,   -7,   1,    year, [], 
 		["res://audio/i-rybku (mp3cut.net).mp3"]),
 	Product.new("Водка",         10,  249,  0,    20,   1,    year**10,
-		[Effect.new("Сонность", "Сон", 4), Effect.new("Вредность", "Здоровье", -10)],
+		[Effect.new("Сонность", "Сон", 4), 
+		 Effect.new("Вредность", "Здоровье", -10)],
 		["res://audio/vsyu-vodku-vyipit-nevozmojo-no-stremitsya-k-etomu-nado.mp3"]),
 	Product.new("Сало",          11,  120,  10,   0,    2,    90, [], 
 		["res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3",
@@ -33,7 +37,9 @@ var all_products = [
 		["res://audio/mjaso.mp3", "res://audio/zelen.mp3"]),
 	Product.new("Кофе",          13,  208,  0,    10,   10,    year,
 		[Effect.new("Бодрость", "Сон", -1)],
-		["res://audio/kofe.mp3"])
+		["res://audio/kofe.mp3"]),
+	Product.new("Подорожник",    14,  155,  0,  0,    1,     year,
+		[Effect.new("Оздоровление", "Здоровье", 10)])
 ]
 
 var rnd = RandomNumberGenerator.new()

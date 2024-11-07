@@ -41,6 +41,20 @@ var chooser_exists: bool = false
 func _on_sleep_pressed() -> void:
 	if not chooser_exists:
 		chooser_exists = true
+		
+		var trans_but = Button.new()
+		trans_but.size = Vector2(668, 868)
+		trans_but.global_position = Vector2(-10, -10)
+		
+		var transparent: StyleBoxFlat = load("res://images/med/transparent.tres")
+		trans_but.add_theme_stylebox_override('focus', transparent)
+		trans_but.add_theme_stylebox_override('disabled', transparent)
+		trans_but.add_theme_stylebox_override('hover_pressed', transparent)
+		trans_but.add_theme_stylebox_override('hover', transparent)
+		trans_but.add_theme_stylebox_override('pressed', transparent)
+		trans_but.add_theme_stylebox_override('normal', transparent)
+		add_child(trans_but)
+		
 		var ask: Label = Label.new()
 		ask.text = "Спать\n" + str(1) + "час?"
 		ask.position = Vector2(360, 746)
@@ -97,6 +111,7 @@ func _on_sleep_pressed() -> void:
 		add_child(no)
 		
 		no.connect('button_up', func():
+			remove_child(trans_but)
 			remove_child(sleep_chooser)
 			remove_child(ask)
 			remove_child(yes)
@@ -105,6 +120,21 @@ func _on_sleep_pressed() -> void:
 			sleep_chooser.free()
 			ask.free()
 			yes.free()
+			trans_but.free()
+		)
+		
+		trans_but.connect('button_down', func():
+			remove_child(trans_but)
+			remove_child(sleep_chooser)
+			remove_child(ask)
+			remove_child(yes)
+			remove_child(no)
+			chooser_exists = false
+			sleep_chooser.free()
+			ask.free()
+			yes.free()
+			no.free()
+			$Med.global_position.x = 1500
 		)
 
 

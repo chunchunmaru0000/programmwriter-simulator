@@ -11,8 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://2ye8rlayqbco" path="res://images/bed.png" id="6_c0t1h"]
 [ext_resource type="AudioStream" uid="uid://f6ch0o5rhs2q" path="res://audio/zhirik.mp3" id="6_sppxf"]
 [ext_resource type="Texture2D" uid="uid://cauvdtg6stnow" path="res://images/med/med.png" id="11_c5vuh"]
+[ext_resource type="StyleBox" uid="uid://beh1w8kdfjjog" path="res://images/med/transparent.tres" id="12_0nqd2"]
 [ext_resource type="Texture2D" uid="uid://ckbw2gkbefliw" path="res://images/med/med_but_def.png" id="12_4oe04"]
-[ext_resource type="StyleBox" uid="uid://dkca6572e0bhp" path="res://images/med/ med_panel.tres" id="12_ttfbg"]
 [ext_resource type="Texture2D" uid="uid://b1ao3vnpu8ovw" path="res://images/med/med_but_act.png" id="13_1r3g8"]
 
 [sub_resource type="Theme" id="Theme_nw4ga"]
@@ -207,7 +207,7 @@ theme_override_constants/separation = 16
 [node name="PanelContainer" type="PanelContainer" parent="Med/Scroll/MedV"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-theme_override_styles/panel = ExtResource("12_ttfbg")
+theme_override_styles/panel = ExtResource("12_0nqd2")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Med"]
 offset_right = 40.0
