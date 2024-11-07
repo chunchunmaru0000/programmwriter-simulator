@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://c6ic2w21tv33y"]
+[gd_scene load_steps=12 format=3 uid="uid://c6ic2w21tv33y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_nqbsp"]
 [ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="2_cu53h"]
+[ext_resource type="Texture2D" uid="uid://dns2khvk6pqmw" path="res://pc_images/day.jpg" id="2_dsgoh"]
 [ext_resource type="Texture2D" uid="uid://vsxai5lk46b8" path="res://pc_images/night.jpg" id="2_g8pso"]
 [ext_resource type="SpriteFrames" uid="uid://df7ijmtp3y2vg" path="res://clocks/clocks.tres" id="2_kyemp"]
 [ext_resource type="Texture2D" uid="uid://dgm5j2o6fueed" path="res://images/fridge_top.png" id="3_oyk8c"]
+[ext_resource type="Texture2D" uid="uid://b26b8vnkglwik" path="res://pc_images/morning.jpg" id="4_l4kpb"]
 [ext_resource type="Texture2D" uid="uid://pqplagad618q" path="res://pc_images/pc.jpg" id="5_ad716"]
 [ext_resource type="Texture2D" uid="uid://2ye8rlayqbco" path="res://images/bed.png" id="6_c0t1h"]
 [ext_resource type="AudioStream" uid="uid://f6ch0o5rhs2q" path="res://audio/zhirik.mp3" id="6_sppxf"]
@@ -14,10 +16,20 @@
 [node name="Game" type="Node2D"]
 script = ExtResource("1_nqbsp")
 
+[node name="Day" type="Sprite2D" parent="."]
+position = Vector2(325, 629)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("2_dsgoh")
+
 [node name="Night" type="Sprite2D" parent="."]
 position = Vector2(325, 629)
 scale = Vector2(1.15, 1.081)
 texture = ExtResource("2_g8pso")
+
+[node name="Morning" type="Sprite2D" parent="."]
+position = Vector2(325, 629)
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("4_l4kpb")
 
 [node name="StatsHBox" type="HBoxContainer" parent="."]
 anchors_preset = 2
@@ -137,6 +149,10 @@ offset_top = 24.0
 offset_right = 479.0
 offset_bottom = 47.0
 scale = Vector2(1.56829, 1.64659)
+theme_override_constants/shadow_offset_x = 4
+theme_override_constants/shadow_offset_y = 4
+theme_override_constants/outline_size = 4
+theme_override_constants/shadow_outline_size = 4
 text = "День 0"
 
 [node name="Back" type="Button" parent="."]

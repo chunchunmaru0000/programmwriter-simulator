@@ -9,6 +9,10 @@ var thirst = 10
 var sleep = 1
 var time = "0:08:00"
 
+var hunger_per_hour = 5
+var thirst_per_hour = 5
+
+
 var money = 5000
 var fridge: Array = []
 var uslugi: Array = [
@@ -17,6 +21,20 @@ var uslugi: Array = [
 	Usluga.new("Интернет от Рос*елеком", 500, "Тратится, только во время работы за компьютером. Обновление увеличения задолженности происходит в реальном времени."),
 	Usluga.new("Газоснабжение, отопление", 300, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день.")
 ]
+var ills: Dictionary = {
+	'l_dehydration': Illness.new('Обезвоживание', false, 1, 
+		'При продолжительной жажде возникает Легкое Обезвоживание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
+	'dehydration': Illness.new('Обезвоживание', false, 31, 
+		'При долгой и продолжительной жажде возникает Обезвоживание, наносящее [color=#b30000] НАИЗНАЧИТЕЛЬНЕЙШИЙ [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
+	'l_starvation': Illness.new('Голодание', false, 1, 
+		'При долгом и продолжительном голоде возникает Легкое Голодание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
+	'starvation': Illness.new('Голодание', false, 3, 
+		'При долгом и продолжительном голоде возникает Голодание, наносящее [color=#ff3300] Средний [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
+}
+var med_karta: Array = [
+	ills['l_starvation']
+]
+
 
 var task
 var did_task: bool = true
@@ -42,6 +60,10 @@ func save_progress():
 	var uslugi_strs = []
 	for usluga in uslugi:
 		uslugi_strs.append(str(usluga.debt))
+		
+	var med_larta_strs = []
+	for ill in med_karta:
+		med_larta_strs.append(ills.find_key([ill]))
 	
 	var data_str: String = "\n".join([
 		"hp " + str(hp),
@@ -50,7 +72,8 @@ func save_progress():
 		"thirst " + str(thirst),
 		"sleep " + str(sleep),
 		"time " + str(time),
-		"uslugi " + "<usluga>".join(uslugi_strs)
+		"uslugi " + "<usluga>".join(uslugi_strs),
+		"ills " + "<ill>".join(med_larta_strs),
 	])
 	for product in fridge:
 		var effects_str: String
@@ -93,7 +116,7 @@ func save_progress():
 	
 func load_progress(file_path):
 	var file = FileAccess.open(file_path, FileAccess.READ)
-	var lines = file.get_as_text().split('\n')
+	var lines = file.get_as_text().split('\n')	
 	
 	hp = int(lines[0].split(' ')[1])
 	money = int(lines[1].split(' ')[1])
@@ -106,7 +129,13 @@ func load_progress(file_path):
 	for i in range(uslugi_strs.size()):
 		uslugi[i].debt = int(uslugi_strs[i])
 	
-	var lines_was = 7
+	var med_karta_str: String = lines[7].split(' ')[1]
+	if med_karta_str:
+		var med_karta_strs = med_karta_str.split('<ill>')
+		for i in range(med_karta_strs.size()):
+			med_karta.append(ills[med_karta_strs])
+	
+	var lines_was = 8
 	for i in lines.size() - lines_was:
 		var line_data = lines[i + lines_was].split("<product_param>")
 		
@@ -173,6 +202,36 @@ func add_time(to) -> void:
 	hour += to
 	sleep += to
 	
+	hunger += hunger_per_hour * to
+	thirst += thirst_per_hour * to
+	
+	if hunger >= 200:
+		hunger = 200
+		ills['starvation'].active = true
+	elif hunger >= 100:
+		ills['l_starvation'].active = true
+	else:
+		ills['starvation'].active = false
+		ills['l_starvation'].active = false
+		
+	if thirst >= 200:
+		thirst = 200
+		ills['dehydration'].active = true
+	elif thirst >= 100:
+		ills['l_dehydration'].active = true
+	else:
+		ills['dehydration'].active = false
+		ills['l_dehydration'].active = false
+		
+	
+	
+	# можно сделать болезни, наносят много урона в час, их нужно личить
+	# много жажды если: обезвоживание
+	# много голода если: невыносимый голод
+	# если нет газа в госуслугах, следовательно холодно и следовательно: простуда и дальше пневмония
+	
+	
+	
 	while hour >= 24:
 		hour -= 24
 		day += 1
@@ -196,6 +255,8 @@ func add_thirst(to) -> void:
 	
 func add_hp(to) -> void:
 	hp += to
+	if hp > 1000:
+		hp = 1000
 	
 func add_sleep(to) -> void:
 	sleep += to
@@ -311,3 +372,15 @@ class Usluga:
 		self.debt = debt
 		self.desc = desc
 		
+		
+class Illness:
+	var name: String
+	var active: bool
+	var damage_per_hour: int
+	var desc: String
+	
+	func _init(name: String, active: bool, damage_per_hour: int, desc: String) -> void:
+		self.name = name
+		self.active = active
+		self.damage_per_hour = damage_per_hour
+		self.desc = desc

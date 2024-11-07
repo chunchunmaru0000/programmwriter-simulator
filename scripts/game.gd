@@ -4,6 +4,13 @@ extends Node2D
 func update_time() -> void:
 	var hour = Singleton.get_hour()
 	$ClockAnim.frame = hour if hour < 12 else hour - 12
+	
+	if hour < 4 or hour > 21:
+		move_child($Night, 2)
+	elif hour < 10 or hour > 16:
+		move_child($Morning, 2)
+	else:
+		move_child($Day, 2)
 
 
 func update_labels() -> void:
@@ -51,7 +58,6 @@ func _on_sleep_pressed() -> void:
 		sleep_chooser.page = 1
 		
 		sleep_chooser.connect('value_changed', func(value: float):
-			print(value)
 			var chas: String = ''
 			if sleep_chooser.value == 1 or sleep_chooser.value == 21:
 				chas = 'час'
