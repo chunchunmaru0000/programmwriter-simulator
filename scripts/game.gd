@@ -122,3 +122,62 @@ func _on_work_pressed() -> void:
 
 func _on_fridge_pressed() -> void:
 	Singleton.go_to("res://scenes/fridge.tscn")
+
+
+func _on_med_but_pressed() -> void:
+	var dark_but = Button.new()
+	dark_but.size = Vector2(668, 868)
+	dark_but.global_position = Vector2(-10, -10)
+	
+	var dark: StyleBoxFlat = load("res://images/med/dark.tres")
+	var panel_style: StyleBoxFlat = load("res://images/med/ med_panel.tres")
+	dark_but.add_theme_stylebox_override('focus', dark)
+	dark_but.add_theme_stylebox_override('disabled', dark)
+	dark_but.add_theme_stylebox_override('hover_pressed', dark)
+	dark_but.add_theme_stylebox_override('hover', dark)
+	dark_but.add_theme_stylebox_override('pressed', dark)
+	dark_but.add_theme_stylebox_override('normal', dark)
+	
+	#for i in 
+	for child in $Med/Scroll/MedV.get_children():
+		child.queue_free()
+		
+	for i in Singleton.ills:
+		var ill = Singleton.ills[i]
+		if ill.active:
+			var title: Label = Label.new()
+			title.text = ill.name
+			title.add_theme_font_size_override('font_size', 30)
+			title.add_theme_color_override('font_color', Color('#000000'))
+			
+			var desc: RichTextLabel = RichTextLabel.new()
+			desc.remove_child(desc.get_v_scroll_bar())
+			desc.bbcode_enabled = true
+			desc.text = ill.desc
+			print(desc.text)
+			desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			desc.add_theme_color_override('default_color', Color('#000000'))
+			desc.add_theme_font_size_override('normal_font_size', 20)
+			print(desc.get_line_count())
+			desc.custom_minimum_size.y = 100
+			
+			var v: VBoxContainer = VBoxContainer.new()
+			v.add_child(title)
+			v.add_child(desc)
+			
+			var panel: PanelContainer = PanelContainer.new()
+			panel.custom_minimum_size = Vector2($Med/Scroll/MedV.size.x, 200)
+			panel.add_theme_stylebox_override('panel', panel_style)
+			panel.add_child(v)
+			
+			$Med/Scroll/MedV.add_child(panel)
+	
+	$Med.global_position.x = get_window().size.x / 2
+	
+	dark_but.connect('button_down', func():
+		remove_child(dark_but)
+		$Med.global_position.x = 1500
+	)
+	
+	add_child(dark_but)
+	move_child($Med, -1)

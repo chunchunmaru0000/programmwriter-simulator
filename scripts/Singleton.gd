@@ -26,14 +26,11 @@ var ills: Dictionary = {
 		'При продолжительной жажде возникает Легкое Обезвоживание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
 	'dehydration': Illness.new('Обезвоживание', false, 31, 
 		'При долгой и продолжительной жажде возникает Обезвоживание, наносящее [color=#b30000] НАИЗНАЧИТЕЛЬНЕЙШИЙ [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
-	'l_starvation': Illness.new('Голодание', false, 1, 
+	'l_starvation': Illness.new('Голодание', true, 1, 
 		'При долгом и продолжительном голоде возникает Легкое Голодание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
 	'starvation': Illness.new('Голодание', false, 3, 
 		'При долгом и продолжительном голоде возникает Голодание, наносящее [color=#ff3300] Средний [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
 }
-var med_karta: Array = [
-	ills['l_starvation']
-]
 
 
 var task
@@ -43,6 +40,7 @@ var slash_n: bool = true
 var tabs: bool = true
 
 var learn: bool = true
+
 
 func clear() -> void:
 	save_file = "save.txt"
@@ -61,9 +59,10 @@ func save_progress():
 	for usluga in uslugi:
 		uslugi_strs.append(str(usluga.debt))
 		
-	var med_larta_strs = []
-	for ill in med_karta:
-		med_larta_strs.append(ills.find_key([ill]))
+	var ills_strs = []
+	for ill in ills:
+		if ills[ill].active:
+			ills_strs.append(ill)
 	
 	var data_str: String = "\n".join([
 		"hp " + str(hp),
@@ -73,7 +72,7 @@ func save_progress():
 		"sleep " + str(sleep),
 		"time " + str(time),
 		"uslugi " + "<usluga>".join(uslugi_strs),
-		"ills " + "<ill>".join(med_larta_strs),
+		"ills " + "<ill>".join(ills_strs),
 	])
 	for product in fridge:
 		var effects_str: String
@@ -129,11 +128,13 @@ func load_progress(file_path):
 	for i in range(uslugi_strs.size()):
 		uslugi[i].debt = int(uslugi_strs[i])
 	
-	var med_karta_str: String = lines[7].split(' ')[1]
-	if med_karta_str:
-		var med_karta_strs = med_karta_str.split('<ill>')
-		for i in range(med_karta_strs.size()):
-			med_karta.append(ills[med_karta_strs])
+	var ills_str: String = lines[7].split(' ')[1]
+	if ills_str:
+		var ills_strs = ills_str.split('<ill>')
+		for ill in ills_strs:
+			if ill in ills:
+				ills[ill].active = true
+				print(ill)
 	
 	var lines_was = 8
 	for i in lines.size() - lines_was:
@@ -223,8 +224,12 @@ func add_time(to) -> void:
 		ills['dehydration'].active = false
 		ills['l_dehydration'].active = false
 		
-	
-	
+	for i in ills:
+		var ill: Illness = ills[i]
+		if ill.active:
+			var damage = ill.damage_per_hour * to
+			hp -= damage
+
 	# можно сделать болезни, наносят много урона в час, их нужно личить
 	# много жажды если: обезвоживание
 	# много голода если: невыносимый голод
