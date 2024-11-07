@@ -141,25 +141,26 @@ func _on_med_but_pressed() -> void:
 	#for i in 
 	for child in $Med/Scroll/MedV.get_children():
 		child.queue_free()
-		
+	
+	var ills: int = 0
 	for i in Singleton.ills:
 		var ill = Singleton.ills[i]
 		if ill.active:
+			ills += 1
+			
 			var title: Label = Label.new()
 			title.text = ill.name
 			title.add_theme_font_size_override('font_size', 30)
-			title.add_theme_color_override('font_color', Color('#000000'))
+			title.add_theme_color_override('font_color', Color('#000000dd'))
 			
 			var desc: RichTextLabel = RichTextLabel.new()
+			desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 			desc.remove_child(desc.get_v_scroll_bar())
 			desc.bbcode_enabled = true
+			desc.add_theme_color_override('default_color', Color('#000000dd'))
+			desc.add_theme_font_size_override('normal_font_size', 24)
 			desc.text = ill.desc
-			print(desc.text)
-			desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			desc.add_theme_color_override('default_color', Color('#000000'))
-			desc.add_theme_font_size_override('normal_font_size', 20)
-			print(desc.get_line_count())
-			desc.custom_minimum_size.y = 100
+			desc.custom_minimum_size.y = 5 * 38
 			
 			var v: VBoxContainer = VBoxContainer.new()
 			v.add_child(title)
@@ -171,6 +172,15 @@ func _on_med_but_pressed() -> void:
 			panel.add_child(v)
 			
 			$Med/Scroll/MedV.add_child(panel)
+	
+	if ills == 0:
+		var title: Label = Label.new()
+		title.text = 'Вы столь здоровы, что вас бы даже не просили проходить медкомисию в Военкомате'
+		title.add_theme_font_size_override('font_size', 30)
+		title.add_theme_color_override('font_color', Color('#000000dd'))
+		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		title.custom_minimum_size.y = $Med/Scroll/MedV.size.y
+		$Med/Scroll/MedV.add_child(title)
 	
 	$Med.global_position.x = get_window().size.x / 2
 	

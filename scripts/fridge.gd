@@ -105,11 +105,17 @@ func _ready() -> void:
 		info.custom_minimum_size.y = anim_height
 		var effects_strs: Array = []
 		for effect in product.effects:
-			effects_strs.append(" - " + effect.name + ": " + effect.stat + " " + str(effect.value))
+			var str_eff: String = str(effect.value)
+			effects_strs.append(" - " + effect.name + ": " + effect.stat + " " + ("+" if str_eff[0] != '-' else '') + str_eff)
+			#effects_strs.append(" - " + effect.name + ": " + effect.stat + " " + str(effect.value))
+		
+		var str_hunger: String = str(product.hunger)
+		var str_thirst: String = str(product.thirst)
+		
 		info.text = "\n".join([
 			product.name,
-			"Сытость: " + str(product.hunger),
-			"Жажда: " + str(product.thirst),
+			"Голод: " + ('+' + str(product.hunger * -1) if str_hunger[0] == '-' else '-' + str_hunger),
+			"Жажда: " + ('+' + str(product.thirst * -1) if str_thirst[0] == '-' else '-' + str_thirst),
 			#"Эффекты: ",
 			#"\n".join(effects_strs)	
 		] + (["Эффекты: ",

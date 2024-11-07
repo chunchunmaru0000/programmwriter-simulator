@@ -22,11 +22,11 @@ var uslugi: Array = [
 	Usluga.new("Газоснабжение, отопление", 300, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день.")
 ]
 var ills: Dictionary = {
-	'l_dehydration': Illness.new('Обезвоживание', false, 1, 
+	'l_dehydration': Illness.new('Легкое Обезвоживание', false, 1, 
 		'При продолжительной жажде возникает Легкое Обезвоживание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
 	'dehydration': Illness.new('Обезвоживание', false, 31, 
 		'При долгой и продолжительной жажде возникает Обезвоживание, наносящее [color=#b30000] НАИЗНАЧИТЕЛЬНЕЙШИЙ [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
-	'l_starvation': Illness.new('Голодание', true, 1, 
+	'l_starvation': Illness.new('Легкое Голодание', false, 1, 
 		'При долгом и продолжительном голоде возникает Легкое Голодание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
 	'starvation': Illness.new('Голодание', false, 3, 
 		'При долгом и продолжительном голоде возникает Голодание, наносящее [color=#ff3300] Средний [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
@@ -134,7 +134,6 @@ func load_progress(file_path):
 		for ill in ills_strs:
 			if ill in ills:
 				ills[ill].active = true
-				print(ill)
 	
 	var lines_was = 8
 	for i in lines.size() - lines_was:
@@ -363,7 +362,6 @@ class Product:
 		clone.effects = effects
 		clone.sounds = [] + self.sounds
 
-		
 		return clone
 		
 		

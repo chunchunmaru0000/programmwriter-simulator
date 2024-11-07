@@ -202,12 +202,16 @@ vertical_scroll_mode = 2
 [node name="MedV" type="VBoxContainer" parent="Med/Scroll"]
 custom_minimum_size = Vector2(622, 325)
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 16
 
 [node name="PanelContainer" type="PanelContainer" parent="Med/Scroll/MedV"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("12_ttfbg")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Med"]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="MedBut" type="TextureButton" parent="."]
 self_modulate = Color(1, 1, 1, 0.466667)
