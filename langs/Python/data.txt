@@ -1,6 +1,6 @@
-exp=5
+exp=8
 slash_n=1
 tabs=1
-did=
+did=0|1
 comment=#
 super_comment=

@@ -39,7 +39,7 @@ var task_path: String
 var slash_n: bool = true
 var tabs: bool = true
 
-var learn: bool = true
+var learn: bool = false
 
 
 func clear() -> void:

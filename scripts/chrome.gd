@@ -70,6 +70,11 @@ var langs: Array = []
 var levels_plus: int = 5
 var combo_box_learns: OptionButton
 
+var combo_box_lan: OptionButton
+var combo_box_hard: OptionButton
+var combo_box_exp: OptionButton
+var combo_box_money: OptionButton
+
 
 func get_datas_from_langs() -> void:
 	if langs.size() == 0:
@@ -519,12 +524,39 @@ func draw_learn() -> void:
 		draw_lang_learn(langs[0])
 	
 
-func draw_money() -> void:
-	$Background.texture = preload("res://pc_images/chrome/money/back.png")
-	for child in $Scroll/Lenta.get_children():
-		$Scroll/Lenta.remove_child(child)
-		child.queue_free()
+func decide_tasks() -> void:
+	pass	
+
+
+func do_combo_box(combo_box: OptionButton) -> OptionButton:
+	var combo_box_style: StyleBoxFlat = preload("res://pc_images/chrome/money/offer_panel_style.tres")
+	combo_box = OptionButton.new()
+	combo_box.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
+	combo_box.add_theme_font_size_override('font_size', 14)
+	combo_box.add_theme_color_override('font_color', Color('#000000'))
+	combo_box.add_theme_color_override('font_focus_color', Color('#000000'))
 	
+	combo_box.custom_minimum_size.x = 400
+	combo_box.add_theme_stylebox_override('normal', combo_box_style)
+	combo_box.connect('item_selected', func(index: int): decide_tasks())
+	return combo_box
+	
+
+func do_label(text: String, font_size: int=14, color: Color=Color('#000000')) -> Label:
+	var label: Label = Label.new()
+	label.text = text
+	label.add_theme_color_override('font_color', color)
+	label.add_theme_font_size_override('font_size', font_size)
+	return label
+	
+
+func do_box(type, children: Array):
+	var box = type.new()
+	for child in children:
+		box.add_child(child)
+
+
+func draw_money() -> void:
 	var tasks: Array = []
 	
 	for lang: Lang in langs:
@@ -534,9 +566,111 @@ func draw_money() -> void:
 				var code_name: int = int(text)
 				if code_name / 3 <= lang.data.exp + levels_plus:
 					tasks.append(Task.new(lang, code_path, code_name))
-	
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
-	#print(tasks.map(func(task: Task): return task.code_name))
+	
+	var text_wide: int = 498
+	var x_padding: int = 16
+	var y_padding: int = 12
+	var half_y_padding: int = y_padding / 2
+	
+	$Background.texture = preload("res://pc_images/chrome/money/back.png")
+	for child in $Scroll/Lenta.get_children():
+		$Scroll/Lenta.remove_child(child)
+		child.queue_free()
+		
+	var panel_style: StyleBoxFlat = preload("res://pc_images/chrome/money/offer_panel_style.tres")
+	var block_style: StyleBoxFlat = preload("res://pc_images/chrome/money/panel_style.tres")
+	var combo_box_style: StyleBoxFlat = panel_style
+	
+	var title: Label = do_label('Фильтры', 26)
+	title.custom_minimum_size = Vector2(text_wide, 30)
+	
+	
+	combo_box_lan = do_combo_box(combo_box_lan)
+	var hbox_lan: HBoxContainer = HBoxContainer.new()
+	hbox_lan.add_child(do_label("Язык: "))
+	hbox_lan.add_child(combo_box_lan)
+	
+	combo_box_hard = do_combo_box(combo_box_hard)
+	var hbox_hard: HBoxContainer = HBoxContainer.new()
+	hbox_hard.add_child(do_label("Сложность: "))
+	hbox_hard.add_child(combo_box_hard)
+	
+	combo_box_exp = do_combo_box(combo_box_exp)
+	var hbox_exp: HBoxContainer = HBoxContainer.new()
+	hbox_exp.add_child(do_label("Стаж языка: "))
+	hbox_exp.add_child(combo_box_exp)
+	
+	combo_box_money = do_combo_box(combo_box_money)
+	var hbox_money: HBoxContainer = HBoxContainer.new()
+	hbox_money.add_child(do_label("Бюджет: "))
+	hbox_money.add_child(combo_box_money)
+	
+	var v_fils: VBoxContainer = VBoxContainer.new()
+	v_fils.add_child(get_new_panel(block_style, 'y', y_padding))
+	v_fils.add_child(title)
+	v_fils.add_child(hbox_lan)
+	v_fils.add_child(hbox_hard)
+	v_fils.add_child(hbox_exp)
+	v_fils.add_child(hbox_money)
+	v_fils.add_child(get_new_panel(block_style, 'y', y_padding + half_y_padding))
+	
+	var temp: Array = []
+	combo_box_lan.add_item("Любой")
+	for lang: Lang in langs:
+		combo_box_lan.add_item(lang.name)
+	
+		if not lang.data.exp in temp:
+			temp.append(lang.data.exp)
+	
+	temp.sort_custom(func(a, b): return a < b)
+	combo_box_exp.add_item("Любой")
+	for exp in temp:
+		combo_box_exp.add_item(str(exp))
+		
+	temp.clear()
+	for task: Task in tasks:
+		if not task.code_name in temp:
+			temp.append(task.code_name)
+	
+	temp.sort_custom(func(a, b): return a < b)
+	combo_box_hard.add_item("Любая")
+	for hard in temp:
+		combo_box_hard.add_item(str(hard))
+		
+	temp = ['Любой', 'от 0 до 100', 'от 101 до 500', 'от 501 до 1000', 'от 1001 до 10000', 'от 10001 и более']
+	for b in temp:
+		combo_box_money.add_item(b)
+	
+	#filters.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x
+	var filters: PanelContainer = PanelContainer.new()
+	filters.add_theme_stylebox_override('panel', block_style)
+	filters.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x - $Scroll.get_v_scroll_bar().size.x - x_padding * 2
+	filters.add_child(v_fils)
+	
+	var hgrid: HBoxContainer = HBoxContainer.new()
+	var left: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+	var right: PanelContainer = get_new_panel(block_style, 'x', x_padding)
+	
+	hgrid.add_child(left)
+	hgrid.add_child(filters)
+	hgrid.add_child(right)
+	
+	var main_panel: PanelContainer = PanelContainer.new()
+	main_panel.add_theme_stylebox_override('panel', panel_style)
+	main_panel.add_child(hgrid)
+	main_panel.name = 'filters'
+	$Scroll/Lenta.add_child(main_panel)
+	
+	decide_tasks()
+	draw_money_of(tasks)
+
+
+func draw_money_of(tasks: Array) -> void:
+	for child in $Scroll/Lenta.get_children():
+		if child.name != 'filters':
+			$Scroll/Lenta.remove_child(child)
+			child.queue_free()
 	
 	var panel_style: StyleBoxFlat = preload("res://pc_images/chrome/money/offer_panel_style.tres")
 	var block_style: StyleBoxFlat = preload("res://pc_images/chrome/money/panel_style.tres")
@@ -567,8 +701,8 @@ func draw_money() -> void:
 		
 		var desc: Label = Label.new()
 		desc.custom_minimum_size = Vector2(text_wide, 0)
-		desc.text = desc_text
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc.text = desc_text
 		desc.add_theme_color_override('font_color', Color('#000000'))
 		desc.add_theme_font_size_override('font_size', 14)
 		

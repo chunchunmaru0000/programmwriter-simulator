@@ -227,6 +227,11 @@ texture_disabled = ExtResource("13_1r3g8")
 texture_focused = ExtResource("13_1r3g8")
 stretch_mode = 0
 
+[node name="OptionButton" type="OptionButton" parent="MedBut"]
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 20.0
+
 [connection signal="pressed" from="ButtonsVBox/5" to="." method="_on_5_pressed"]
 [connection signal="pressed" from="ButtonsVBox/Fridge" to="." method="_on_fridge_pressed"]
 [connection signal="pressed" from="ButtonsVBox/Work" to="." method="_on_work_pressed"]
