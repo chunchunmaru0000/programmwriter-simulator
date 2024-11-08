@@ -70,6 +70,7 @@ var langs: Array = []
 var levels_plus: int = 5
 var combo_box_learns: OptionButton
 
+var all_tasks: Array
 var combo_box_lan: OptionButton
 var combo_box_hard: OptionButton
 var combo_box_exp: OptionButton
@@ -525,7 +526,31 @@ func draw_learn() -> void:
 	
 
 func decide_tasks() -> void:
-	pass	
+	var tasks: Array = all_tasks.duplicate(true)
+	
+	if not combo_box_lan.text == 'Любой':
+		tasks = tasks.filter(func(task: Task): return task.lang.name == combo_box_lan.text)
+	
+	if not combo_box_hard.text == 'Любая':
+		tasks = tasks.filter(func(task: Task): return str(task.code_name) == combo_box_hard.text)
+		
+	if not combo_box_exp.text == 'Любой':
+		tasks = tasks.filter(func(task: Task): return str(task.lang.data.exp) == combo_box_exp.text)
+	
+	if not combo_box_money.text == 'Любой':
+		match combo_box_money.text:
+			'от 0 до 100':
+				tasks = tasks.filter(func(task: Task): return task.price < 101)
+			'от 101 до 500':
+				tasks = tasks.filter(func(task: Task): return task.price > 100 and task.price < 501) 
+			'от 501 до 1000':
+				tasks = tasks.filter(func(task: Task): return task.price > 500 and task.price < 1001) 
+			'от 1001 до 10000':
+				tasks = tasks.filter(func(task: Task): return task.price > 1000 and task.price < 10001) 
+			'от 10001 и более':
+				tasks = tasks.filter(func(task: Task): return task.price > 10000)
+				
+	draw_money_of(tasks)
 
 
 func do_combo_box(combo_box: OptionButton) -> OptionButton:
@@ -567,6 +592,7 @@ func draw_money() -> void:
 				if code_name / 3 <= lang.data.exp + levels_plus:
 					tasks.append(Task.new(lang, code_path, code_name))
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
+	all_tasks = tasks
 	
 	var text_wide: int = 498
 	var x_padding: int = 16
@@ -642,7 +668,6 @@ func draw_money() -> void:
 	for b in temp:
 		combo_box_money.add_item(b)
 	
-	#filters.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x
 	var filters: PanelContainer = PanelContainer.new()
 	filters.add_theme_stylebox_override('panel', block_style)
 	filters.custom_minimum_size.x = $Scroll/Lenta.custom_minimum_size.x - $Scroll.get_v_scroll_bar().size.x - x_padding * 2
@@ -663,7 +688,6 @@ func draw_money() -> void:
 	$Scroll/Lenta.add_child(main_panel)
 	
 	decide_tasks()
-	draw_money_of(tasks)
 
 
 func draw_money_of(tasks: Array) -> void:
