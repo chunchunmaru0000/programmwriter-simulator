@@ -11,9 +11,10 @@ var time = "0:08:00"
 
 var hunger_per_hour = 5
 var thirst_per_hour = 5
+var sleep_koef = 2.
 
 
-var money = 5000
+var money = 500
 var fridge: Array = []
 var uslugi: Array = [
 	Usluga.new("Водоснабжение, водоотведение", 100, "Тратится постепенно, но всегда. Обновление увеличения задолженности происходит раз в день."),
@@ -27,9 +28,13 @@ var ills: Dictionary = {
 	'dehydration': Illness.new('Обезвоживание', false, 31, 
 		'При долгой и продолжительной жажде возникает Обезвоживание, наносящее [color=#b30000] НАИЗНАЧИТЕЛЬНЕЙШИЙ [/color] вред здоровью почасово. Возможно оно пройдет, если утолить жажду.'),
 	'l_starvation': Illness.new('Легкое Голодание', false, 1, 
-		'При долгом и продолжительном голоде возникает Легкое Голодание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
+		'При продолжительном голоде возникает Легкое Голодание, наносящее [color=#00cc00] Незначительный [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
 	'starvation': Illness.new('Голодание', false, 3, 
 		'При долгом и продолжительном голоде возникает Голодание, наносящее [color=#ff3300] Средний [/color] вред здоровью почасово. Возможно оно пройдет, если утолить голод.'),
+	'l_sleep_deprivation': Illness.new('Легкий Недосып', false, 6,
+		'При продолжительном отсутствии сна возникает Легкий Недосып, наносящий [color=#ff3300] Средний [/color] вред здоровью почасово. Возможно он пройдет, если достаточно поспать.'),
+	'sleep_deprivation': Illness.new('Недосып', false, 62,
+		'При долгом и продолжительном отсутствии сна возникает Недосып, наносящий [color=#b30000] НАИЗНАЧИТЕЛЬНЕЙШИЙ [/color] вред здоровью почасово. Возможно он пройдет, если достаточно поспать.'),
 }
 
 
@@ -121,7 +126,7 @@ func load_progress(file_path):
 	money = int(lines[1].split(' ')[1])
 	hunger = int(lines[2].split(' ')[1])
 	thirst = int(lines[3].split(' ')[1])
-	sleep = int(lines[4].split(' ')[1])
+	sleep = float(lines[4].split(' ')[1])
 	time = lines[5].split(' ')[1]
 	
 	var uslugi_strs = lines[6].split(' ')[1].split("<usluga>")
@@ -196,12 +201,16 @@ func set_money(to) -> void:
 func set_time(to) -> void:
 	time = to
 	
-func add_time(to) -> void:
+func add_time(to, add_sleep: bool=true) -> void:
 	var hour = int(time.split(":")[1])
 	var day = int(time.split(":")[0])
 	hour += to
-	sleep += to
 	
+	if add_sleep:
+		sleep += to / sleep_koef
+	else:
+		sleep -= to
+		
 	hunger += hunger_per_hour * to
 	thirst += thirst_per_hour * to
 	
@@ -223,6 +232,23 @@ func add_time(to) -> void:
 		ills['dehydration'].active = false
 		ills['l_dehydration'].active = false
 		
+
+	if sleep < 0:
+		sleep = 0
+		
+	if sleep >= 40:
+		sleep = 40
+	
+	if sleep >= 24:
+		ills['sleep_deprivation'].active = true
+	elif sleep >= 16:
+		ills['sleep_deprivation'].active = false
+		ills['l_sleep_deprivation'].active = true
+	else:
+		ills['sleep_deprivation'].active = false
+		ills['l_sleep_deprivation'].active = false
+	
+		
 	for i in ills:
 		var ill: Illness = ills[i]
 		if ill.active:
@@ -230,11 +256,7 @@ func add_time(to) -> void:
 			hp -= damage
 
 	# можно сделать болезни, наносят много урона в час, их нужно личить
-	# много жажды если: обезвоживание
-	# много голода если: невыносимый голод
 	# если нет газа в госуслугах, следовательно холодно и следовательно: простуда и дальше пневмония
-	
-	
 	
 	while hour >= 24:
 		hour -= 24
@@ -242,7 +264,7 @@ func add_time(to) -> void:
 		
 	time = str(day) + ":" + str(hour) + ":00"
 	
-	for product in fridge:	
+	for product in fridge:
 		(product as Product).expiration_hours -= to
 		while product.expiration_hours < 0:
 			product.expiration_hours += 24

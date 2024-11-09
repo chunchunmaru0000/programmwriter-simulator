@@ -276,8 +276,8 @@ func _on_start_but_button_down() -> void:
 			
 		Singleton.money += task.price
 		Singleton.did_task = true
-		Singleton.add_time(ceil(task.code_name / 10))
-		print(ceil(task.code_name / 10), ' time added')
+		Singleton.add_time(ceil(task.code_name / 10.))
+		print(ceil(task.code_name / 10.), ' time added')
 		Singleton.go_to("res://scenes/chrome.tscn")
 	else:
 		#может чтото типа вы даун будет не знаю

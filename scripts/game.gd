@@ -97,10 +97,7 @@ func _on_sleep_pressed() -> void:
 		yes.position = Vector2(360, 800)
 		add_child(yes)
 		yes.connect('button_up', func():
-			var sleep_time = sleep_chooser.value
-			Singleton.add_time(sleep_time)
-			Singleton.add_sleep(-sleep_time * 2)
-
+			Singleton.add_time(sleep_chooser.value, false)
 			update_labels()
 		)
 		
@@ -134,7 +131,6 @@ func _on_sleep_pressed() -> void:
 			ask.free()
 			yes.free()
 			no.free()
-			$Med.global_position.x = 1500
 		)
 
 
