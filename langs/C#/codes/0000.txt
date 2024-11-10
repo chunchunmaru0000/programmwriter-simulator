@@ -21,33 +21,3 @@ class<w///>Program
         Console.WriteLine(<w///>$<w///>"Сумма {a} и {b} равна {sum}."<w///>);
     }
 }
-class<w///>Program
-{
-    static<w///>void<w///>Main()
-    {
-<t///><w///><t///><w///>Console.WriteLine(<w///>"Введите первое число:"<w///>);
-<t///><w///><t///><w///>double<w///>a<w///>=<w///>Convert.ToDouble(Console.ReadLine());
-
-        Console.WriteLine(<w///>"Введите второе число:"<w///>);
-        double<w///>b<w///>=<w///>Convert.ToDouble(Console.ReadLine());
-
-        double<w///>sum<w///>=<w///>a<w///>+<w///>b;
-
-        Console.WriteLine(<w///>$<w///>"Сумма {a} и {b} равна {sum}."<w///>);
-    }
-}
-class<w///>Program
-{
-    static<w///>void<w///>Main()
-    {
-<t///><w///><t///><w///>Console.WriteLine(<w///>"Введите первое число:"<w///>);
-<t///><w///><t///><w///>double<w///>a<w///>=<w///>Convert.ToDouble(Console.ReadLine());
-
-        Console.WriteLine(<w///>"Введите второе число:"<w///>);
-        double<w///>b<w///>=<w///>Convert.ToDouble(Console.ReadLine());
-
-        double<w///>sum<w///>=<w///>a<w///>+<w///>b;
-
-        Console.WriteLine(<w///>$<w///>"Сумма {a} и {b} равна {sum}."<w///>);
-    }
-}

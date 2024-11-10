@@ -45,6 +45,7 @@ var slash_n: bool = true
 var tabs: bool = true
 
 var learn: bool = false
+var didexps: Dictionary
 
 
 func clear() -> void:
@@ -69,6 +70,10 @@ func save_progress():
 		if ills[ill].active:
 			ills_strs.append(ill)
 	
+	var didexp_strs = []
+	for n in didexps:
+		didexp_strs.append(n + '<did>' + didexps[n].did + '<exp>' + str(didexps[n].exp))
+	
 	var data_str: String = "\n".join([
 		"hp " + str(hp),
 		"money " + str(money),
@@ -78,6 +83,7 @@ func save_progress():
 		"time " + str(time),
 		"uslugi " + "<usluga>".join(uslugi_strs),
 		"ills " + "<ill>".join(ills_strs),
+		"didexps " + "<didexp>".join(didexp_strs)
 	])
 	for product in fridge:
 		var effects_str: String
@@ -139,8 +145,16 @@ func load_progress(file_path):
 		for ill in ills_strs:
 			if ill in ills:
 				ills[ill].active = true
-	
-	var lines_was = 8
+				
+	var didexp_str: String = ' '.join(lines[8].split(' ').slice(1))
+	if didexp_str:
+		var didexp_strs = didexp_str.split('<didexp>')
+		for des in didexp_strs:
+			var nde = des.split('<exp>')
+			var nd = nde[0].split('<did>')
+			didexps[nd[0]] = DidExp.new(nd[1], int(nde[1]))
+			
+	var lines_was = 9
 	for i in lines.size() - lines_was:
 		var line_data = lines[i + lines_was].split("<product_param>")
 		
@@ -409,3 +423,12 @@ class Illness:
 		self.active = active
 		self.damage_per_hour = damage_per_hour
 		self.desc = desc
+
+
+class DidExp:
+	var did: String
+	var exp: int
+	
+	func _init(did: String, exp: int) -> void:
+		self.did = did
+		self.exp = exp

@@ -86,15 +86,35 @@ func get_datas_from_langs() -> void:
 			var data_path: String = lang_path + "data.txt"
 			
 			var data_text = FileAccess.open(data_path, FileAccess.READ).get_as_text().split('\n')
+			var lang_data: LangData
 			
-			var lang_data: LangData = LangData.new(
-				int(data_text[0].split('=')[1].strip_edges()),
+			var exp: int
+			var did: Array
+			
+			if lang_name in Singleton.didexps:
+				exp = Singleton.didexps[lang_name].exp
+				did = [] if Singleton.didexps[lang_name].did == '' else Array(Singleton.didexps[lang_name].did.split('|')).map(func(num: String): return int(num))
+			else:
+				exp = 0
+				did = []
+				Singleton.didexps[lang_name] = Singleton.DidExp.new('', 0)
+				
+			lang_data = LangData.new(
+				exp,
+				data_text[0].split('=')[1].strip_edges() == '1',
 				data_text[1].split('=')[1].strip_edges() == '1',
-				data_text[2].split('=')[1].strip_edges() == '1',
-				[] if data_text[3].strip_edges() == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
-				data_text[4].split('=')[1].strip_edges(),
-				data_text[5].split('=')[1].strip_edges()
+				did,
+				data_text[2].split('=')[1].strip_edges(),
+				data_text[3].split('=')[1].strip_edges()
 			)
+			#lang_name = LangData.new(
+				#0 if not lang_name in Singleton.didexps else Singleton.didexps[lang_name].exp,
+				#data_text[1].split('=')[1].strip_edges() == '1',
+				#data_text[2].split('=')[1].strip_edges() == '1',
+				#[] if data_text[3].strip_edges() == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
+				#data_text[4].split('=')[1].strip_edges(),
+				#data_text[5].split('=')[1].strip_edges()
+			#)
 			
 			var img = Image.new() 
 			var texture = ImageTexture.new() 
@@ -553,9 +573,9 @@ func decide_tasks() -> void:
 	draw_money_of(tasks)
 
 
-func do_combo_box(combo_box: OptionButton) -> OptionButton:
+func do_combo_box() -> OptionButton:
 	var combo_box_style: StyleBoxFlat = preload("res://pc_images/chrome/money/offer_panel_style.tres")
-	combo_box = OptionButton.new()
+	var combo_box = OptionButton.new()
 	combo_box.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
 	combo_box.add_theme_font_size_override('font_size', 14)
 	combo_box.add_theme_color_override('font_color', Color('#000000'))
@@ -612,22 +632,22 @@ func draw_money() -> void:
 	title.custom_minimum_size = Vector2(text_wide, 30)
 	
 	
-	combo_box_lan = do_combo_box(combo_box_lan)
+	combo_box_lan = do_combo_box()
 	var hbox_lan: HBoxContainer = HBoxContainer.new()
 	hbox_lan.add_child(do_label("Язык: "))
 	hbox_lan.add_child(combo_box_lan)
 	
-	combo_box_hard = do_combo_box(combo_box_hard)
+	combo_box_hard = do_combo_box()
 	var hbox_hard: HBoxContainer = HBoxContainer.new()
 	hbox_hard.add_child(do_label("Сложность: "))
 	hbox_hard.add_child(combo_box_hard)
 	
-	combo_box_exp = do_combo_box(combo_box_exp)
+	combo_box_exp = do_combo_box()
 	var hbox_exp: HBoxContainer = HBoxContainer.new()
 	hbox_exp.add_child(do_label("Стаж языка: "))
 	hbox_exp.add_child(combo_box_exp)
 	
-	combo_box_money = do_combo_box(combo_box_money)
+	combo_box_money = do_combo_box()
 	var hbox_money: HBoxContainer = HBoxContainer.new()
 	hbox_money.add_child(do_label("Бюджет: "))
 	hbox_money.add_child(combo_box_money)

@@ -38,7 +38,7 @@ func _on_quit_pressed() -> void:
 	
 	
 func _ready() -> void:
-	Singleton.proj = '/'.join(OS.get_executable_path().split('/').slice(0, -1)) + '/'
+	#Singleton.proj = '/'.join(OS.get_executable_path().split('/').slice(0, -1)) + '/'
 	Singleton.proj = ProjectSettings.globalize_path('res://')
 	print(Singleton.proj)
 	
