@@ -56,9 +56,15 @@ func clear() -> void:
 	thirst = 10
 	sleep = 1
 	time = "0:08:00"
-	
-	money = 5000
+	money = 500
 	fridge = []
+	
+	did_task = true
+	learn = false
+	didexps = {}
+	
+	for ill in ills:
+		ills[ill].active = false
 
 func save_progress():
 	var uslugi_strs = []

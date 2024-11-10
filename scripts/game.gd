@@ -35,6 +35,7 @@ func _process(delta: float) -> void:
 
 func _on_back_pressed() -> void:
 	Singleton.go_to("res://scenes/start.tscn")
+	Singleton.clear()
 
 
 var chooser_exists: bool = false
