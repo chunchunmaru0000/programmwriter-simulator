@@ -107,14 +107,6 @@ func get_datas_from_langs() -> void:
 				data_text[2].split('=')[1].strip_edges(),
 				data_text[3].split('=')[1].strip_edges()
 			)
-			#lang_name = LangData.new(
-				#0 if not lang_name in Singleton.didexps else Singleton.didexps[lang_name].exp,
-				#data_text[1].split('=')[1].strip_edges() == '1',
-				#data_text[2].split('=')[1].strip_edges() == '1',
-				#[] if data_text[3].strip_edges() == 'did=' else Array(data_text[3].split('=')[1].split('|')).map(func(num: String): return int(num)),
-				#data_text[4].split('=')[1].strip_edges(),
-				#data_text[5].split('=')[1].strip_edges()
-			#)
 			
 			var img = Image.new() 
 			var texture = ImageTexture.new() 
@@ -122,9 +114,9 @@ func get_datas_from_langs() -> void:
 			img.load_png_from_buffer(file.get_buffer(file.get_length())) 
 			file.close() 
 			
-			print(texture.get_size())
+			#print(texture.get_size())
 			if texture.get_size() == Vector2(0, 0):
-				print("res://reserve_langs/" + lang_name + "/logo.png", '   ', ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"))
+				#print("res://reserve_langs/" + lang_name + "/logo.png", '   ', ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"))
 				if ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"):
 					texture = load("res://reserve_langs/" + lang_name + "/logo.png")
 			
@@ -609,7 +601,7 @@ func draw_money() -> void:
 			var text: String = code_path.split('/')[-1].split('.')[0].strip_edges()
 			if text.is_valid_int():
 				var code_name: int = int(text)
-				if code_name / 3 <= lang.data.exp + levels_plus:
+				if code_name <= lang.data.exp + levels_plus:
 					tasks.append(Task.new(lang, code_path, code_name))
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
 	all_tasks = tasks

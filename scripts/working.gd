@@ -43,7 +43,6 @@ func estimate_code() -> bool:
 		equal = \
 			Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
 			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
-
 #elif not Singleton.slash_n and Singleton.tabs:
 	# вероятно не существует
 		
@@ -263,28 +262,14 @@ func _on_start_but_button_down() -> void:
 		var data = task.lang.data
 		var text: String = FileAccess.open(task.lang.data_path, FileAccess.READ).get_as_text()
 		
-		#if task.lang.name in Singleton.didexps:
 		var didexp = Singleton.didexps[task.lang.name]
 		didexp.exp += 1
 		didexp.did = str(task.code_name) if didexp.did == '' else didexp.did + '|' + str(task.code_name)
-		#else:
-			#pass
-			
-		var new_text: String = \
-			'exp=' + str(data.exp + 1) + '\n' + \
-			'slash_n=' + ('1' if data.slash_n else '0') + '\n' + \
-			'tabs=' + ('1' if data.tabs else '0') + '\n' + \
-			#'did=' + ('' if data.did.size() == 0 else '|'.join(data.did) + '|') + str(task.code_name) + '\n' + \
-			'comment=' + data.comment + '\n' + \
-			'super_comment=' + data.super_comment
-		var file = FileAccess.open(task.lang.data_path, FileAccess.WRITE)
-		file.store_string(new_text)
-		file.close()
-			
+
 		Singleton.money += task.price
 		Singleton.did_task = true
 		Singleton.add_time(ceil(task.code_name / 10.))
-		print(ceil(task.code_name / 10.), ' time added')
+		#print(ceil(task.code_name / 10.), ' time added')
 		Singleton.go_to("res://scenes/chrome.tscn")
 	else:
 		#может чтото типа вы даун будет не знаю
