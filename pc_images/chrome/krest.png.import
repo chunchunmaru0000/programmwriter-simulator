@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://jxvohtsc2qw1"
-path="res://.godot/imported/logo.png-2b0008346187de7658478260d3d8b938.ctex"
+uid="uid://bp6h6niwysbas"
+path="res://.godot/imported/krest.png-ecd9118fa8e3c6e5c6c9bb55067f08e8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://reserve_langs/C#/logo.png"
-dest_files=["res://.godot/imported/logo.png-2b0008346187de7658478260d3d8b938.ctex"]
+source_file="res://pc_images/chrome/krest.png"
+dest_files=["res://.godot/imported/krest.png-ecd9118fa8e3c6e5c6c9bb55067f08e8.ctex"]
 
 [params]
 

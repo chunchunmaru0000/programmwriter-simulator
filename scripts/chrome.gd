@@ -20,7 +20,7 @@ class LangData:
 
 class Lang:
 	var name: String
-	var img: CompressedTexture2D
+	var img: Texture2D
 	var codes_paths: Array
 	var learn_paths: Array
 	var data: LangData
@@ -29,7 +29,7 @@ class Lang:
 	var learns: Array
 	var lights: Dictionary
 	
-	func _init(name: String, img: CompressedTexture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String, desc: String, learns: Array, lights: Dictionary) -> void:
+	func _init(name: String, img: Texture2D, codes_paths: Array, learn_paths: Array, data: LangData, data_path: String, desc: String, learns: Array, lights: Dictionary) -> void:
 		self.name = name
 		self.img = img
 		self.codes_paths = codes_paths
@@ -108,17 +108,11 @@ func get_datas_from_langs() -> void:
 				data_text[3].split('=')[1].strip_edges()
 			)
 			
-			var img = Image.new() 
-			var texture = ImageTexture.new() 
-			var file: FileAccess = FileAccess.open(lang_path + "logo.png", FileAccess.READ) 
-			img.load_png_from_buffer(file.get_buffer(file.get_length())) 
-			file.close() 
-			
-			#print(texture.get_size())
-			if texture.get_size() == Vector2(0, 0):
-				#print("res://reserve_langs/" + lang_name + "/logo.png", '   ', ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"))
-				if ResourceLoader.exists("res://reserve_langs/" + lang_name + "/logo.png"):
-					texture = load("res://reserve_langs/" + lang_name + "/logo.png")
+			var img = Image.new().load_from_file(lang_path + "logo.png")
+			print('logo img ' + lang_name + ' size = ', img.get_size())
+
+			var texture = ImageTexture.new().create_from_image(img)
+			print('logo texture ' + lang_name + ' size = ', texture.get_size())
 			
 			var sites: Array = []
 			for site_name in DirAccess.open(lang_path + "learn/").get_files():
@@ -621,7 +615,16 @@ func draw_money() -> void:
 	var combo_box_style: StyleBoxFlat = panel_style
 	
 	var title: Label = do_label('Фильтры', 26)
-	title.custom_minimum_size = Vector2(text_wide, 30)
+	#title.custom_minimum_size = Vector2(text_wide, 30)
+	var budget: Label = do_label('Баланс: ' + str(Singleton.money) + '₽')
+	var tbh: HBoxContainer = HBoxContainer.new()
+	tbh.custom_minimum_size = Vector2(text_wide, 30)
+	title.size_flags_horizontal = Control.SIZE_EXPAND
+	budget.size_flags_horizontal = Control.SIZE_EXPAND
+	title.size_flags_stretch_ratio = 5
+	budget.size_flags_stretch_ratio = 1
+	tbh.add_child(title)
+	tbh.add_child(budget)
 	
 	
 	combo_box_lan = do_combo_box()
@@ -646,7 +649,7 @@ func draw_money() -> void:
 	
 	var v_fils: VBoxContainer = VBoxContainer.new()
 	v_fils.add_child(get_new_panel(block_style, 'y', y_padding))
-	v_fils.add_child(title)
+	v_fils.add_child(tbh)
 	v_fils.add_child(hbox_lan)
 	v_fils.add_child(hbox_hard)
 	v_fils.add_child(hbox_exp)
