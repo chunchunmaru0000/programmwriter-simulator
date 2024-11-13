@@ -10,6 +10,7 @@ var holder0: Button = null
 var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
+var all_words_ordered: Array
 
 func estimate_code() -> bool:
 	if Singleton.did_task:
@@ -221,10 +222,21 @@ func _ready() -> void:
 	
 	var i: int = 1
 	var strs: Array = Array(strokes)
-	strs.shuffle()
+	#strs.shuffle()
+	
 	var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
+	var new_order: Array = []
 	
 	for stroke in strs:
+		var words: Array = Array(stroke.split('<w///>'))
+		all_words_ordered.append_array(words.duplicate(true))
+		words.shuffle()
+		new_order.append(words)
+	new_order.shuffle()
+	
+	
+
+	for stroke in new_order:
 		var panel: PanelContainer = PanelContainer.new()
 		panel.custom_minimum_size = Vector2(608, 32)
 		panel.add_theme_stylebox_override('panel', hbox_style)
@@ -235,10 +247,8 @@ func _ready() -> void:
 		
 		panel.add_child(hcont)
 		$ScrollContainer/VBoxContainer.add_child(panel)
-
-		var words: Array = Array(stroke.split('<w///>'))
-		words.shuffle()
-		for word in words:
+		
+		for word in stroke:
 			word = word.replace('\n', '').strip_edges()
 			
 			if word != '':
@@ -274,11 +284,15 @@ func _on_start_but_button_down() -> void:
 		Singleton.did_task = true
 		Singleton.add_time(ceil(task.code_name / 10.))
 		
+		var chasov: String = str(ceil(task.code_name / 10.)) + ' '
+		var chas = int(chasov[-1])
+		chas = 'час' if chas == 1 else 'часа' if chas > 1 and chas < 5 else 'часов'
+		
 		$WinnerPanel.position.x = -648 * 2
 		$WinnerPanel/Rewards.text = \
 			'Стаж ' + task.lang.name + ': ' + str(didexp.exp - 1) + c_str('ffb300', ' -> ') + c_str('66ff66', str(didexp.exp)) + '\n' + \
 			'Капитал: ' + str(Singleton.money - task.price) + c_str('ffb300', ' -> ') + c_str('66ff66', str(Singleton.money)) + '\n' + \
-			'Времени прошло: ' + str(ceil(task.code_name / 10.)) + ' часов'
+			'Времени прошло: ' + chasov + chas
 	else:
 		#может чтото типа вы даун будет не знаю
 		pass
