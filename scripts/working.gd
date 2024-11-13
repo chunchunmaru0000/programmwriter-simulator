@@ -256,6 +256,10 @@ func _process(delta: float) -> void:
 		holder0.position = but_m_pos(holder0)
 
 
+func c_str(c: String, s: String) -> String:
+	return '[color=#' + c + ']' + s + '[/color]'
+
+
 func _on_start_but_button_down() -> void:
 	if estimate_code():
 		var task = Singleton.task
@@ -269,8 +273,12 @@ func _on_start_but_button_down() -> void:
 		Singleton.money += task.price
 		Singleton.did_task = true
 		Singleton.add_time(ceil(task.code_name / 10.))
-		#print(ceil(task.code_name / 10.), ' time added')
-		Singleton.go_to("res://scenes/chrome.tscn")
+		
+		$WinnerPanel.position.x = -648 * 2
+		$WinnerPanel/Rewards.text = \
+			'Стаж ' + task.lang.name + ': ' + str(didexp.exp - 1) + c_str('ffb300', ' -> ') + c_str('66ff66', str(didexp.exp)) + '\n' + \
+			'Капитал: ' + str(Singleton.money - task.price) + c_str('ffb300', ' -> ') + c_str('66ff66', str(Singleton.money)) + '\n' + \
+			'Времени прошло: ' + str(ceil(task.code_name / 10.)) + ' часов'
 	else:
 		#может чтото типа вы даун будет не знаю
 		pass
@@ -281,4 +289,8 @@ func _on_start_button_down() -> void:
 
 
 func _on_chrome_button_down() -> void:
+	Singleton.go_to("res://scenes/chrome.tscn")
+
+
+func _on_close_scene_pressed() -> void:
 	Singleton.go_to("res://scenes/chrome.tscn")

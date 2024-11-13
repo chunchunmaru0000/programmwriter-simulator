@@ -186,7 +186,11 @@ theme_override_styles/normal_mirrored = ExtResource("10_e1iun")
 theme_override_styles/normal = ExtResource("10_e1iun")
 text = "ээээээээээээээээээ"
 
-[node name="Bar" type="Node" parent="."]
+[node name="Bar" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Bar" type="Sprite2D" parent="Bar"]
 position = Vector2(323.85, 835.35)
@@ -212,19 +216,6 @@ offset_right = 625.0
 offset_bottom = 847.0
 text = "00:00"
 
-[node name="Chrome" type="TextureButton" parent="Bar"]
-offset_left = 101.0
-offset_top = 823.0
-offset_right = 286.0
-offset_bottom = 848.0
-texture_normal = ExtResource("14_tid06")
-texture_pressed = ExtResource("15_5ssuq")
-texture_hover = ExtResource("15_5ssuq")
-texture_disabled = ExtResource("14_tid06")
-texture_focused = ExtResource("15_5ssuq")
-ignore_texture_size = true
-stretch_mode = 0
-
 [node name="Vs" type="TextureButton" parent="Bar"]
 offset_left = 288.0
 offset_top = 823.0
@@ -238,6 +229,87 @@ texture_focused = ExtResource("17_j4qtc")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="Chrome" type="TextureButton" parent="Bar"]
+offset_left = 101.0
+offset_top = 823.0
+offset_right = 286.0
+offset_bottom = 848.0
+texture_normal = ExtResource("14_tid06")
+texture_pressed = ExtResource("15_5ssuq")
+texture_hover = ExtResource("15_5ssuq")
+texture_disabled = ExtResource("14_tid06")
+texture_focused = ExtResource("15_5ssuq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="WinnerPanel" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="PanelContainer" parent="WinnerPanel"]
+self_modulate = Color(0, 0, 0, 1)
+offset_left = 1288.0
+offset_top = -8.0
+offset_right = 1952.0
+offset_bottom = 872.0
+
+[node name="Out" type="Label" parent="WinnerPanel"]
+self_modulate = Color(1, 1, 1, 0.6)
+offset_left = 1344.0
+offset_top = 776.0
+offset_right = 1992.0
+offset_bottom = 812.0
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 26
+text = "Нажмите на пустое место, чтобы закрыть"
+
+[node name="Good" type="Label" parent="WinnerPanel"]
+self_modulate = Color(1, 0.701961, 0, 1)
+offset_left = 1336.0
+offset_top = 208.0
+offset_right = 2024.0
+offset_bottom = 263.0
+theme_override_font_sizes/font_size = 32
+text = "ЗАКАЗ БЫЛ УСПЕШНО ВЫПОЛНЕН"
+
+[node name="Reward" type="Label" parent="WinnerPanel"]
+self_modulate = Color(1, 0.701961, 0, 1)
+offset_left = 1512.0
+offset_top = 272.0
+offset_right = 1717.0
+offset_bottom = 295.0
+text = "ВАШЕ ВОЗНАГРАЖДЕНИЕ"
+
+[node name="Line" type="ColorRect" parent="WinnerPanel"]
+self_modulate = Color(1, 0.701961, 0, 1)
+offset_left = 1368.0
+offset_top = 256.0
+offset_right = 1856.0
+offset_bottom = 257.0
+
+[node name="Rewards" type="RichTextLabel" parent="WinnerPanel"]
+custom_minimum_size = Vector2(400, 400)
+offset_left = 1420.0
+offset_top = 336.0
+offset_right = 1820.0
+offset_bottom = 736.0
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "да
+да
+да
+"
+scroll_active = false
+
+[node name="CloseScene" type="Button" parent="WinnerPanel"]
+self_modulate = Color(1, 1, 1, 0)
+offset_left = 1296.0
+offset_right = 1944.0
+offset_bottom = 848.0
+
 [connection signal="button_down" from="StartBut" to="." method="_on_start_but_button_down"]
 [connection signal="button_down" from="Bar/Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Bar/Chrome" to="." method="_on_chrome_button_down"]
+[connection signal="pressed" from="WinnerPanel/CloseScene" to="." method="_on_close_scene_pressed"]

@@ -333,7 +333,7 @@ func remove_fridge(product) -> void:
 func set_fridge_at(index: int, product: Product) -> void:
 	fridge[index] = product
 	
-func go_to(path: String, save: bool=true):
+func go_to(path: String, save: bool=true, notifications: Array=[]):
 	if save:
 		Singleton.save_progress()
 	get_tree().change_scene_to_file(path)
