@@ -1,11 +1,11 @@
 hp 1000
-money 2234
-hunger 55
-thirst 55
-sleep 5.5
-time 108:13:00
+money 2331
+hunger 60
+thirst 60
+sleep 6
+time 108:14:00
 uslugi 100<usluga>100<usluga>500<usluga>300
 ills 
-didexps Python<did>0|1|2|3|5|4|8<exp>20<didexp>C#<did>8<exp>12<didexp>JS<did><exp>10
-Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>4<product_param>15<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
-Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>6<product_param>13<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+didexps Python<did>0|1|2|3|5|4|8<exp>21<didexp>C#<did><exp>12<didexp>JS<did><exp>10
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>4<product_param>14<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3
+Сало<product_param>11<product_param>120<product_param>10<product_param>0<product_param>0<product_param>30<product_param>6<product_param>12<product_param>2<product_param>1<product_param><product_param>res://audio/zelen.mp3<sounds>res://audio/putin_-zrja-vy-hrjukaete (mp3cut.net).mp3

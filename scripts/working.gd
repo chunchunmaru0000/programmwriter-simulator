@@ -99,7 +99,6 @@ func estimate_code() -> bool:
 			trues += 1
 		
 	var equal: bool = trues == words.size()
-	print(equal)
 	return equal
 
 
@@ -268,7 +267,7 @@ func _ready() -> void:
 		new_order.append(words)
 	while all_words_ordered[-1] == '<n///>':
 		all_words_ordered.remove_at(all_words_ordered.size() - 1)
-	print(all_words_ordered)
+	#print(all_words_ordered)
 	new_order.shuffle()
 
 	for stroke in new_order:
@@ -323,7 +322,6 @@ func _on_start_but_button_down() -> void:
 		
 		var chasov: String = str(ceil(task.code_name / 10.)) + ' '
 		var chas = int(chasov[chasov.length() - 2])
-		print(chasov, ' ', chas)
 		chas = 'час' if chas == 1 else 'часа' if chas > 1 and chas < 5 else 'часов'
 		
 		$WinnerPanel.position.x = -648 * 2
@@ -333,7 +331,7 @@ func _on_start_but_button_down() -> void:
 			'Времени прошло: ' + chasov + chas
 	else:
 		#может чтото типа вы даун будет не знаю
-		pass
+		do_buts_coloring()
 
 
 func _on_start_button_down() -> void:
@@ -349,24 +347,55 @@ func _on_close_scene_pressed() -> void:
 
 
 func _on_help_pressed() -> void:
-	#print(get_words())
-	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
-	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
-	#Singleton.tabs = false
-	#print(get_words())
-	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
-	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
-	#Singleton.slash_n = false
-	#print(get_words())
-	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
-	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
+	pass
 	
+	
+func do_buts_coloring() -> void:
 	var words: Array = get_words()
 	var buts: Array = get_buts()
 	var trues: int = 0
+	var border_width_max = 4
+	var border_width = 0
 	
 	for i in words.size():
 		if words[i] == buts[i].text:
 			trues += 1
-	print(trues == words.size())
+		else:
+			break
+	
+	var red: StyleBoxFlat
+	var green: StyleBoxFlat
+	
+	var steps = 10.
+	var time = 0.25
+	
+	for step in steps * 2:
+		if step > steps:
+			border_width = border_width_max / steps * (steps * 2 - step)
+		else:
+			border_width = border_width_max / steps * step
+	
+		if buts:
+			red = (buts[0].but as Button).get_theme_stylebox('normal').duplicate(true)
+			red.border_width_left = border_width
+			red.border_width_bottom = border_width
+			red.border_width_top = border_width
+			red.border_width_right = border_width
+			red.border_color = Color('#ff6666')
 			
+			green = (buts[0].but as Button).get_theme_stylebox('normal').duplicate(true)
+			green.border_width_left = border_width
+			green.border_width_bottom = border_width
+			green.border_width_top = border_width
+			green.border_width_right = border_width
+			green.border_color = Color('#66ff66')
+			
+		for i in trues:
+			if buts[i].text != '<n///>':
+				(buts[i].but as Button).add_theme_stylebox_override('normal', green)
+		for i in range(trues, buts.size()):
+			if buts[i].text != '<n///>':
+				(buts[i].but as Button).add_theme_stylebox_override('normal', red)
+				
+		await get_tree().create_timer(time / steps).timeout
+	
