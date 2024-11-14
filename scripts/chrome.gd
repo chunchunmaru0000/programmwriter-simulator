@@ -109,10 +109,11 @@ func get_datas_from_langs() -> void:
 			)
 			
 			var img = Image.new().load_from_file(lang_path + "logo.png")
-			print('logo img ' + lang_name + ' size = ', img.get_size())
-
 			var texture = ImageTexture.new().create_from_image(img)
-			print('logo texture ' + lang_name + ' size = ', texture.get_size())
+			
+			if not OS.is_debug_build():
+				print('logo img ' + lang_name + ' size = ', img.get_size())
+				print('logo texture ' + lang_name + ' size = ', texture.get_size())
 			
 			var sites: Array = []
 			for site_name in DirAccess.open(lang_path + "learn/").get_files():

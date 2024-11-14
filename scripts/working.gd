@@ -7,10 +7,12 @@ var from: Button = null
 var to: Button = null
 var holder0: Button = null
 
-var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[-1]
+var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
 var all_words_ordered: Array
+var tab_text: String = '        '
+var final_tab_text: String = '  ' + tab_text + '  '
 
 func estimate_code() -> bool:
 	if Singleton.did_task:
@@ -18,25 +20,26 @@ func estimate_code() -> bool:
 		
 	var equal: bool = false
 	
-	var lines = text.split('\n')
-	var words: Array = []
+	var words: Array = all_words_ordered.duplicate(true)
 	var buts: Array = []
 	
-	for line in lines:
-		for word in line.split('<w///>'):
-			var stripped_word = word.strip_edges()
-			if stripped_word != '' and stripped_word != '\n':
-				words.append(stripped_word.replace('<n///>', ''))
-				
-				if stripped_word.contains('<n///>'):
-					words.append('<n///>')
+	#var lines = text.split('\n')
+	#for line in lines:
+		#for word in line.split('<w///>'):
+			#var stripped_word = word.strip_edges()
+			#if stripped_word != '' and stripped_word != '\n':
+				#words.append(stripped_word.replace('<n///>', ''))
+				#
+				#if stripped_word.contains('<n///>'):
+					#words.append('<n///>')
+	#print(words)
 	
 	if Singleton.slash_n and Singleton.tabs:	
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
 			for but: Button in hcont.get_children():
 				var stripped_but: String = but.text.strip_edges()
-				if stripped_but == '' and but.text.length() == 12:
+				if stripped_but == '' and but.text.length() == tab_text.length() + 4:
 					buts.append('<t///>')
 				else:
 					buts.append(stripped_but)
@@ -44,7 +47,7 @@ func estimate_code() -> bool:
 		equal = \
 			Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
 			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
-#elif not Singleton.slash_n and Singleton.tabs:
+#   elif not Singleton.slash_n and Singleton.tabs:
 	# вероятно не существует
 		
 	elif Singleton.slash_n and not Singleton.tabs:	
@@ -220,21 +223,22 @@ func _ready() -> void:
 	if Singleton.did_task:
 		return
 	
-	var i: int = 1
-	var strs: Array = Array(strokes)
-	#strs.shuffle()
-	
 	var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
+	var strs: Array = text.split('\n')#Array(strokes)
 	var new_order: Array = []
-	
+	var lines = text.split('\n')
 	for stroke in strs:
-		var words: Array = Array(stroke.split('<w///>'))
-		all_words_ordered.append_array(words.duplicate(true))
+		var words: Array = Array(stroke.replace('<n///>', '').split('<w///>'))
+		#for i in words.size():
+			#words[i] = words[i].replace('<t///>', final_tab_text)
+		all_words_ordered.append_array(words.filter(func(s: String): return s.strip_edges() != '').duplicate(true))
+		if stroke.contains('<n///>'):
+			all_words_ordered.append('<n///>')
+			
 		words.shuffle()
 		new_order.append(words)
+	#print(all_words_ordered)
 	new_order.shuffle()
-	
-	
 
 	for stroke in new_order:
 		var panel: PanelContainer = PanelContainer.new()
@@ -253,7 +257,7 @@ func _ready() -> void:
 			
 			if word != '':
 				if word == '<t///>':
-					create_but(hcont, '        ')
+					create_but(hcont, tab_text)
 				else:
 					create_but(hcont, word)
 
@@ -271,6 +275,8 @@ func c_str(c: String, s: String) -> String:
 
 
 func _on_start_but_button_down() -> void:
+	if Singleton.did_task: return
+		
 	if estimate_code():
 		var task = Singleton.task
 		var data = task.lang.data
@@ -308,3 +314,8 @@ func _on_chrome_button_down() -> void:
 
 func _on_close_scene_pressed() -> void:
 	Singleton.go_to("res://scenes/chrome.tscn")
+
+
+func _on_help_pressed() -> void:
+	
+	pass # Replace with function body.
