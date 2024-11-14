@@ -14,6 +14,64 @@ var all_words_ordered: Array
 var tab_text: String = '        '
 var final_tab_text: String = '  ' + tab_text + '  '
 
+
+class ButConcPlaceText:
+	var hcont: HBoxContainer
+	var place: int
+	var text: String
+	var but: Button
+	
+	func _init(hcont: HBoxContainer, place: int, text: String, but: Button) -> void:
+		self.but = but
+		self.hcont = hcont
+		self.place = place
+		self.text = text
+	
+	
+func get_buts() -> Array:
+	var buts: Array
+	
+	if Singleton.slash_n and Singleton.tabs:	
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hcont: HBoxContainer = panel.get_child(0)
+			if hcont.get_child_count():
+				var i: int = -1
+				for but: Button in hcont.get_children():
+					i += 1
+					var stripped_but: String = but.text.strip_edges()
+					var but_text: String = stripped_but
+					if stripped_but == '' and but.text.length() == tab_text.length() + 4:
+						but_text = '<t///>'
+					
+					buts.append(ButConcPlaceText.new(hcont, i, but_text, but))
+				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
+		if buts: buts.remove_at(buts.size() - 1)
+	elif Singleton.slash_n and not Singleton.tabs:
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hcont: HBoxContainer = panel.get_child(0)
+			if hcont.get_child_count():
+				var i: int = -1
+				for but: Button in hcont.get_children():
+					i += 1
+					var stripped_but: String = but.text.strip_edges()
+					if not(stripped_but == '' and but.text.length() == tab_text.length() + 4):
+						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges(), but))
+				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
+		if buts: buts.remove_at(buts.size() - 1)
+	else:
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hcont: HBoxContainer = panel.get_child(0)
+			if hcont.get_child_count():
+				var i: int = -1
+				for but: Button in hcont.get_children():
+					i += 1
+					if but.text != final_tab_text:
+						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges().replace('\n', ''), but))
+						#buts.append(but.text.strip_edges().replace('\n', ''))
+						
+	return buts
+
+
 func estimate_code() -> bool:
 	if Singleton.did_task:
 		return false
@@ -237,7 +295,7 @@ func _ready() -> void:
 			
 		words.shuffle()
 		new_order.append(words)
-	#print(all_words_ordered)
+	print(all_words_ordered)
 	new_order.shuffle()
 
 	for stroke in new_order:
@@ -317,5 +375,8 @@ func _on_close_scene_pressed() -> void:
 
 
 func _on_help_pressed() -> void:
-	
-	pass # Replace with function body.
+	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	Singleton.tabs = false
+	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	Singleton.slash_n = false
+	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
