@@ -27,6 +27,17 @@ class ButConcPlaceText:
 		self.place = place
 		self.text = text
 	
+
+func get_words() -> Array:
+	if Singleton.slash_n and Singleton.tabs:	
+		return all_words_ordered.duplicate(true)
+	elif Singleton.slash_n and not Singleton.tabs:
+		return all_words_ordered.duplicate(true). \
+		filter(func(word: String): return not word.strip_edges() in ['<t///>', ''])
+	else:
+		return all_words_ordered.duplicate(true). \
+		filter(func(word: String): return not word.strip_edges() in ['<t///>', '<n///>', ''])
+	
 	
 func get_buts() -> Array:
 	var buts: Array
@@ -45,7 +56,9 @@ func get_buts() -> Array:
 					
 					buts.append(ButConcPlaceText.new(hcont, i, but_text, but))
 				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
-		if buts: buts.remove_at(buts.size() - 1)
+		if buts:# buts.remove_at(buts.size() - 1)
+			while buts[-1].text == '<n///>':
+				buts.remove_at(buts.size() - 1)
 	elif Singleton.slash_n and not Singleton.tabs:
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
@@ -57,7 +70,9 @@ func get_buts() -> Array:
 					if not(stripped_but == '' and but.text.length() == tab_text.length() + 4):
 						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges(), but))
 				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
-		if buts: buts.remove_at(buts.size() - 1)
+		if buts: #buts.remove_at(buts.size() - 1)
+			while buts[-1].text == '<n///>':
+				buts.remove_at(buts.size() - 1)
 	else:
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
@@ -65,10 +80,9 @@ func get_buts() -> Array:
 				var i: int = -1
 				for but: Button in hcont.get_children():
 					i += 1
-					if but.text != final_tab_text:
+					if but.text != final_tab_text and but.text != '<n///>':
 						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges().replace('\n', ''), but))
 						#buts.append(but.text.strip_edges().replace('\n', ''))
-						
 	return buts
 
 
@@ -76,58 +90,15 @@ func estimate_code() -> bool:
 	if Singleton.did_task:
 		return false
 		
-	var equal: bool = false
+	var words: Array = get_words()
+	var buts: Array = get_buts()
+	var trues: int = 0
 	
-	var words: Array = all_words_ordered.duplicate(true)
-	var buts: Array = []
-	
-	#var lines = text.split('\n')
-	#for line in lines:
-		#for word in line.split('<w///>'):
-			#var stripped_word = word.strip_edges()
-			#if stripped_word != '' and stripped_word != '\n':
-				#words.append(stripped_word.replace('<n///>', ''))
-				#
-				#if stripped_word.contains('<n///>'):
-					#words.append('<n///>')
-	#print(words)
-	
-	if Singleton.slash_n and Singleton.tabs:	
-		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
-			var hcont: HBoxContainer = panel.get_child(0)
-			for but: Button in hcont.get_children():
-				var stripped_but: String = but.text.strip_edges()
-				if stripped_but == '' and but.text.length() == tab_text.length() + 4:
-					buts.append('<t///>')
-				else:
-					buts.append(stripped_but)
-			buts.append('<n///>')
-		equal = \
-			Array(''.join(words).split('<n///>')).filter(func(word): return word != '') == \
-			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
-#   elif not Singleton.slash_n and Singleton.tabs:
-	# вероятно не существует
+	for i in words.size():
+		if words[i] == buts[i].text:
+			trues += 1
 		
-	elif Singleton.slash_n and not Singleton.tabs:	
-		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
-			var hcont: HBoxContainer = panel.get_child(0)
-			for but: Button in hcont.get_children():
-				buts.append(but.text.strip_edges())
-			buts.append('<n///>')
-		equal = \
-			Array(''.join(words).split('<n///>')). \
-				filter(func(word): return word != '' and word != '<t///>'). \
-				map(func(word): return word.replace('<t///>', '')) == \
-			Array(''.join(buts).split('<n///>')).filter(func(word):  return word != '')
-
-	else:
-		buts = $ScrollContainer/VBoxContainer.get_children(). \
-			map(func(panel: PanelContainer): return panel.get_child(0).get_children(). \
-			map(func(but: Button): return but.text.strip_edges().replace('\n', '')))
-		equal = \
-			''.join(words.map(func(word): return word.replace('<t///>', ''))) == \
-			''.join(buts.map(func(line): return ''.join(line)))
-		
+	var equal: bool = trues == words.size()
 	print(equal)
 	return equal
 
@@ -295,6 +266,8 @@ func _ready() -> void:
 			
 		words.shuffle()
 		new_order.append(words)
+	while all_words_ordered[-1] == '<n///>':
+		all_words_ordered.remove_at(all_words_ordered.size() - 1)
 	print(all_words_ordered)
 	new_order.shuffle()
 
@@ -349,7 +322,8 @@ func _on_start_but_button_down() -> void:
 		Singleton.add_time(ceil(task.code_name / 10.))
 		
 		var chasov: String = str(ceil(task.code_name / 10.)) + ' '
-		var chas = int(chasov[-1])
+		var chas = int(chasov[chasov.length() - 2])
+		print(chasov, ' ', chas)
 		chas = 'час' if chas == 1 else 'часа' if chas > 1 and chas < 5 else 'часов'
 		
 		$WinnerPanel.position.x = -648 * 2
@@ -375,8 +349,24 @@ func _on_close_scene_pressed() -> void:
 
 
 func _on_help_pressed() -> void:
-	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
-	Singleton.tabs = false
-	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
-	Singleton.slash_n = false
-	print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	#print(get_words())
+	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
+	#Singleton.tabs = false
+	#print(get_words())
+	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
+	#Singleton.slash_n = false
+	#print(get_words())
+	#print(get_buts().map(func(b: ButConcPlaceText): return b.text + ' ' + str(b.place)))
+	#print(get_words().size(), ' ', get_buts().size(), ' ', get_words().size() == get_buts().size())
+	
+	var words: Array = get_words()
+	var buts: Array = get_buts()
+	var trues: int = 0
+	
+	for i in words.size():
+		if words[i] == buts[i].text:
+			trues += 1
+	print(trues == words.size())
+			
