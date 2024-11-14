@@ -3,9 +3,15 @@ extends Node2D
 
 var rnd = RandomNumberGenerator.new()
 
+var dragging: bool = false
 var from: Button = null
 var to: Button = null
-var holder0: Button = null
+var holder0: Button = null:
+	set(value):
+		if holder0:
+			remove_child(holder0)
+			holder0.queue_free()
+		holder0 = value
 
 var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
@@ -214,9 +220,11 @@ func but_up(sender: Button) -> void:
 					place += 1
 					
 	holder0 = null
+	dragging = false
 
 
 func but_down(sender: Button) -> void:
+	dragging = true
 	holder0 = but_pressed(sender)
 	from = sender
 	holder0.modulate.a = 0.6
@@ -295,8 +303,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var m_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	
-	if holder0 != null and m_pressed:
+	if holder0 != null and m_pressed and dragging:
 		holder0.position = but_m_pos(holder0)
 
 
@@ -347,7 +354,48 @@ func _on_close_scene_pressed() -> void:
 
 
 func _on_help_pressed() -> void:
-	pass
+	var words: Array = get_words()
+	var buts: Array = get_buts()
+	var trues: int = 0
+	var border_width_max = 4
+	var border_width = 0
+	
+	for i in words.size():
+		if words[i] == buts[i].text:
+			trues += 1
+		else:
+			break
+	
+	if trues != buts.size():
+		if buts[trues].text == '<n///>':
+			trues += 1
+		var wrong_but_pos: Vector2 = buts[trues].but.global_position
+		var needed_but: Button
+		
+		for i in range(trues, buts.size()):
+			if words[trues] == buts[i].text:
+				if words[trues] == '<n///>':
+					needed_but = buts[i + 1].but
+				else:
+					needed_but = buts[i].but
+				break
+				
+		holder0 = but_pressed(needed_but)
+		holder0.position = needed_but.global_position
+		holder0.modulate.a = 0.6
+		
+		var steps = 100.
+		var time = 10.
+		
+		for step in steps:
+			if holder0 and not dragging:
+				holder0.position = lerp(holder0.position, wrong_but_pos, step / steps) 
+				#print('from: ', holder0.position, '; to: ', wrong_but_pos, '; step ', step)
+				await get_tree().create_timer(time / steps).timeout
+			else:
+				break
+		if not dragging:
+			holder0 = null
 	
 	
 func do_buts_coloring() -> void:
