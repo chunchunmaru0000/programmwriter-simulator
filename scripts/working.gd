@@ -23,11 +23,11 @@ var final_tab_text: String = '  ' + tab_text + '  '
 
 class ButConcPlaceText:
 	var hcont: HBoxContainer
-	var place: int
+	var place: Vector2
 	var text: String
 	var but: Button
 	
-	func _init(hcont: HBoxContainer, place: int, text: String, but: Button) -> void:
+	func _init(hcont: HBoxContainer, place: Vector2, text: String, but: Button) -> void:
 		self.but = but
 		self.hcont = hcont
 		self.place = place
@@ -48,9 +48,11 @@ func get_words() -> Array:
 func get_buts() -> Array:
 	var buts: Array
 	
-	if Singleton.slash_n and Singleton.tabs:	
+	if Singleton.slash_n and Singleton.tabs:
+		var j: int = -1
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
+			j += 1
 			if hcont.get_child_count():
 				var i: int = -1
 				for but: Button in hcont.get_children():
@@ -60,34 +62,38 @@ func get_buts() -> Array:
 					if stripped_but == '' and but.text.length() == tab_text.length() + 4:
 						but_text = '<t///>'
 					
-					buts.append(ButConcPlaceText.new(hcont, i, but_text, but))
-				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
+					buts.append(ButConcPlaceText.new(hcont, Vector2(i, j), but_text, but))
+				buts.append(ButConcPlaceText.new(hcont, Vector2(i + 1, j), '<n///>', null))
 		if buts:# buts.remove_at(buts.size() - 1)
 			while buts[-1].text == '<n///>':
 				buts.remove_at(buts.size() - 1)
 	elif Singleton.slash_n and not Singleton.tabs:
+		var j: int = -1
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
+			j += 1
 			if hcont.get_child_count():
 				var i: int = -1
 				for but: Button in hcont.get_children():
 					i += 1
 					var stripped_but: String = but.text.strip_edges()
 					if not(stripped_but == '' and but.text.length() == tab_text.length() + 4):
-						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges(), but))
-				buts.append(ButConcPlaceText.new(hcont, i + 1, '<n///>', null))
+						buts.append(ButConcPlaceText.new(hcont, Vector2(i, j), but.text.strip_edges(), but))
+				buts.append(ButConcPlaceText.new(hcont, Vector2(i + 1, j), '<n///>', null))
 		if buts: #buts.remove_at(buts.size() - 1)
 			while buts[-1].text == '<n///>':
 				buts.remove_at(buts.size() - 1)
 	else:
+		var j: int = -1
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
+			j += 1
 			if hcont.get_child_count():
 				var i: int = -1
 				for but: Button in hcont.get_children():
 					i += 1
 					if but.text != final_tab_text and but.text != '<n///>':
-						buts.append(ButConcPlaceText.new(hcont, i, but.text.strip_edges().replace('\n', ''), but))
+						buts.append(ButConcPlaceText.new(hcont, Vector2(i, j), but.text.strip_edges().replace('\n', ''), but))
 						#buts.append(but.text.strip_edges().replace('\n', ''))
 	return buts
 
@@ -98,14 +104,16 @@ func estimate_code() -> bool:
 		
 	var words: Array = get_words()
 	var buts: Array = get_buts()
-	var trues: int = 0
 	
+	if words.size() != buts.size():
+		return false
+		
+	var trues: int = 0
 	for i in words.size():
 		if words[i] == buts[i].text:
 			trues += 1
-		
-	var equal: bool = trues == words.size()
-	return equal
+	
+	return trues == words.size()
 
 
 func swap_from_to(sender: Button) -> void:
@@ -362,9 +370,7 @@ func _on_help_pressed() -> void:
 	var words: Array = get_words()
 	var buts: Array = get_buts()
 	var trues: int = 0
-	var border_width_max = 4
-	var border_width = 0
-	
+
 	for i in words.size():
 		if words[i] == buts[i].text:
 			trues += 1
@@ -372,23 +378,40 @@ func _on_help_pressed() -> void:
 			break
 	
 	if trues != buts.size():
-		if buts[trues].text == '<n///>':
-			trues += 1
-			
-		if trues == buts.size():
-			return
-			
-		var wrong_but_pos: Vector2 = buts[trues].but.global_position
+		var wrong_but_pos: Vector2
 		var needed_but: Button
 		
-		for i in range(trues, buts.size()):
-			if words[trues] == buts[i].text:
-				if words[trues] == '<n///>':
-					needed_but = buts[i + 1].but
+		if Singleton.slash_n:
+			if words[trues] == '<n///>' and buts[trues].text != '<n///>':
+				if buts[trues].place.y + 1 < $ScrollContainer/VBoxContainer.get_child_count():
+					for i in range(trues, buts.size()):
+						if words[trues + 1] == buts[i].text:
+							needed_but = buts[i].but
+					wrong_but_pos = $ScrollContainer/VBoxContainer.get_child(buts[trues].place.y + 1).global_position
 				else:
+					# я надеюсь этот  + 1 не будет иметь баг
+					# var was_true_lines = words.slice(0, trues + 1).count('<n///>')
+					# пусть с первой строки пишет черт
+					for i in buts.size():
+						if words[0] == buts[i].text:
+							needed_but = buts[i].but
+					wrong_but_pos = $ScrollContainer/VBoxContainer.get_child(0).global_position
+					
+			elif words[trues] != '<n///>' and buts[trues].text == '<n///>':
+				var bomj: Button = buts[trues - 1].but
+				wrong_but_pos = Vector2(bomj.global_position.x + bomj.size.x + (buts[trues - 1].hcont as HBoxContainer).get_theme_constant('separation'), bomj.global_position.y)
+			else:
+				wrong_but_pos = buts[trues].but.global_position
+		else:
+			wrong_but_pos = buts[trues].but.global_position
+			
+		if needed_but == null:
+			for i in range(trues, buts.size()):
+				if words[trues] == buts[i].text:
 					needed_but = buts[i].but
-				break
-				
+					break
+	
+		
 		holder0 = but_pressed(needed_but)
 		holder0.position = needed_but.global_position
 		holder0.modulate.a = 0.6
@@ -405,6 +428,8 @@ func _on_help_pressed() -> void:
 				break
 		if not dragging:
 			holder0 = null
+	else:
+		do_buts_coloring()
 	
 	
 func do_buts_coloring() -> void:
