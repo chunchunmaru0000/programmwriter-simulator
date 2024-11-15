@@ -126,8 +126,12 @@ func swap_from_to(sender: Button) -> void:
 		from_parrent.add_child(to)
 		to_parrent.add_child(from)
 		
-		from_parrent.move_child(to, from_place)
-		to_parrent.move_child(from, to_place)
+		if from_place > to_place and from_parrent.position == to_parrent.position:
+			to_parrent.move_child(from, to_place)
+			from_parrent.move_child(to, from_place)
+		else:
+			from_parrent.move_child(to, from_place)
+			to_parrent.move_child(from, to_place)
 		
 		from = null
 		to = null
@@ -171,7 +175,8 @@ func child_place(sender: Button, parrent: HBoxContainer) -> int:
 
 
 func but_up(sender: Button) -> void:
-	remove_child(holder0)
+	dragging = false
+	holder0 = null
 	
 	var was_any: bool = false
 	var m_pos: Vector2 = get_global_mouse_position()
@@ -209,8 +214,7 @@ func but_up(sender: Button) -> void:
 						break
 					
 					if m_pos.x <= pos.x and m_pos.x >= pos.x - gap_x:
-						from.get_parent().remove_child(from)
-						hbox.add_child(from)
+						to_place.call()
 						hbox.move_child(from, place)
 						
 						from = null
@@ -218,9 +222,6 @@ func but_up(sender: Button) -> void:
 						break
 					
 					place += 1
-					
-	holder0 = null
-	dragging = false
 
 
 func but_down(sender: Button) -> void:
@@ -303,8 +304,12 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var m_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
-	if holder0 != null and m_pressed and dragging:
+	
+	if holder0 != null and m_pressed:
 		holder0.position = but_m_pos(holder0)
+		
+	if not dragging and m_pressed and holder0:
+		holder0 = null
 
 
 func c_str(c: String, s: String) -> String:
@@ -369,6 +374,10 @@ func _on_help_pressed() -> void:
 	if trues != buts.size():
 		if buts[trues].text == '<n///>':
 			trues += 1
+			
+		if trues == buts.size():
+			return
+			
 		var wrong_but_pos: Vector2 = buts[trues].but.global_position
 		var needed_but: Button
 		
@@ -385,7 +394,7 @@ func _on_help_pressed() -> void:
 		holder0.modulate.a = 0.6
 		
 		var steps = 100.
-		var time = 10.
+		var time = 2.
 		
 		for step in steps:
 			if holder0 and not dragging:
