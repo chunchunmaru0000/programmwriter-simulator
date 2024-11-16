@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://drn7d4sni10aa"]
+[gd_scene load_steps=20 format=3 uid="uid://drn7d4sni10aa"]
 
 [ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
 [ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="15_5ssuq"]
 [ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="16_sabrv"]
 [ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="17_j4qtc"]
+[ext_resource type="Texture2D" uid="uid://c5xqoi3opaytu" path="res://pc_images/vs/lamp_def.png" id="17_ry46e"]
+[ext_resource type="Texture2D" uid="uid://bbktaewc868m5" path="res://pc_images/vs/lamp_act.png" id="18_55vuf"]
 
 [sub_resource type="Theme" id="Theme_w1crs"]
 Button/styles/disabled = ExtResource("9_wcf76")
@@ -173,6 +175,7 @@ scale = Vector2(1.09571, 1.32759)
 texture = ExtResource("2_vfb5r")
 
 [node name="StartDef" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.266667)
 position = Vector2(320, 16)
 texture = ExtResource("3_7e3th")
 
@@ -320,14 +323,20 @@ offset_left = 1296.0
 offset_right = 1944.0
 offset_bottom = 848.0
 
-[node name="Help" type="Button" parent="."]
-offset_left = 464.0
-offset_right = 600.0
-offset_bottom = 32.0
-text = "Help"
+[node name="Lamp" type="TextureButton" parent="."]
+offset_left = 273.0
+offset_top = 3.0
+offset_right = 300.0
+offset_bottom = 29.0
+texture_normal = ExtResource("17_ry46e")
+texture_pressed = ExtResource("18_55vuf")
+texture_hover = ExtResource("18_55vuf")
+texture_disabled = ExtResource("18_55vuf")
+texture_focused = ExtResource("18_55vuf")
+stretch_mode = 0
 
-[connection signal="button_down" from="StartBut" to="." method="_on_start_but_button_down"]
+[connection signal="pressed" from="StartBut" to="." method="_on_start_but_pressed"]
 [connection signal="button_down" from="Bar/Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Bar/Chrome" to="." method="_on_chrome_button_down"]
 [connection signal="pressed" from="WinnerPanel/CloseScene" to="." method="_on_close_scene_pressed"]
-[connection signal="pressed" from="Help" to="." method="_on_help_pressed"]
+[connection signal="pressed" from="Lamp" to="." method="_on_lamp_pressed"]

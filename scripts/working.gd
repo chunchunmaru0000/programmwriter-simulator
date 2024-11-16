@@ -324,7 +324,7 @@ func c_str(c: String, s: String) -> String:
 	return '[color=#' + c + ']' + s + '[/color]'
 
 
-func _on_start_but_button_down() -> void:
+func _on_start_but_pressed() -> void:
 	if Singleton.did_task: return
 		
 	if estimate_code():
@@ -366,7 +366,7 @@ func _on_close_scene_pressed() -> void:
 	Singleton.go_to("res://scenes/chrome.tscn")
 
 
-func _on_help_pressed() -> void:
+func _on_lamp_pressed() -> void:
 	var words: Array = get_words()
 	var buts: Array = get_buts()
 	var trues: int = 0
