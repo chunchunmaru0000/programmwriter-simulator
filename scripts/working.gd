@@ -191,45 +191,61 @@ func but_up(sender: Button) -> void:
 	var gap_y2: int = $ScrollContainer/VBoxContainer.get_theme_constant('separation') / 2
 	var more_than_last_but_width: bool = false
 	
-	for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
-		var hbox: HBoxContainer = panel.get_child(0)
-		if was_any: break
-		var gap_x: int = hbox.get_theme_constant('separation') # / 2
-		var place: int = 0
-		var og: Vector2 = hbox.get_global_transform().origin
+	if m_pos.y > $ScrollContainer/VBoxContainer.size.y + $ScrollContainer/VBoxContainer.global_position.y:
+		var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
+		var panel: PanelContainer = PanelContainer.new()
+		panel.custom_minimum_size = Vector2(608, 32)
+		panel.add_theme_stylebox_override('panel', hbox_style)
 		
-		if og.y - gap_y2 <= m_pos.y and og.y + hbox.size.y + gap_y2 >= m_pos.y:
-			var to_place = func():
-				from.get_parent().remove_child(from)
-				hbox.add_child(from)
+		var hcont: HBoxContainer = HBoxContainer.new()
+		hcont.custom_minimum_size = Vector2(608, 32)
+		hcont.add_theme_constant_override('separation', 8)
+		
+		panel.add_child(hcont)
+		$ScrollContainer/VBoxContainer.add_child(panel)
+		
+		from.get_parent().remove_child(from)
+		hcont.add_child(from)
+	else:
+		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+			var hbox: HBoxContainer = panel.get_child(0)
+			if was_any: break
+			var gap_x: int = hbox.get_theme_constant('separation') # / 2
+			var place: int = 0
+			var og: Vector2 = hbox.get_global_transform().origin
 			
-			if hbox.get_child_count() < 1:
-				to_place.call()
-			elif m_pos.x > hbox.get_children()[hbox.get_child_count() - 1].global_position.x + hbox.get_children()[hbox.get_child_count() - 1].size.x:
-				to_place.call()
-			elif m_pos.x < og.x:
-				to_place.call()
-				hbox.move_child(from, 0)
-			else:
-				for but: Button in hbox.get_children():
-					var pos: Vector2 = but.global_position
-					var b_s: Vector2 = but.size
-					
-					if pos.x <= m_pos.x and pos.x + b_s.x >= m_pos.x:
-						swap_from_to(but)
+			if og.y - gap_y2 <= m_pos.y and og.y + hbox.size.y + gap_y2 >= m_pos.y:
+				var to_place = func():
+					from.get_parent().remove_child(from)
+					hbox.add_child(from)
+				
+				if hbox.get_child_count() < 1:
+					to_place.call()
+				elif m_pos.x > hbox.get_children()[hbox.get_child_count() - 1].global_position.x + hbox.get_children()[hbox.get_child_count() - 1].size.x:
+					to_place.call()
+				elif m_pos.x < og.x:
+					to_place.call()
+					hbox.move_child(from, 0)
+				else:
+					for but: Button in hbox.get_children():
+						var pos: Vector2 = but.global_position
+						var b_s: Vector2 = but.size
 						
-						was_any = true
-						break
-					
-					if m_pos.x <= pos.x and m_pos.x >= pos.x - gap_x:
-						to_place.call()
-						hbox.move_child(from, place)
+						if pos.x <= m_pos.x and pos.x + b_s.x >= m_pos.x:
+							swap_from_to(but)
+							
+							was_any = true
+							break
 						
-						from = null
-						was_any = true
-						break
-					
-					place += 1
+						if m_pos.x <= pos.x and m_pos.x >= pos.x - gap_x:
+							to_place.call()
+							hbox.move_child(from, place)
+							
+							from = null
+							was_any = true
+							break
+						
+						place += 1
 
 
 func but_down(sender: Button) -> void:
