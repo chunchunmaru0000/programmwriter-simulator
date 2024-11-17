@@ -20,6 +20,10 @@ var all_words_ordered: Array
 var tab_text: String = '        '
 var final_tab_text: String = '  ' + tab_text + '  '
 
+var r_press: bool = false
+var r_begin: Vector2
+var area_but: Button
+
 
 class ButConcPlaceText:
 	var hcont: HBoxContainer
@@ -328,12 +332,60 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var m_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
+	var r_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	
 	if holder0 != null and m_pressed:
 		holder0.position = but_m_pos(holder0)
 		
 	if not dragging and m_pressed and holder0:
 		holder0 = null
+		
+	if r_pressed:
+		to_selected_area()
+	else:
+		r_press = false
+		if area_but:
+			get_selected_area_buts()
+			remove_child(area_but)
+
+
+func to_selected_area() -> void:
+	var r_mouse = get_global_mouse_position()
+	if not r_press:
+		r_press = true
+		r_begin = r_mouse
+		
+		area_but = Button.new()
+		area_but.add_theme_stylebox_override('hover', load("res://pc_images/vs/area_style.tres"))
+		area_but.add_theme_stylebox_override('hover_pressed', load("res://pc_images/vs/area_style.tres"))
+		area_but.add_theme_stylebox_override('pressed', load("res://pc_images/vs/area_style.tres"))
+		area_but.add_theme_stylebox_override('focus', load("res://pc_images/vs/area_style.tres"))
+		area_but.add_theme_stylebox_override('normal', load("res://pc_images/vs/area_style.tres"))
+		area_but.position = r_begin
+		area_but.size = Vector2.ZERO
+		
+		add_child(area_but)
+	else:
+		if r_mouse.x < r_begin.x and r_mouse.y < r_begin.y:
+			area_but.position = r_mouse
+			area_but.size = r_begin - r_mouse
+		elif r_mouse.x < r_begin.x:
+			area_but.position = Vector2(r_mouse.x, r_begin.y)
+			area_but.size = Vector2(r_begin.x - r_mouse.x, r_mouse.y - r_begin.y)
+		elif r_mouse.y < r_begin.y:
+			area_but.position = Vector2(r_begin.x, r_mouse.y)
+			area_but.size = Vector2(r_mouse.x - r_begin.x, r_begin.y - r_mouse.y)
+		else:
+			area_but.position = r_begin
+			area_but.size = r_mouse - r_begin
+	
+
+func get_selected_area_buts() -> Array:
+	var buts: Array
+	
+	#for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+		#if panel.global_position.y + panel.size.y <= 
+	return []
 
 
 func c_str(c: String, s: String) -> String:
@@ -399,19 +451,17 @@ func _on_lamp_pressed() -> void:
 		
 		if Singleton.slash_n:
 			if words[trues] == '<n///>' and buts[trues].text != '<n///>':
+				for i in range(trues, buts.size()):
+					if words[trues + 1] == buts[i].text:
+						needed_but = buts[i].but
+						
 				if buts[trues].place.y + 1 < $ScrollContainer/VBoxContainer.get_child_count():
-					for i in range(trues, buts.size()):
-						if words[trues + 1] == buts[i].text:
-							needed_but = buts[i].but
 					wrong_but_pos = $ScrollContainer/VBoxContainer.get_child(buts[trues].place.y + 1).global_position
 				else:
 					# я надеюсь этот  + 1 не будет иметь баг
-					# var was_true_lines = words.slice(0, trues + 1).count('<n///>')
-					# пусть с первой строки пишет черт
-					for i in buts.size():
-						if words[0] == buts[i].text:
-							needed_but = buts[i].but
-					wrong_but_pos = $ScrollContainer/VBoxContainer.get_child(0).global_position
+					wrong_but_pos = Vector2($ScrollContainer.global_position.x, 
+					$ScrollContainer/VBoxContainer.size.y + $ScrollContainer/VBoxContainer.get_child(0).size.y +
+					$ScrollContainer/VBoxContainer.get_theme_constant("separation"))
 					
 			elif words[trues] != '<n///>' and buts[trues].text == '<n///>':
 				var bomj: Button = buts[trues - 1].but
