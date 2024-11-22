@@ -23,7 +23,8 @@ var final_tab_text: String = '  ' + tab_text + '  '
 var r_press: bool = false
 var r_begin: Vector2
 var area_but: Button
-
+# подсказка как управлять знак наверно восклицательный
+# развернуть задание даже не знаю
 
 class ButConcPlaceText:
 	var hcont: HBoxContainer
@@ -285,8 +286,20 @@ func _ready() -> void:
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
 	
+	var vbar: VScrollBar = $TZ/TZText.get_v_scroll_bar()
+	vbar.custom_minimum_size.x = 16
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	
+	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
+	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	
+	
 	if Singleton.did_task:
 		return
+	
+	$TZ/TZText.text = Singleton.task.text
 	
 	var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
 	var strs: Array = text.split('\n')#Array(strokes)
@@ -547,3 +560,24 @@ func do_buts_coloring() -> void:
 				
 		await get_tree().create_timer(time / steps).timeout
 	
+
+func _on_tz_but_pressed() -> void:
+	var time: float = 0.1
+	var steps = 24
+	var traectory = $TZ/ColorRect.size.y
+	
+	for step in steps:
+		$TZ.position.y = -traectory + (float(step) / steps) * traectory
+		await get_tree().create_timer(time / steps).timeout
+	$TZ.position.y = 0
+
+
+func _on_tz_up_pressed() -> void:
+	var time: float = 0.1
+	var steps = 24
+	var traectory = $TZ/ColorRect.size.y
+	
+	for step in steps:
+		$TZ.position.y = -traectory + (float(steps - step) / steps) * traectory
+		await get_tree().create_timer(time / steps).timeout
+	$TZ.position.y = -traectory

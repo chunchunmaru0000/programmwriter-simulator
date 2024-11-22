@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://drn7d4sni10aa"]
+[gd_scene load_steps=24 format=3 uid="uid://drn7d4sni10aa"]
 
 [ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
 [ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
@@ -11,13 +11,17 @@
 [ext_resource type="StyleBox" uid="uid://dbqielejpmuu5" path="res://pc_images/vs/normal_flat.tres" id="10_e1iun"]
 [ext_resource type="Texture2D" uid="uid://dkxfnjovkoffn" path="res://pc_images/desktop/bar.jpg" id="11_io68t"]
 [ext_resource type="Texture2D" uid="uid://c0prag83l0gl7" path="res://pc_images/desktop/start_def.jpg" id="12_4cday"]
+[ext_resource type="Texture2D" uid="uid://c2pyly1eki3j5" path="res://pc_images/vs/task_list_def.png" id="12_16d5w"]
 [ext_resource type="Texture2D" uid="uid://mrc5yo7oj2jh" path="res://pc_images/desktop/start_act.jpg" id="13_c2knh"]
+[ext_resource type="Texture2D" uid="uid://b5ycsmposxavg" path="res://pc_images/vs/task_list_act.png" id="13_w0gfj"]
 [ext_resource type="Texture2D" uid="uid://vn3uxytd5fhi" path="res://pc_images/desktop/chrome.png" id="14_tid06"]
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="15_5ssuq"]
 [ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="16_sabrv"]
 [ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="17_j4qtc"]
 [ext_resource type="Texture2D" uid="uid://c5xqoi3opaytu" path="res://pc_images/vs/lamp_def.png" id="17_ry46e"]
 [ext_resource type="Texture2D" uid="uid://bbktaewc868m5" path="res://pc_images/vs/lamp_act.png" id="18_55vuf"]
+[ext_resource type="Texture2D" uid="uid://cfn53c76anj6g" path="res://pc_images/vs/tz_up.png" id="21_xeeu7"]
+[ext_resource type="Texture2D" uid="uid://ct5ssgapfnmff" path="res://pc_images/vs/tz_up_act.png" id="22_4bbrf"]
 
 [sub_resource type="Theme" id="Theme_w1crs"]
 Button/styles/disabled = ExtResource("9_wcf76")
@@ -189,6 +193,30 @@ texture_pressed = ExtResource("7_0i2wh")
 texture_hover = ExtResource("7_0i2wh")
 texture_disabled = ExtResource("6_t0dmx")
 
+[node name="Lamp" type="TextureButton" parent="."]
+offset_left = 273.0
+offset_top = 3.0
+offset_right = 300.0
+offset_bottom = 29.0
+texture_normal = ExtResource("17_ry46e")
+texture_pressed = ExtResource("18_55vuf")
+texture_hover = ExtResource("18_55vuf")
+texture_disabled = ExtResource("18_55vuf")
+texture_focused = ExtResource("18_55vuf")
+stretch_mode = 0
+
+[node name="TZBut" type="TextureButton" parent="."]
+offset_left = 316.0
+offset_top = 3.0
+offset_right = 342.0
+offset_bottom = 29.0
+texture_normal = ExtResource("12_16d5w")
+texture_pressed = ExtResource("13_w0gfj")
+texture_hover = ExtResource("13_w0gfj")
+texture_disabled = ExtResource("12_16d5w")
+texture_focused = ExtResource("13_w0gfj")
+stretch_mode = 0
+
 [node name="Bar" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -246,6 +274,40 @@ texture_pressed = ExtResource("15_5ssuq")
 texture_hover = ExtResource("15_5ssuq")
 texture_disabled = ExtResource("14_tid06")
 texture_focused = ExtResource("15_5ssuq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="TZ" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -100.0
+offset_right = 40.0
+offset_bottom = -60.0
+
+[node name="ColorRect" type="ColorRect" parent="TZ"]
+layout_mode = 0
+offset_right = 648.0
+offset_bottom = 100.0
+color = Color(0.0687983, 0.0687983, 0.0687983, 1)
+
+[node name="TZText" type="RichTextLabel" parent="TZ"]
+layout_mode = 0
+offset_right = 648.0
+offset_bottom = 84.0
+bbcode_enabled = true
+text = "asdf
+asdfasdfasdfasd
+fasdfasdfasdfasdfa"
+
+[node name="TZUp" type="TextureButton" parent="TZ"]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 648.0
+offset_bottom = 100.0
+texture_normal = ExtResource("21_xeeu7")
+texture_pressed = ExtResource("22_4bbrf")
+texture_hover = ExtResource("22_4bbrf")
+texture_focused = ExtResource("22_4bbrf")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -323,20 +385,10 @@ offset_left = 1296.0
 offset_right = 1944.0
 offset_bottom = 848.0
 
-[node name="Lamp" type="TextureButton" parent="."]
-offset_left = 273.0
-offset_top = 3.0
-offset_right = 300.0
-offset_bottom = 29.0
-texture_normal = ExtResource("17_ry46e")
-texture_pressed = ExtResource("18_55vuf")
-texture_hover = ExtResource("18_55vuf")
-texture_disabled = ExtResource("18_55vuf")
-texture_focused = ExtResource("18_55vuf")
-stretch_mode = 0
-
 [connection signal="pressed" from="StartBut" to="." method="_on_start_but_pressed"]
+[connection signal="pressed" from="Lamp" to="." method="_on_lamp_pressed"]
+[connection signal="pressed" from="TZBut" to="." method="_on_tz_but_pressed"]
 [connection signal="button_down" from="Bar/Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Bar/Chrome" to="." method="_on_chrome_button_down"]
+[connection signal="pressed" from="TZ/TZUp" to="." method="_on_tz_up_pressed"]
 [connection signal="pressed" from="WinnerPanel/CloseScene" to="." method="_on_close_scene_pressed"]
-[connection signal="pressed" from="Lamp" to="." method="_on_lamp_pressed"]

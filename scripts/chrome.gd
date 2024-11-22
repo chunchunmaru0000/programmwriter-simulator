@@ -45,12 +45,14 @@ class Task:
 	var lang: Lang
 	var path: String
 	var code_name: int
+	var text: String
 	var price: int
 	
-	func _init(lang: Lang, path: String, code_name: int, price: int=0) -> void:
+	func _init(lang: Lang, path: String, code_name: int, text: String, price: int=0) -> void:
 		self.lang = lang
 		self.path = path
 		self.code_name = code_name
+		self.text = text
 		self.price = price
 		
 
@@ -597,7 +599,7 @@ func draw_money() -> void:
 			if text.is_valid_int():
 				var code_name: int = int(text)
 				if code_name <= lang.data.exp + levels_plus:
-					tasks.append(Task.new(lang, code_path, code_name))
+					tasks.append(Task.new(lang, code_path, code_name, FileAccess.open(code_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[1]))
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
 	all_tasks = tasks
 	
