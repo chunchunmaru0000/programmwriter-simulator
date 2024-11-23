@@ -22,3 +22,8 @@ func _on_chrome_button_down() -> void:
 
 func _on_vs_button_down() -> void:
 	Singleton.go_to("res://scenes/visual_studio.tscn")
+
+
+func _on_video_stream_player_finished() -> void:
+	remove_child($WinLoad)
+	$AudioStreamPlayer2D.play()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b30jctsmhp03m"]
+[gd_scene load_steps=12 format=3 uid="uid://b30jctsmhp03m"]
 
 [ext_resource type="Script" path="res://scripts/desktop.gd" id="1_er28i"]
 [ext_resource type="Texture2D" uid="uid://bj1fruxsfqu60" path="res://pc_images/desktop/wall_smol.jpg" id="1_fsma8"]
@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="7_stwc0"]
 [ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="8_egvgu"]
 [ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="9_kmss2"]
+[ext_resource type="VideoStream" path="res://pc_images/load-.ogv" id="10_jw43b"]
+[ext_resource type="AudioStream" uid="uid://0dmri5n1n3d5" path="res://pc_images/WindowsXPLoad.mp3" id="11_5ru1w"]
 
 [node name="Desktop" type="Node2D"]
 script = ExtResource("1_er28i")
@@ -68,6 +70,32 @@ texture_focused = ExtResource("9_kmss2")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="WinLoad" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Black" type="ColorRect" parent="WinLoad"]
+offset_left = -12.0
+offset_top = -10.0
+offset_right = 28.0
+offset_bottom = 30.0
+scale = Vector2(16.9666, 21.8298)
+color = Color(0, 0, 0, 1)
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="WinLoad"]
+offset_left = 5.0
+offset_top = 260.0
+offset_right = 645.0
+offset_bottom = 628.0
+stream = ExtResource("10_jw43b")
+autoplay = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_5ru1w")
+
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Chrome" to="." method="_on_chrome_button_down"]
 [connection signal="button_down" from="Vs" to="." method="_on_vs_button_down"]
+[connection signal="finished" from="WinLoad/VideoStreamPlayer" to="." method="_on_video_stream_player_finished"]
