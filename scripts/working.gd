@@ -276,7 +276,7 @@ func create_but(hcont: HBoxContainer, word: String) -> void:
 	but.connect("button_down", func(): but_down(but))
 	but.connect("button_up", func(): but_up(but))
 	hcont.add_child(but)
-
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -285,16 +285,9 @@ func _ready() -> void:
 	
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
-	
-	var vbar: VScrollBar = $TZ/TZText.get_v_scroll_bar()
-	vbar.custom_minimum_size.x = 16
-	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
-	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
-	
-	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
-	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
-	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
-	
+
+	Singleton.do_scroll($TZ/TZText.get_v_scroll_bar())
+	Singleton.do_scroll($WinXpHelp/RichTextLabel.get_v_scroll_bar())
 	
 	if Singleton.did_task:
 		return
@@ -581,3 +574,15 @@ func _on_tz_up_pressed() -> void:
 		$TZ.position.y = -traectory + (float(steps - step) / steps) * traectory
 		await get_tree().create_timer(time / steps).timeout
 	$TZ.position.y = -traectory
+
+
+func _on_guide_but_pressed() -> void:
+	$WinXpHelp.position = Vector2(0, 0)
+
+
+func _on_close_pressed() -> void:
+	$WinXpHelp.position = Vector2(0, -648)
+
+
+func _on_ok_pressed() -> void:
+	$WinXpHelp.position = Vector2(0, -648)

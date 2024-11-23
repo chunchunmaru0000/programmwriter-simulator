@@ -831,14 +831,7 @@ func draw_money_of(tasks: Array) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var vbar: VScrollBar = $Scroll.get_v_scroll_bar()
-	vbar.custom_minimum_size.x = 16
-	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
-	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
-	
-	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
-	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
-	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	Singleton.do_scroll($Scroll.get_v_scroll_bar())
 	
 	get_datas_from_langs()
 	var times = Singleton.time.split(':')

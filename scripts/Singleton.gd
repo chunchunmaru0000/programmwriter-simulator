@@ -338,6 +338,14 @@ func go_to(path: String, save: bool=true, notifications: Array=[]):
 		Singleton.save_progress()
 	get_tree().change_scene_to_file(path)
 
+func do_scroll(vbar: VScrollBar, wide: float=16) -> void:
+	vbar.custom_minimum_size.x = wide
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	vbar.add_theme_stylebox_override('scroll', preload("res://pc_images/chrome/money/scroll_style.tres"))
+	
+	vbar.add_theme_stylebox_override('grabber', preload("res://pc_images/chrome/money/grabber_style.tres"))
+	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
+	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
 
 class Effect:
 	var name: String

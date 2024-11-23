@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://drn7d4sni10aa"]
+[gd_scene load_steps=31 format=3 uid="uid://drn7d4sni10aa"]
 
 [ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
 [ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
@@ -14,14 +14,21 @@
 [ext_resource type="Texture2D" uid="uid://c2pyly1eki3j5" path="res://pc_images/vs/task_list_def.png" id="12_16d5w"]
 [ext_resource type="Texture2D" uid="uid://mrc5yo7oj2jh" path="res://pc_images/desktop/start_act.jpg" id="13_c2knh"]
 [ext_resource type="Texture2D" uid="uid://b5ycsmposxavg" path="res://pc_images/vs/task_list_act.png" id="13_w0gfj"]
+[ext_resource type="Texture2D" uid="uid://lleo54aiypbf" path="res://pc_images/vs/tutor_def.png" id="14_8lojx"]
 [ext_resource type="Texture2D" uid="uid://vn3uxytd5fhi" path="res://pc_images/desktop/chrome.png" id="14_tid06"]
 [ext_resource type="Texture2D" uid="uid://cv5tt3twawx2t" path="res://pc_images/desktop/chrome_act.png" id="15_5ssuq"]
+[ext_resource type="Texture2D" uid="uid://b041epajr1nco" path="res://pc_images/vs/tutor_act.png" id="15_ekyu3"]
 [ext_resource type="Texture2D" uid="uid://bixvrgocqivey" path="res://pc_images/desktop/vs.png" id="16_sabrv"]
 [ext_resource type="Texture2D" uid="uid://bvtaxmfwury05" path="res://pc_images/desktop/vs_act.png" id="17_j4qtc"]
 [ext_resource type="Texture2D" uid="uid://c5xqoi3opaytu" path="res://pc_images/vs/lamp_def.png" id="17_ry46e"]
 [ext_resource type="Texture2D" uid="uid://bbktaewc868m5" path="res://pc_images/vs/lamp_act.png" id="18_55vuf"]
 [ext_resource type="Texture2D" uid="uid://cfn53c76anj6g" path="res://pc_images/vs/tz_up.png" id="21_xeeu7"]
 [ext_resource type="Texture2D" uid="uid://ct5ssgapfnmff" path="res://pc_images/vs/tz_up_act.png" id="22_4bbrf"]
+[ext_resource type="Texture2D" uid="uid://bh0bk0gaxivxv" path="res://pc_images/vs/winxp_panel.png" id="25_vgtso"]
+[ext_resource type="Texture2D" uid="uid://6ya1lwkpe64y" path="res://pc_images/vs/ok_def.png" id="26_4sntr"]
+[ext_resource type="Texture2D" uid="uid://caju7kxtbgwee" path="res://pc_images/vs/ok_act.png" id="27_onk8l"]
+[ext_resource type="Texture2D" uid="uid://dxukojt86hs5f" path="res://pc_images/vs/close_def.png" id="28_bi7cx"]
+[ext_resource type="Texture2D" uid="uid://dicvao7pjyoxc" path="res://pc_images/vs/close_act.png" id="29_25641"]
 
 [sub_resource type="Theme" id="Theme_w1crs"]
 Button/styles/disabled = ExtResource("9_wcf76")
@@ -217,6 +224,19 @@ texture_disabled = ExtResource("12_16d5w")
 texture_focused = ExtResource("13_w0gfj")
 stretch_mode = 0
 
+[node name="GuideBut" type="TextureButton" parent="."]
+offset_left = 346.0
+offset_top = 3.0
+offset_right = 372.0
+offset_bottom = 29.0
+texture_normal = ExtResource("14_8lojx")
+texture_pressed = ExtResource("15_ekyu3")
+texture_hover = ExtResource("15_ekyu3")
+texture_disabled = ExtResource("14_8lojx")
+texture_focused = ExtResource("15_ekyu3")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="Bar" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -297,7 +317,15 @@ offset_bottom = 84.0
 bbcode_enabled = true
 text = "asdf
 asdfasdfasdfasd
-fasdfasdfasdfasdfa"
+fasdfasdfasdfasdfa
+asd
+fa
+sdfasdf
+adsf
+ads
+fas
+dfasdfasdfasdf
+sdfsda"
 
 [node name="TZUp" type="TextureButton" parent="TZ"]
 layout_mode = 0
@@ -309,6 +337,59 @@ texture_pressed = ExtResource("22_4bbrf")
 texture_hover = ExtResource("22_4bbrf")
 texture_focused = ExtResource("22_4bbrf")
 ignore_texture_size = true
+stretch_mode = 0
+
+[node name="WinXpHelp" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -648.0
+offset_right = -608.0
+offset_bottom = 40.0
+
+[node name="WinxpPanel" type="Sprite2D" parent="WinXpHelp"]
+position = Vector2(324, 424)
+texture = ExtResource("25_vgtso")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="WinXpHelp"]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 375.0
+offset_right = 508.0
+offset_bottom = 466.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 14
+text = "Правила:
+1. Задача считается выполненой, если все блоки кода стоят в допустимых значениях.
+2. Все языки программирования(ЯП) имеют два параметра - отступы и строки. 
+3. Отступы выглядят как пустой блок, если ЯП учитывает отступы, то они будут влиять на верность кода, если нет, то будут пропущены
+4. Строки - каждый ЯП может в одной строке либо содержать лишь одну команду либо иметь в ней хоть весь код, это влияет на верность кода.
+5. Блоки кода можно перемещать левой кнопкой мыши. При перемещении одного блока на другой они поменяются местами иначе займет место ,куда был перемещен.
+6. Если переместить блок ниже последней строки, то добавится строка и блок переместится на нее. 
+"
+
+[node name="OK" type="TextureButton" parent="WinXpHelp"]
+layout_mode = 0
+offset_left = 283.0
+offset_top = 477.0
+offset_right = 357.0
+offset_bottom = 498.0
+texture_normal = ExtResource("26_4sntr")
+texture_pressed = ExtResource("27_onk8l")
+texture_hover = ExtResource("27_onk8l")
+texture_disabled = ExtResource("26_4sntr")
+texture_focused = ExtResource("27_onk8l")
+
+[node name="Close" type="TextureButton" parent="WinXpHelp"]
+layout_mode = 0
+offset_left = 499.0
+offset_top = 342.0
+offset_right = 522.0
+offset_bottom = 365.0
+texture_normal = ExtResource("28_bi7cx")
+texture_pressed = ExtResource("29_25641")
+texture_hover = ExtResource("29_25641")
+texture_disabled = ExtResource("28_bi7cx")
+texture_focused = ExtResource("29_25641")
 stretch_mode = 0
 
 [node name="WinnerPanel" type="Control" parent="."]
@@ -388,7 +469,10 @@ offset_bottom = 848.0
 [connection signal="pressed" from="StartBut" to="." method="_on_start_but_pressed"]
 [connection signal="pressed" from="Lamp" to="." method="_on_lamp_pressed"]
 [connection signal="pressed" from="TZBut" to="." method="_on_tz_but_pressed"]
+[connection signal="pressed" from="GuideBut" to="." method="_on_guide_but_pressed"]
 [connection signal="button_down" from="Bar/Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Bar/Chrome" to="." method="_on_chrome_button_down"]
 [connection signal="pressed" from="TZ/TZUp" to="." method="_on_tz_up_pressed"]
+[connection signal="pressed" from="WinXpHelp/OK" to="." method="_on_ok_pressed"]
+[connection signal="pressed" from="WinXpHelp/Close" to="." method="_on_close_pressed"]
 [connection signal="pressed" from="WinnerPanel/CloseScene" to="." method="_on_close_scene_pressed"]
