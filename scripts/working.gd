@@ -23,8 +23,11 @@ var final_tab_text: String = '  ' + tab_text + '  '
 var r_press: bool = false
 var r_begin: Vector2
 var area_but: Button
-# подсказка как управлять знак наверно восклицательный
-# развернуть задание даже не знаю
+
+var grab_win_panel: bool = false
+var grab_start_m_pos: Vector2
+var win_panel_on: bool = false
+
 
 class ButConcPlaceText:
 	var hcont: HBoxContainer
@@ -37,7 +40,7 @@ class ButConcPlaceText:
 		self.hcont = hcont
 		self.place = place
 		self.text = text
-	
+
 
 func get_words() -> Array:
 	if Singleton.slash_n and Singleton.tabs:	
@@ -353,6 +356,9 @@ func _process(delta: float) -> void:
 		if area_but:
 			get_selected_area_buts()
 			remove_child(area_but)
+			
+	if grab_win_panel:
+		$WinXpHelp.position = get_global_mouse_position() - grab_start_m_pos
 
 
 func to_selected_area() -> void:
@@ -577,12 +583,27 @@ func _on_tz_up_pressed() -> void:
 
 
 func _on_guide_but_pressed() -> void:
-	$WinXpHelp.position = Vector2(0, 0)
+	win_panel_on = !win_panel_on
+	if win_panel_on:
+		$WinXpHelp.position = Vector2(142, 252) # center
+	else:
+		$WinXpHelp.position = Vector2(-648, 0)
 
 
 func _on_close_pressed() -> void:
-	$WinXpHelp.position = Vector2(0, -648)
+	$WinXpHelp.position = Vector2(-648, 0)
+	win_panel_on = false
 
 
 func _on_ok_pressed() -> void:
-	$WinXpHelp.position = Vector2(0, -648)
+	$WinXpHelp.position = Vector2(-648, 0)
+	win_panel_on = false
+
+
+func _on_up_grab_button_down() -> void:
+	grab_win_panel = true
+	grab_start_m_pos = get_global_mouse_position() - $WinXpHelp.position
+
+
+func _on_up_grab_button_up() -> void:
+	grab_win_panel = false

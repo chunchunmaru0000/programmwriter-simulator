@@ -342,20 +342,21 @@ stretch_mode = 0
 [node name="WinXpHelp" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -648.0
-offset_right = -608.0
-offset_bottom = 40.0
+offset_left = -583.0
+offset_top = 237.0
+offset_right = -178.0
+offset_bottom = 409.0
 
 [node name="WinxpPanel" type="Sprite2D" parent="WinXpHelp"]
-position = Vector2(324, 424)
+position = Vector2(202.5, 86)
 texture = ExtResource("25_vgtso")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="WinXpHelp"]
 layout_mode = 0
-offset_left = 138.0
-offset_top = 375.0
-offset_right = 508.0
-offset_bottom = 466.0
+offset_left = 16.5
+offset_top = 37.0
+offset_right = 386.5
+offset_bottom = 128.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 14
 text = "Правила:
@@ -363,16 +364,25 @@ text = "Правила:
 2. Все языки программирования(ЯП) имеют два параметра - отступы и строки. 
 3. Отступы выглядят как пустой блок, если ЯП учитывает отступы, то они будут влиять на верность кода, если нет, то будут пропущены
 4. Строки - каждый ЯП может в одной строке либо содержать лишь одну команду либо иметь в ней хоть весь код, это влияет на верность кода.
-5. Блоки кода можно перемещать левой кнопкой мыши. При перемещении одного блока на другой они поменяются местами иначе займет место ,куда был перемещен.
+5. Блоки кода можно перемещать левой кнопкой мыши. При перемещении одного блока на другой они поменяются местами иначе займет место, куда был перемещен.
 6. Если переместить блок ниже последней строки, то добавится строка и блок переместится на нее. 
 "
 
+[node name="UpGrab" type="Button" parent="WinXpHelp"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 0.5
+offset_top = 1.0
+offset_right = 8.5
+offset_bottom = 9.0
+scale = Vector2(50.4648, 3.38716)
+
 [node name="OK" type="TextureButton" parent="WinXpHelp"]
 layout_mode = 0
-offset_left = 283.0
-offset_top = 477.0
-offset_right = 357.0
-offset_bottom = 498.0
+offset_left = 161.5
+offset_top = 139.0
+offset_right = 235.5
+offset_bottom = 160.0
 texture_normal = ExtResource("26_4sntr")
 texture_pressed = ExtResource("27_onk8l")
 texture_hover = ExtResource("27_onk8l")
@@ -381,10 +391,10 @@ texture_focused = ExtResource("27_onk8l")
 
 [node name="Close" type="TextureButton" parent="WinXpHelp"]
 layout_mode = 0
-offset_left = 499.0
-offset_top = 342.0
-offset_right = 522.0
-offset_bottom = 365.0
+offset_left = 377.5
+offset_top = 4.0
+offset_right = 400.5
+offset_bottom = 27.0
 texture_normal = ExtResource("28_bi7cx")
 texture_pressed = ExtResource("29_25641")
 texture_hover = ExtResource("29_25641")
@@ -473,6 +483,8 @@ offset_bottom = 848.0
 [connection signal="button_down" from="Bar/Start" to="." method="_on_start_button_down"]
 [connection signal="button_down" from="Bar/Chrome" to="." method="_on_chrome_button_down"]
 [connection signal="pressed" from="TZ/TZUp" to="." method="_on_tz_up_pressed"]
+[connection signal="button_down" from="WinXpHelp/UpGrab" to="." method="_on_up_grab_button_down"]
+[connection signal="button_up" from="WinXpHelp/UpGrab" to="." method="_on_up_grab_button_up"]
 [connection signal="pressed" from="WinXpHelp/OK" to="." method="_on_ok_pressed"]
 [connection signal="pressed" from="WinXpHelp/Close" to="." method="_on_close_pressed"]
 [connection signal="pressed" from="WinnerPanel/CloseScene" to="." method="_on_close_scene_pressed"]
