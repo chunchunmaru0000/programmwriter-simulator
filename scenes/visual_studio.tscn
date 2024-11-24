@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://drn7d4sni10aa"]
+[gd_scene load_steps=30 format=3 uid="uid://drn7d4sni10aa"]
 
 [ext_resource type="Script" path="res://scripts/working.gd" id="1_injln"]
 [ext_resource type="Texture2D" uid="uid://5ns7b4wbepqf" path="res://pc_images/vs/gray_back.png" id="2_lgjs3"]
@@ -23,12 +23,11 @@
 [ext_resource type="Texture2D" uid="uid://c5xqoi3opaytu" path="res://pc_images/vs/lamp_def.png" id="17_ry46e"]
 [ext_resource type="Texture2D" uid="uid://bbktaewc868m5" path="res://pc_images/vs/lamp_act.png" id="18_55vuf"]
 [ext_resource type="Texture2D" uid="uid://bh0bk0gaxivxv" path="res://pc_images/vs/winxp_panel.png" id="25_vgtso"]
+[ext_resource type="Texture2D" uid="uid://cx25ra7tqdt6w" path="res://pc_images/vs/title.png" id="25_ykosl"]
 [ext_resource type="Texture2D" uid="uid://6ya1lwkpe64y" path="res://pc_images/vs/ok_def.png" id="26_4sntr"]
-[ext_resource type="Texture2D" uid="uid://dier8m6up112m" path="res://pc_images/vs/title_TZ.png" id="26_b20rk"]
 [ext_resource type="Texture2D" uid="uid://caju7kxtbgwee" path="res://pc_images/vs/ok_act.png" id="27_onk8l"]
 [ext_resource type="Texture2D" uid="uid://dxukojt86hs5f" path="res://pc_images/vs/close_def.png" id="28_bi7cx"]
 [ext_resource type="Texture2D" uid="uid://dicvao7pjyoxc" path="res://pc_images/vs/close_act.png" id="29_25641"]
-[ext_resource type="Texture2D" uid="uid://c4rpdvkbvb81i" path="res://pc_images/vs/title_rules.png" id="30_peaa8"]
 
 [sub_resource type="Theme" id="Theme_w1crs"]
 Button/styles/disabled = ExtResource("9_wcf76")
@@ -309,9 +308,18 @@ offset_bottom = 589.0
 position = Vector2(202.5, 86)
 texture = ExtResource("25_vgtso")
 
-[node name="TitleTz" type="Sprite2D" parent="TZPanel"]
-position = Vector2(55, 16)
-texture = ExtResource("26_b20rk")
+[node name="Title" type="Sprite2D" parent="TZPanel"]
+position = Vector2(53, 16)
+texture = ExtResource("25_ykosl")
+
+[node name="Label" type="Label" parent="TZPanel"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = -1.0
+offset_right = 99.0
+offset_bottom = 27.0
+theme_override_font_sizes/font_size = 20
+text = "Задача"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="TZPanel"]
 layout_mode = 0
@@ -368,9 +376,18 @@ offset_bottom = 409.0
 position = Vector2(202.5, 86)
 texture = ExtResource("25_vgtso")
 
-[node name="TitleRules" type="Sprite2D" parent="WinXpHelp"]
-position = Vector2(54, 16)
-texture = ExtResource("30_peaa8")
+[node name="Title" type="Sprite2D" parent="WinXpHelp"]
+position = Vector2(55, 17)
+texture = ExtResource("25_ykosl")
+
+[node name="Label" type="Label" parent="WinXpHelp"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = -1.0
+offset_right = 112.0
+offset_bottom = 27.0
+theme_override_font_sizes/font_size = 20
+text = "Правила"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="WinXpHelp"]
 layout_mode = 0

@@ -347,6 +347,7 @@ func do_scroll(vbar: VScrollBar, wide: float=16) -> void:
 	vbar.add_theme_stylebox_override('grabber_highlight', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
 	vbar.add_theme_stylebox_override('grabber_pressed', preload("res://pc_images/chrome/money/grabber_style_act.tres"))
 
+
 class Effect:
 	var name: String
 	var stat: String

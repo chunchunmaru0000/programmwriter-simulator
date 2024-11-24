@@ -287,7 +287,7 @@ func create_but(hcont: HBoxContainer, word: String) -> void:
 	but.connect("button_down", func(): but_down(but))
 	but.connect("button_up", func(): but_up(but))
 	hcont.add_child(but)
-	
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
