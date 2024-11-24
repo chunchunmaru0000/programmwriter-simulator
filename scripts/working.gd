@@ -22,11 +22,18 @@ var final_tab_text: String = '  ' + tab_text + '  '
 
 var r_press: bool = false
 var r_begin: Vector2
-var area_but: Button
+var area_panel: PanelContainer
+
+var full_area: PanelContainer
+
 
 var grab_win_panel: bool = false
-var grab_start_m_pos: Vector2
+var win_grab_start_m_pos: Vector2
 var win_panel_on: bool = false
+
+var grab_tz_panel: bool = false
+var tz_grab_start_m_pos: Vector2
+var tz_panel_on: bool = false
 
 
 class ButConcPlaceText:
@@ -288,14 +295,13 @@ func _ready() -> void:
 	
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer)
 	$ScrollContainer/VBoxContainer.remove_child($ScrollContainer/VBoxContainer/HBoxContainer2)
-
-	Singleton.do_scroll($TZ/TZText.get_v_scroll_bar())
 	Singleton.do_scroll($WinXpHelp/RichTextLabel.get_v_scroll_bar())
+	Singleton.do_scroll($TZPanel/RichTextLabel.get_v_scroll_bar())
 	
 	if Singleton.did_task:
 		return
-	
-	$TZ/TZText.text = Singleton.task.text
+
+	$TZPanel/RichTextLabel.text = Singleton.task.text
 	
 	var hbox_style: StyleBoxFlat = load("res://pc_images/vs/hbox_style.tres")
 	var strs: Array = text.split('\n')#Array(strokes)
@@ -353,12 +359,25 @@ func _process(delta: float) -> void:
 		to_selected_area()
 	else:
 		r_press = false
-		if area_but:
-			get_selected_area_buts()
-			remove_child(area_but)
+		if area_panel:
+			get_selected_area_panels()
+			remove_child(area_panel)
 			
 	if grab_win_panel:
-		$WinXpHelp.position = get_global_mouse_position() - grab_start_m_pos
+		$WinXpHelp.position = get_global_mouse_position() - win_grab_start_m_pos
+		if $TZPanel.get_index() > $WinXpHelp.get_index():
+			move_child($WinXpHelp, $TZPanel.get_index())
+	elif grab_tz_panel:
+		$TZPanel.position = get_global_mouse_position() - tz_grab_start_m_pos
+		if $TZPanel.get_index() < $WinXpHelp.get_index():
+			move_child($TZPanel, $WinXpHelp.get_index())
+		
+
+
+func to_color_panel(panel: PanelContainer, color: String) -> void:
+	var style: StyleBoxFlat = load("res://pc_images/vs/area_style.tres").duplicate(true)
+	style.border_color = Color(color)
+	panel.add_theme_stylebox_override('panel', style)
 
 
 func to_selected_area() -> void:
@@ -366,38 +385,54 @@ func to_selected_area() -> void:
 	if not r_press:
 		r_press = true
 		r_begin = r_mouse
+
+		area_panel = PanelContainer.new()
+		to_color_panel(area_panel, '#ffffff')
+		area_panel.position = r_begin
+		area_panel.size = Vector2.ZERO
 		
-		area_but = Button.new()
-		area_but.add_theme_stylebox_override('hover', load("res://pc_images/vs/area_style.tres"))
-		area_but.add_theme_stylebox_override('hover_pressed', load("res://pc_images/vs/area_style.tres"))
-		area_but.add_theme_stylebox_override('pressed', load("res://pc_images/vs/area_style.tres"))
-		area_but.add_theme_stylebox_override('focus', load("res://pc_images/vs/area_style.tres"))
-		area_but.add_theme_stylebox_override('normal', load("res://pc_images/vs/area_style.tres"))
-		area_but.position = r_begin
-		area_but.size = Vector2.ZERO
-		
-		add_child(area_but)
+		add_child(area_panel)
 	else:
 		if r_mouse.x < r_begin.x and r_mouse.y < r_begin.y:
-			area_but.position = r_mouse
-			area_but.size = r_begin - r_mouse
+			area_panel.position = r_mouse
+			area_panel.size = r_begin - r_mouse
 		elif r_mouse.x < r_begin.x:
-			area_but.position = Vector2(r_mouse.x, r_begin.y)
-			area_but.size = Vector2(r_begin.x - r_mouse.x, r_mouse.y - r_begin.y)
+			area_panel.position = Vector2(r_mouse.x, r_begin.y)
+			area_panel.size = Vector2(r_begin.x - r_mouse.x, r_mouse.y - r_begin.y)
 		elif r_mouse.y < r_begin.y:
-			area_but.position = Vector2(r_begin.x, r_mouse.y)
-			area_but.size = Vector2(r_mouse.x - r_begin.x, r_begin.y - r_mouse.y)
+			area_panel.position = Vector2(r_begin.x, r_mouse.y)
+			area_panel.size = Vector2(r_mouse.x - r_begin.x, r_begin.y - r_mouse.y)
 		else:
-			area_but.position = r_begin
-			area_but.size = r_mouse - r_begin
+			area_panel.position = r_begin
+			area_panel.size = r_mouse - r_begin
 	
 
-func get_selected_area_buts() -> Array:
-	var buts: Array
+func get_selected_area_panels() -> Array:
+	var panels: Array
 	
-	#for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
-		#if panel.global_position.y + panel.size.y <= 
-	return []
+	var areapos: Vector2 = area_panel.global_position
+	var areas: Vector2 = area_panel.size
+	
+	var aup = area_panel.global_position.y
+	var adown = area_panel.global_position.y + area_panel.size.y
+	for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
+		var pup = panel.global_position.y
+		var pdown = panel.global_position.y + panel.size.y
+		
+		if aup < pup and adown > pdown \
+		or aup < pup and adown < pdown and adown > pup \
+		or aup > pup and adown > pdown and aup < pdown \
+		or aup > pup and adown < pdown:
+			panels.append(panel)
+
+	if panels.size():
+		full_area = PanelContainer.new()
+		to_color_panel(full_area, '#aaaa00')
+		full_area.position = panels[0].global_position
+		full_area.size = panels[-1].global_position + panels[-1].size - panels[0].global_position
+		add_child(full_area)
+	
+	return panels
 
 
 func c_str(c: String, s: String) -> String:
@@ -561,25 +596,11 @@ func do_buts_coloring() -> void:
 	
 
 func _on_tz_but_pressed() -> void:
-	var time: float = 0.1
-	var steps = 24
-	var traectory = $TZ/ColorRect.size.y
-	
-	for step in steps:
-		$TZ.position.y = -traectory + (float(step) / steps) * traectory
-		await get_tree().create_timer(time / steps).timeout
-	$TZ.position.y = 0
-
-
-func _on_tz_up_pressed() -> void:
-	var time: float = 0.1
-	var steps = 24
-	var traectory = $TZ/ColorRect.size.y
-	
-	for step in steps:
-		$TZ.position.y = -traectory + (float(steps - step) / steps) * traectory
-		await get_tree().create_timer(time / steps).timeout
-	$TZ.position.y = -traectory
+	tz_panel_on = !tz_panel_on
+	if tz_panel_on:
+		$TZPanel.position = Vector2(142, 252) # center
+	else:
+		$TZPanel.position = Vector2(-648, 0)
 
 
 func _on_guide_but_pressed() -> void:
@@ -602,8 +623,27 @@ func _on_ok_pressed() -> void:
 
 func _on_up_grab_button_down() -> void:
 	grab_win_panel = true
-	grab_start_m_pos = get_global_mouse_position() - $WinXpHelp.position
+	win_grab_start_m_pos = get_global_mouse_position() - $WinXpHelp.position
 
 
 func _on_up_grab_button_up() -> void:
 	grab_win_panel = false
+
+
+func _on_tz_close_pressed() -> void:
+	$TZPanel.position = Vector2(-648, 0)
+	tz_panel_on = false
+
+
+func _on_tz_ok_pressed() -> void:
+	$TZPanel.position = Vector2(-648, 0)
+	tz_panel_on = false
+
+
+func _on_tz_up_grab_button_down() -> void:
+	grab_tz_panel = true
+	tz_grab_start_m_pos = get_global_mouse_position() - $TZPanel.position
+
+
+func _on_tz_up_grab_button_up() -> void:
+	grab_tz_panel = false
