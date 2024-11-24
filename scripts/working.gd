@@ -424,6 +424,7 @@ func to_selected_area() -> void:
 		area_panel.size = Vector2.ZERO
 		
 		add_child(area_panel)
+		move_child(area_panel, $ScrollContainer.get_index() + 1)
 	else:
 		if r_mouse.x < r_begin.x and r_mouse.y < r_begin.y:
 			area_panel.position = r_mouse
@@ -463,7 +464,7 @@ func get_selected_area_panels() -> Array:
 		full_area.position = panels[0].global_position
 		full_area.size = panels[-1].global_position + panels[-1].size - panels[0].global_position
 		add_child(full_area)
-		move_child(full_area,$ScrollContainer.get_index() + 1)
+		move_child(full_area, $ScrollContainer.get_index() + 1)
 	
 	return panels
 
