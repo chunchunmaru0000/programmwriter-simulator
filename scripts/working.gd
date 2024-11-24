@@ -20,11 +20,12 @@ var all_words_ordered: Array
 var tab_text: String = '        '
 var final_tab_text: String = '  ' + tab_text + '  '
 
+
 var r_press: bool = false
 var r_begin: Vector2
 var area_panel: PanelContainer
-
 var full_area: PanelContainer
+var selected_panels: Array
 
 
 var grab_win_panel: bool = false
@@ -50,7 +51,7 @@ class ButConcPlaceText:
 
 
 func get_words() -> Array:
-	if Singleton.slash_n and Singleton.tabs:	
+	if Singleton.slash_n and Singleton.tabs:
 		return all_words_ordered.duplicate(true)
 	elif Singleton.slash_n and not Singleton.tabs:
 		return all_words_ordered.duplicate(true). \
@@ -308,10 +309,10 @@ func _ready() -> void:
 	var new_order: Array = []
 	var lines = text.split('\n')
 	for stroke in strs:
-		var words: Array = Array(stroke.replace('<n///>', '').split('<w///>'))
+		var words: Array = Array(stroke.replace('<n///>', '').split('<w///>')).map(func(s: String): return s.strip_edges())
 		#for i in words.size():
 			#words[i] = words[i].replace('<t///>', final_tab_text)
-		all_words_ordered.append_array(words.filter(func(s: String): return s.strip_edges() != '').duplicate(true))
+		all_words_ordered.append_array(words.filter(func(s: String): return s != '').duplicate(true))
 		if stroke.contains('<n///>'):
 			all_words_ordered.append('<n///>')
 			
@@ -349,20 +350,32 @@ func _process(delta: float) -> void:
 	var m_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 	var r_pressed: bool = Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT)
 	
-	if holder0 != null and m_pressed:
-		holder0.position = but_m_pos(holder0)
+	if m_pressed:
+		if holder0:
+			if dragging:
+				holder0.position = but_m_pos(holder0)
+			else:
+				holder0 = null
 		
-	if not dragging and m_pressed and holder0:
-		holder0 = null
-		
+		if full_area:
+			remove_child(full_area)
+			full_area = null
+	
 	if r_pressed:
+		if full_area:
+			remove_child(full_area)
+			full_area = null
 		to_selected_area()
 	else:
 		r_press = false
 		if area_panel:
-			get_selected_area_panels()
+			selected_panels = get_selected_area_panels()
 			remove_child(area_panel)
+			area_panel = null
 			
+	if full_area:
+		proceed_panels()
+	
 	if grab_win_panel:
 		$WinXpHelp.position = get_global_mouse_position() - win_grab_start_m_pos
 		if $TZPanel.get_index() > $WinXpHelp.get_index():
@@ -371,7 +384,26 @@ func _process(delta: float) -> void:
 		$TZPanel.position = get_global_mouse_position() - tz_grab_start_m_pos
 		if $TZPanel.get_index() < $WinXpHelp.get_index():
 			move_child($TZPanel, $WinXpHelp.get_index())
-		
+
+
+func proceed_panels() -> void:
+	if Input.is_action_just_pressed('вверх'):
+		if selected_panels[0].get_index() != 0:
+			for panel: PanelContainer in selected_panels:
+				var idx = panel.get_index()
+				$ScrollContainer/VBoxContainer.move_child($ScrollContainer/VBoxContainer.get_child(idx), idx - 1)
+			$ScrollContainer.ensure_control_visible(selected_panels[0])
+				
+	elif Input.is_action_just_pressed('вниз'):
+		if selected_panels[-1].get_index() < $ScrollContainer/VBoxContainer.get_child_count() - 1:
+			for i in range(selected_panels.size() - 1, -1, -1):
+				var panel: PanelContainer = selected_panels[i]
+				var idx = panel.get_index()
+				$ScrollContainer/VBoxContainer.move_child($ScrollContainer/VBoxContainer.get_child(idx), idx + 1)
+			$ScrollContainer.ensure_control_visible(selected_panels[-1])
+				
+	full_area.position = selected_panels[0].global_position
+	full_area.size = selected_panels[-1].global_position + selected_panels[-1].size - selected_panels[0].global_position
 
 
 func to_color_panel(panel: PanelContainer, color: String) -> void:
@@ -405,7 +437,7 @@ func to_selected_area() -> void:
 		else:
 			area_panel.position = r_begin
 			area_panel.size = r_mouse - r_begin
-	
+
 
 func get_selected_area_panels() -> Array:
 	var panels: Array
@@ -431,6 +463,7 @@ func get_selected_area_panels() -> Array:
 		full_area.position = panels[0].global_position
 		full_area.size = panels[-1].global_position + panels[-1].size - panels[0].global_position
 		add_child(full_area)
+		move_child(full_area,$ScrollContainer.get_index() + 1)
 	
 	return panels
 
@@ -485,7 +518,7 @@ func _on_lamp_pressed() -> void:
 	var words: Array = get_words()
 	var buts: Array = get_buts()
 	var trues: int = 0
-
+	
 	for i in words.size():
 		if words[i] == buts[i].text:
 			trues += 1
@@ -543,8 +576,8 @@ func _on_lamp_pressed() -> void:
 			holder0 = null
 	else:
 		do_buts_coloring()
-	
-	
+
+
 func do_buts_coloring() -> void:
 	var words: Array = get_words()
 	var buts: Array = get_buts()
@@ -593,7 +626,7 @@ func do_buts_coloring() -> void:
 				(buts[i].but as Button).add_theme_stylebox_override('normal', red)
 				
 		await get_tree().create_timer(time / steps).timeout
-	
+
 
 func _on_tz_but_pressed() -> void:
 	tz_panel_on = !tz_panel_on
