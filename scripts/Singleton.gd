@@ -2,6 +2,7 @@ extends Node
 
 var save_file = "save.txt"
 var proj: String
+var rnd: RandomNumberGenerator = RandomNumberGenerator.new()
 
 var hp = 1000
 var hunger = 50
@@ -12,7 +13,7 @@ var time = "0:08:00"
 var hunger_per_hour = 5
 var thirst_per_hour = 5
 var sleep_koef = 2.
-
+var the_end: bool = false
 
 var money = 500
 var fridge: Array = []
@@ -274,6 +275,9 @@ func add_time(to, add_sleep: bool=true) -> void:
 		if ill.active:
 			var damage = ill.damage_per_hour * to
 			hp -= damage
+	
+	if hp < 1:
+		ending()
 
 	# если нет газа в госуслугах, следовательно холодно и следовательно: простуда и дальше пневмония
 	while hour >= 24:
@@ -291,10 +295,14 @@ func add_time(to, add_sleep: bool=true) -> void:
 		if (product.expiration_hours == 0 and product.expiration_days == 0) or product.expiration_days < 0:
 			if not product.effects.filter(func(e: Effect): return e.name == 'Просрочен'):
 				product.effects.append_array([
-					Effect.new("Просрочен", "Время", -2),
-					Effect.new("Просрочен", "Здоровье", -2),
+					Effect.new("Просрочен", "Время", -randi_range(2, 5)),
+					Effect.new("Просрочен", "Здоровье", -randi_range(2, 5)),
 				])
 			#remove_fridge_at(get_product_index(product))
+	
+func ending() -> void:
+	the_end = true
+	go_to("res://scenes/game.tscn")
 	
 func add_hunger(to) -> void:
 	hunger += int(to)
