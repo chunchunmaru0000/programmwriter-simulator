@@ -275,23 +275,26 @@ func add_time(to, add_sleep: bool=true) -> void:
 			var damage = ill.damage_per_hour * to
 			hp -= damage
 
-	# можно сделать болезни, наносят много урона в час, их нужно личить
 	# если нет газа в госуслугах, следовательно холодно и следовательно: простуда и дальше пневмония
-	
 	while hour >= 24:
 		hour -= 24
 		day += 1
 		
 	time = str(day) + ":" + str(hour) + ":00"
 	
-	for product in fridge:
+	for product: Product in fridge:
 		(product as Product).expiration_hours -= to
 		while product.expiration_hours < 0:
 			product.expiration_hours += 24
 			product.expiration_days -= 1
 		
 		if (product.expiration_hours == 0 and product.expiration_days == 0) or product.expiration_days < 0:
-			remove_fridge_at(get_product_index(product))
+			if not product.effects.filter(func(e: Effect): return e.name == 'Просрочен'):
+				product.effects.append_array([
+					Effect.new("Просрочен", "Время", -2),
+					Effect.new("Просрочен", "Здоровье", -2),
+				])
+			#remove_fridge_at(get_product_index(product))
 	
 func add_hunger(to) -> void:
 	hunger += int(to)

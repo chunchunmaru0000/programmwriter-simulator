@@ -530,6 +530,8 @@ func _on_lamp_pressed() -> void:
 		var wrong_but_pos: Vector2
 		var needed_but: Button
 		
+		var wrong_but: Button = null
+		
 		if Singleton.slash_n:
 			if words[trues] == '<n///>' and buts[trues].text != '<n///>':
 				for i in range(trues, buts.size()):
@@ -537,7 +539,8 @@ func _on_lamp_pressed() -> void:
 						needed_but = buts[i].but
 						
 				if buts[trues].place.y + 1 < $ScrollContainer/VBoxContainer.get_child_count():
-					wrong_but_pos = $ScrollContainer/VBoxContainer.get_child(buts[trues].place.y + 1).global_position
+					wrong_but = $ScrollContainer/VBoxContainer.get_child(buts[trues].place.y + 1)
+					wrong_but_pos = wrong_but.global_position
 				else:
 					# я надеюсь этот  + 1 не будет иметь баг
 					wrong_but_pos = Vector2($ScrollContainer.global_position.x, 

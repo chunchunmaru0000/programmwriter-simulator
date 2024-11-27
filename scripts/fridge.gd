@@ -42,6 +42,8 @@ func eat_owned_product(but, product) -> void:
 				Singleton.add_hunger(int(effect.value))
 			"Жажда":
 				Singleton.add_thirst(int(effect.value))
+			"Время":
+				Singleton.add_time(abs(int(effect.value)))
 		
 		
 func toss_owned_product(but, product) -> void:

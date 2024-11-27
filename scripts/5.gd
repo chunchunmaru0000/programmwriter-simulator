@@ -26,7 +26,7 @@ var all_products = [
 		["res://audio/piva-mnogo-pil-v-svobodnoe-vremya.mp3"]),
  	Product.new("Вобла",         9,   140,  15,   -7,   1,    year, [], 
 		["res://audio/i-rybku (mp3cut.net).mp3"]),
-	Product.new("Водка",         10,  249,  0,    20,   1,    year**10,
+	Product.new("Водка",         10,  249,  0,    20,   1,    year**4,
 		[Effect.new("Сонность", "Сон", 4), 
 		 Effect.new("Вредность", "Здоровье", -10)],
 		["res://audio/vsyu-vodku-vyipit-nevozmojo-no-stremitsya-k-etomu-nado.mp3"]),
