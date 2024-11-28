@@ -31,8 +31,9 @@ func _on_load_pressed() -> void:
 func _on_file_dialog_file_selected(path: String) -> void:
 	Singleton.load_progress($"../FileDialog".current_file)
 	if Singleton.hp < 1:
-		Singleton.the_end = true
-	get_tree().change_scene_to_file("res://scenes/game.tscn")
+		get_tree().change_scene_to_file("res://scenes/ending.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/game.tscn")
 	
 	
 func _on_quit_pressed() -> void:

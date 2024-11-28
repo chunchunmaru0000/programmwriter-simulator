@@ -13,7 +13,6 @@ var time = "0:08:00"
 var hunger_per_hour = 5
 var thirst_per_hour = 5
 var sleep_koef = 2.
-var the_end: bool = false
 
 var money = 500
 var fridge: Array = []
@@ -301,8 +300,7 @@ func add_time(to, add_sleep: bool=true) -> void:
 			#remove_fridge_at(get_product_index(product))
 	
 func ending() -> void:
-	the_end = true
-	go_to("res://scenes/game.tscn")
+	go_to("res://scenes/ending.tscn")
 	
 func add_hunger(to) -> void:
 	hunger += int(to)
