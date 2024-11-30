@@ -19,6 +19,7 @@ var strokes: PackedStringArray = text_bez_n.split('\n')
 var all_words_ordered: Array
 var tab_text: String = '        '
 var final_tab_text: String = '  ' + tab_text + '  '
+var help_pressed_times: int = 0
 
 
 var r_press: bool = false
@@ -487,9 +488,11 @@ func _on_start_but_pressed() -> void:
 
 		Singleton.money += task.price
 		Singleton.did_task = true
-		Singleton.add_time(ceil(task.code_name / 10.))
 		
-		var chasov: String = str(ceil(task.code_name / 10.)) + ' '
+		var time_passed = max(3, ceil(task.code_name / 10.) + floor(help_pressed_times / 5.))
+		Singleton.add_time(time_passed)
+		
+		var chasov: String = str(time_passed) + ' '
 		var chas = int(chasov[chasov.length() - 2])
 		chas = 'час' if chas == 1 else 'часа' if chas > 1 and chas < 5 else 'часов'
 		
@@ -499,7 +502,7 @@ func _on_start_but_pressed() -> void:
 			'Капитал: ' + str(Singleton.money - task.price) + c_str('ffb300', ' -> ') + c_str('66ff66', str(Singleton.money)) + '\n' + \
 			'Времени прошло: ' + chasov + chas
 	else:
-		#может чтото типа вы даун будет не знаю
+		help_pressed_times += 1
 		do_buts_coloring()
 
 
@@ -527,6 +530,8 @@ func _on_lamp_pressed() -> void:
 			break
 	
 	if trues != buts.size():
+		help_pressed_times += 1
+		
 		var wrong_but_pos: Vector2
 		var needed_but: Button
 		

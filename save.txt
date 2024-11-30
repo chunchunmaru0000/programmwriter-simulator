@@ -1,18 +1,18 @@
-hp 1000
+hp -776
 money 1459
-hunger 0
-thirst 0
+hunger 200
+thirst 200
 sleep 0
-time 121:21:00
+time 123:21:00
 uslugi 100<usluga>100<usluga>500<usluga>300
-ills 
+ills l_dehydration<ill>dehydration<ill>l_starvation<ill>starvation
 didexps Python<did>0|1|2|3|5|4<exp>22<didexp>C#<did><exp>13<didexp>JS<did><exp>10
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>353<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>352<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>353<product_param>23<product_param>8<product_param>8<product_param><product_param>
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>353<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>352<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>353<product_param>23<product_param>8<product_param>8<product_param><product_param>
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>353<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>352<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
-Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>353<product_param>23<product_param>8<product_param>8<product_param><product_param>
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>351<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>350<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>351<product_param>23<product_param>8<product_param>8<product_param><product_param>
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>351<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>350<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>351<product_param>23<product_param>8<product_param>8<product_param><product_param>
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>351<product_param>23<product_param>10<product_param>10<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Квас<product_param>7<product_param>65<product_param>0<product_param>8<product_param>0<product_param>25<product_param>350<product_param>23<product_param>10<product_param>9<product_param><product_param>res://audio/putin-kvasku-to-mahnuli-uzhe-s-utra.mp3
+Гречка<product_param>0<product_param>36<product_param>20<product_param>0<product_param>0<product_param>50<product_param>351<product_param>23<product_param>8<product_param>8<product_param><product_param>

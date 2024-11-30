@@ -16,6 +16,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="Out" type="Label" parent="ColorRect"]
 self_modulate = Color(1, 1, 1, 0.6)
+layout_mode = 0
 offset_left = 124.0
 offset_top = 849.0
 offset_right = 772.0
@@ -44,6 +45,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_k4ho5")
 
 [node name="Line" type="ColorRect" parent="ColorRect"]
 self_modulate = Color(1, 0.701961, 0, 1)
+layout_mode = 0
 offset_left = 84.0
 offset_top = 665.0
 offset_right = 588.0
