@@ -13,13 +13,16 @@ var holder0: Button = null:
 			holder0.queue_free()
 		holder0 = value
 
-var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task_path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')[-1]
+var text: String = '' if Singleton.did_task else FileAccess.open(Singleton.task.path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')[-1]
 var text_bez_n = text.replace('<n///>', '')
 var strokes: PackedStringArray = text_bez_n.split('\n')
 var all_words_ordered: Array
 var tab_text: String = '        '
 var final_tab_text: String = '  ' + tab_text + '  '
 var help_pressed_times: int = 0
+
+var tabs: bool 
+var slash_n: bool
 
 
 var r_press: bool = false
@@ -52,9 +55,9 @@ class ButConcPlaceText:
 
 
 func get_words() -> Array:
-	if Singleton.slash_n and Singleton.tabs:
+	if slash_n and tabs:
 		return all_words_ordered.duplicate(true)
-	elif Singleton.slash_n and not Singleton.tabs:
+	elif slash_n and not tabs:
 		return all_words_ordered.duplicate(true). \
 		filter(func(word: String): return not word.strip_edges() in ['<t///>', ''])
 	else:
@@ -65,7 +68,7 @@ func get_words() -> Array:
 func get_buts() -> Array:
 	var buts: Array
 	
-	if Singleton.slash_n and Singleton.tabs:
+	if slash_n and tabs:
 		var j: int = -1
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
@@ -84,7 +87,7 @@ func get_buts() -> Array:
 		if buts:# buts.remove_at(buts.size() - 1)
 			while buts[-1].text == '<n///>':
 				buts.remove_at(buts.size() - 1)
-	elif Singleton.slash_n and not Singleton.tabs:
+	elif slash_n and not tabs:
 		var j: int = -1
 		for panel: PanelContainer in $ScrollContainer/VBoxContainer.get_children():
 			var hcont: HBoxContainer = panel.get_child(0)
@@ -302,6 +305,9 @@ func _ready() -> void:
 	
 	if Singleton.did_task:
 		return
+		
+	tabs = Singleton.task.lang.data.tabs
+	slash_n = Singleton.task.lang.data.slash_n
 
 	$TZPanel/RichTextLabel.text = Singleton.task.text
 	
@@ -536,8 +542,8 @@ func _on_lamp_pressed() -> void:
 		var needed_but: Button
 		
 		var wrong_but: Button = null
-		
-		if Singleton.slash_n:
+
+		if slash_n:
 			if words[trues] == '<n///>' and buts[trues].text != '<n///>':
 				for i in range(trues, buts.size()):
 					if words[trues + 1] == buts[i].text:

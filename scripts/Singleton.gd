@@ -40,9 +40,6 @@ var ills: Dictionary = {
 
 var task
 var did_task: bool = true
-var task_path: String
-var slash_n: bool = true
-var tabs: bool = true
 
 var learn: bool = false
 var didexps: Dictionary

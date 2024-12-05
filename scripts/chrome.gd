@@ -164,9 +164,6 @@ func get_new_panel(style: StyleBoxFlat, pos: String, padding: int) -> PanelConta
 
 
 func take_task(task: Task) -> void:
-	Singleton.task_path = task.path
-	Singleton.tabs = task.lang.data.tabs
-	Singleton.slash_n = task.lang.data.slash_n
 	Singleton.task = task
 	Singleton.did_task = false
 	Singleton.go_to("res://scenes/visual_studio.tscn")
@@ -605,7 +602,7 @@ func draw_money() -> void:
 				if code_name <= lang.data.exp + levels_plus:
 					var datas = FileAccess.open(code_path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')
 					tasks.append(Task.new(lang, code_path, code_name, datas[1], int(datas[2]), datas[0], datas[3]))
-					#tasks.append(Task.new(lang, code_path, code_name, FileAccess.open(code_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[1]))
+
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
 	all_tasks = tasks
 	
@@ -730,22 +727,10 @@ func draw_money_of(tasks: Array) -> void:
 	for task: Task in tasks:
 		if task.code_name in task.lang.data.did:
 			continue
-		
-		#var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
-		#var title_text: String = datas[0]
-		#var desc_text: String = datas[1]
-		#var price_value: int = int(datas[2])
-		#var task_code_text: String = datas[3]
-		#task.price = price_value
-		var title_text: String = task.title
-		var desc_text: String = task.text
-		var price_value: int = task.price
-		var task_code_text: String = task.code
-		
-		
+
 		var title: Label = Label.new()
 		title.custom_minimum_size = Vector2(text_wide, 22)
-		title.text = title_text
+		title.text = task.title
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		title.add_theme_color_override('font_color', Color('#009400'))
 		title.add_theme_font_size_override('font_size', 20)
@@ -754,7 +739,7 @@ func draw_money_of(tasks: Array) -> void:
 		var desc: Label = Label.new()
 		desc.custom_minimum_size = Vector2(text_wide, 0)
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		desc.text = desc_text
+		desc.text = task.text
 		desc.add_theme_color_override('font_color', Color('#000000'))
 		desc.add_theme_font_size_override('font_size', 14)
 		
@@ -764,7 +749,7 @@ func draw_money_of(tasks: Array) -> void:
 		price_low.add_theme_color_override('font_color', Color('#009400'))
 		price_low.add_theme_font_size_override('font_size', 12)
 		var price_big: Label = Label.new()
-		price_big.text = str(price_value) + '₽'
+		price_big.text = str(task.price) + '₽'
 		price_big.add_theme_color_override('font_color', Color('#009400'))
 		price_big.add_theme_font_size_override('font_size', 20)
 		var price: HBoxContainer = HBoxContainer.new()
