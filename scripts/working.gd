@@ -489,7 +489,7 @@ func _on_start_but_pressed() -> void:
 		Singleton.money += task.price
 		Singleton.did_task = true
 		
-		var time_passed = max(3, ceil(task.code_name / 10.) + floor(help_pressed_times / 5.))
+		var time_passed = max(3, ceil(task.code_name / 10.)) + floor(help_pressed_times / 5.)
 		Singleton.add_time(time_passed)
 		
 		var chasov: String = str(time_passed) + ' '

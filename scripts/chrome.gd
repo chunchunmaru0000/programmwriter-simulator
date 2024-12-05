@@ -47,23 +47,27 @@ class Task:
 	var code_name: int
 	var text: String
 	var price: int
+	var title: String
+	var code: String
 	
-	func _init(lang: Lang, path: String, code_name: int, text: String, price: int=0) -> void:
+	func _init(lang: Lang, path: String, code_name: int, text: String, price: int, title: String, code: String) -> void:
 		self.lang = lang
 		self.path = path
 		self.code_name = code_name
 		self.text = text
 		self.price = price
+		self.title = title
+		self.code = code
 		
 
 class Site:
 	var id: int
-	var theme: String
+	var topic: String
 	var text: String
 	
-	func _init(id: int, theme: String, text: String) -> void:
+	func _init(id: int, topic: String, text: String) -> void:
 		self.id = id
-		self.theme = theme
+		self.topic = topic
 		self.text = text
 		
 
@@ -405,7 +409,7 @@ func draw_lang_learn(lang: Lang) -> void:
 	var half_y_padding: int = y_padding / 2
 	lang.learns.sort_custom(func(a: Site, b: Site): return a.id < b.id)
 	for site: Site in lang.learns:
-		combo_box_learns.add_item(str(site.id) + '.' + site.theme)
+		combo_box_learns.add_item(str(site.id) + '.' + site.topic)
 		
 		var icon: TextureRect = TextureRect.new()
 		icon.texture = lang.img
@@ -415,7 +419,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		var name_link: Label = Label.new()
 		name_link.text = \
 			lang.name.to_lower().replace(' ', '_') + '.org\n' + \
-			'https://www.' + lang.name.to_lower().replace(' ', '_') + '/' + site.theme.to_lower().replace(' ', '_') + '.org > doc\n'
+			'https://www.' + lang.name.to_lower().replace(' ', '_') + '/' + site.topic.to_lower().replace(' ', '_') + '.org > doc\n'
 		name_link.add_theme_color_override('font_color', Color('#bfbfbf'))
 		name_link.add_theme_font_size_override('font_size', 11)
 		
@@ -424,7 +428,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		hup.add_child(name_link)
 		
 		var title: LinkButton = LinkButton.new()
-		title.text = site.theme + " - Документация по " + lang.name
+		title.text = site.topic + " - Документация по " + lang.name
 		title.add_theme_color_override('font_color', Color('#94bcf6'))
 		title.add_theme_color_override('font_focus_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_pressed_color', Color('#c07ddd'))
@@ -475,7 +479,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		
 		hgrid.add_child(left)
 		hgrid.add_child(panel)
-		hgrid.name = site.theme
+		hgrid.name = site.topic
 		
 		$Scroll/Lenta.add_child(hgrid)
 
@@ -599,7 +603,9 @@ func draw_money() -> void:
 			if text.is_valid_int():
 				var code_name: int = int(text)
 				if code_name <= lang.data.exp + levels_plus:
-					tasks.append(Task.new(lang, code_path, code_name, FileAccess.open(code_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[1]))
+					var datas = FileAccess.open(code_path, FileAccess.READ).get_as_text().replace('\r', '').split('\n<data///>\n')
+					tasks.append(Task.new(lang, code_path, code_name, datas[1], int(datas[2]), datas[0], datas[3]))
+					#tasks.append(Task.new(lang, code_path, code_name, FileAccess.open(code_path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')[1]))
 	tasks.sort_custom(func(a: Task, b: Task): return a.code_name < b.code_name)
 	all_tasks = tasks
 	
@@ -725,12 +731,16 @@ func draw_money_of(tasks: Array) -> void:
 		if task.code_name in task.lang.data.did:
 			continue
 		
-		var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
-		var title_text: String = datas[0]
-		var desc_text: String = datas[1]
-		var price_value: int = int(datas[2])
-		var task_code_text: String = datas[3]
-		task.price = price_value
+		#var datas = FileAccess.open(task.path, FileAccess.READ).get_as_text().split('\r\n<data///>\r\n')
+		#var title_text: String = datas[0]
+		#var desc_text: String = datas[1]
+		#var price_value: int = int(datas[2])
+		#var task_code_text: String = datas[3]
+		#task.price = price_value
+		var title_text: String = task.title
+		var desc_text: String = task.text
+		var price_value: int = task.price
+		var task_code_text: String = task.code
 		
 		
 		var title: Label = Label.new()
