@@ -145,8 +145,8 @@ func swap_from_to(sender: Button) -> void:
 		var from_parrent: HBoxContainer = from.get_parent()
 		var to_parrent: HBoxContainer = to.get_parent()
 		
-		var from_place: int = from.get_index() #child_place(from, from_parrent)
-		var to_place: int = to.get_index() #child_place(to, to_parrent)
+		var from_place: int = from.get_index()
+		var to_place: int = to.get_index()
 		
 		from_parrent.remove_child(from)
 		to_parrent.remove_child(to)
@@ -191,15 +191,6 @@ func clone_but(sender: Button) -> Button:
 	clone.custom_minimum_size = sender.size
 	but_add_themes(clone)
 	return clone
-
-
-func child_place(sender: Button, parrent: HBoxContainer) -> int:
-	var place: int = 0
-	for child in parrent.get_children():
-		if child == sender:
-			break
-		place += 1
-	return place
 
 
 func but_up(sender: Button) -> void:
