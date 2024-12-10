@@ -145,8 +145,8 @@ func swap_from_to(sender: Button) -> void:
 		var from_parrent: HBoxContainer = from.get_parent()
 		var to_parrent: HBoxContainer = to.get_parent()
 		
-		var from_place: int = child_place(from, from_parrent)
-		var to_place: int = child_place(to, to_parrent)
+		var from_place: int = from.get_index() #child_place(from, from_parrent)
+		var to_place: int = to.get_index() #child_place(to, to_parrent)
 		
 		from_parrent.remove_child(from)
 		to_parrent.remove_child(to)
