@@ -23,6 +23,8 @@ var help_pressed_times: int = 0
 
 var tabs: bool 
 var slash_n: bool
+var global_words: Array
+var global_buts: Array
 
 
 var r_press: bool = false
@@ -118,22 +120,28 @@ func get_buts() -> Array:
 	return buts
 
 
+func get_to_global_word_and_buts() -> void:
+	global_words.clear()
+	global_buts.clear()
+	
+	global_words = get_words()
+	global_buts = get_buts()
+
+
 func estimate_code() -> bool:
 	if Singleton.did_task:
 		return false
 		
-	var words: Array = get_words()
-	var buts: Array = get_buts()
+	get_to_global_word_and_buts()
 	
-	if words.size() != buts.size():
+	if global_words.size() != global_buts.size():
 		return false
 		
-	var trues: int = 0
-	for i in words.size():
-		if words[i] == buts[i].text:
-			trues += 1
-	
-	return trues == words.size()
+	for i in global_words.size():
+		if global_words[i] == global_buts[i].text:
+			continue
+		return false
+	return true
 
 
 func swap_from_to(sender: Button) -> void:
@@ -500,7 +508,7 @@ func _on_start_but_pressed() -> void:
 			'Времени прошло: ' + chasov + chas
 	else:
 		help_pressed_times += 1
-		do_buts_coloring()
+		do_buts_coloring(false)
 
 
 func _on_start_button_down() -> void:
@@ -532,7 +540,7 @@ func _on_lamp_pressed() -> void:
 		var wrong_but_pos: Vector2
 		var needed_but: Button
 		
-		var wrong_but: Button = null
+		var wrong_but = null
 
 		if slash_n:
 			if words[trues] == '<n///>' and buts[trues].text != '<n///>':
@@ -584,9 +592,12 @@ func _on_lamp_pressed() -> void:
 		do_buts_coloring()
 
 
-func do_buts_coloring() -> void:
-	var words: Array = get_words()
-	var buts: Array = get_buts()
+func do_buts_coloring(need_to_get: bool=true) -> void:
+	if need_to_get:
+		get_to_global_word_and_buts()
+
+	var words: Array = global_words
+	var buts: Array = global_buts
 	var trues: int = 0
 	var border_width_max = 4
 	var border_width = 0
