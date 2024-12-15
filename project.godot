@@ -25,6 +25,7 @@ window/size/viewport_width=648
 window/size/viewport_height=848
 window/size/mode=1
 window/size/resizable=false
+window/per_pixel_transparency/allowed=true
 
 [input]
 

@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cuhny837yqar6"]
+[gd_scene load_steps=3 format=3 uid="uid://cuhny837yqar6"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_0h66i"]
+[ext_resource type="Texture2D" uid="uid://bbsxisx01amrs" path="res://images/start_back.png" id="1_url06"]
 
 [node name="Start" type="Node2D"]
+
+[node name="StartBack" type="Sprite2D" parent="."]
+position = Vector2(325, 442)
+scale = Vector2(1.69, 1.69)
+texture = ExtResource("1_url06")
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3
@@ -43,12 +49,27 @@ text = "
 "
 
 [node name="FileDialog" type="FileDialog" parent="."]
+transparent_bg = true
 title = "Open a File"
 position = Vector2i(0, 36)
 size = Vector2i(650, 650)
+transparent = true
 ok_button_text = "Open"
 file_mode = 0
 access = 2
+show_hidden_files = true
+use_native_dialog = true
+
+[node name="Label" type="Label" parent="."]
+offset_left = 48.0
+offset_top = 88.0
+offset_right = 602.0
+offset_bottom = 207.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 42
+text = "Симулятор  Разработчика 
+Программного Кода"
+horizontal_alignment = 1
 
 [connection signal="button_down" from="Menu/VBoxContainer/NewGame" to="Menu" method="_on_newgame_button_down"]
 [connection signal="button_down" from="Menu/VBoxContainer/Load" to="Menu" method="_on_hui_button_down"]
