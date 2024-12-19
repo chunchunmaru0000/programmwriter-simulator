@@ -58,7 +58,7 @@ offset_left = 76.0
 offset_top = 673.0
 offset_right = 596.0
 offset_bottom = 841.0
-theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/normal_font_size = 24
 text = "Тут
 текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и текст и не текст"
 

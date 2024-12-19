@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c6ic2w21tv33y"]
+[gd_scene load_steps=15 format=3 uid="uid://c6ic2w21tv33y"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_nqbsp"]
 [ext_resource type="Texture2D" uid="uid://kbxxf6g407ck" path="res://images/5top.png" id="2_cu53h"]
@@ -14,8 +14,6 @@
 [ext_resource type="StyleBox" uid="uid://beh1w8kdfjjog" path="res://images/med/transparent.tres" id="12_0nqd2"]
 [ext_resource type="Texture2D" uid="uid://ckbw2gkbefliw" path="res://images/med/med_but_def.png" id="12_4oe04"]
 [ext_resource type="Texture2D" uid="uid://b1ao3vnpu8ovw" path="res://images/med/med_but_act.png" id="13_1r3g8"]
-
-[sub_resource type="Theme" id="Theme_nw4ga"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_nqbsp")
@@ -51,25 +49,30 @@ layout_mode = 2
 
 [node name="Hp" type="Label" parent="StatsHBox/Info0LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Здоровье
 "
 
 [node name="Money" type="Label" parent="StatsHBox/Info0LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Рубли
 "
 
 [node name="Hunger" type="Label" parent="StatsHBox/Info0LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Голод
 "
 
 [node name="Thirst" type="Label" parent="StatsHBox/Info0LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Жажда"
 
 [node name="Sleep" type="Label" parent="StatsHBox/Info0LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Сон"
 
 [node name="Info1LabelBox" type="VBoxContainer" parent="StatsHBox"]
@@ -77,74 +80,83 @@ layout_mode = 2
 
 [node name="Hp" type="Label" parent="StatsHBox/Info1LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "0"
 
 [node name="Money" type="Label" parent="StatsHBox/Info1LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "0"
 
 [node name="Hunger" type="Label" parent="StatsHBox/Info1LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "0
 "
 
 [node name="Thirst" type="Label" parent="StatsHBox/Info1LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "0"
 
 [node name="Sleep" type="Label" parent="StatsHBox/Info1LabelBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "0"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-offset_left = 480.0
-offset_top = 666.0
-offset_right = 598.0
-offset_bottom = 802.0
+offset_left = 456.0
+offset_top = 664.0
+offset_right = 574.0
+offset_bottom = 800.0
 scale = Vector2(1.276, 1.2)
 
 [node name="5Top" type="Sprite2D" parent="VBoxContainer"]
-position = Vector2(59.0368, 15.3334)
-scale = Vector2(0.122146, 0.203948)
+position = Vector2(65.8308, 15.8334)
+scale = Vector2(0.136, 0.2)
 texture = ExtResource("2_cu53h")
 
 [node name="FridgeTop" type="Sprite2D" parent="VBoxContainer"]
-position = Vector2(59.103, 50.3751)
-scale = Vector2(0.266227, 0.208896)
+position = Vector2(65.8307, 50.8334)
+scale = Vector2(0.294334, 0.202097)
 texture = ExtResource("3_oyk8c")
 
 [node name="Pc" type="Sprite2D" parent="VBoxContainer"]
-position = Vector2(59.0878, 85.5834)
-scale = Vector2(0.727004, 0.191468)
+position = Vector2(66.6144, 85.8334)
+scale = Vector2(0.808, 0.187)
 texture = ExtResource("5_ad716")
 
 [node name="Bed" type="Sprite2D" parent="VBoxContainer"]
-position = Vector2(59.2159, 120.125)
-scale = Vector2(0.147992, 0.0649104)
+position = Vector2(65.8307, 120)
+scale = Vector2(0.166, 0.064)
 texture = ExtResource("6_c0t1h")
 
 [node name="ButtonsVBox" type="VBoxContainer" parent="."]
-offset_left = 480.0
-offset_top = 666.0
-offset_right = 598.0
-offset_bottom = 802.0
+offset_left = 456.0
+offset_top = 664.0
+offset_right = 588.0
+offset_bottom = 800.0
 scale = Vector2(1.27626, 1.19995)
 
 [node name="5" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "
 "
 
 [node name="Fridge" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Холодильник"
 
 [node name="Work" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Компьютер"
 
 [node name="Sleep" type="Button" parent="ButtonsVBox"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "Спать"
 
 [node name="Time" type="Label" parent="."]
@@ -153,18 +165,17 @@ offset_top = 24.0
 offset_right = 479.0
 offset_bottom = 47.0
 scale = Vector2(1.56829, 1.64659)
-theme_override_constants/shadow_offset_x = 4
-theme_override_constants/shadow_offset_y = 4
-theme_override_constants/outline_size = 4
-theme_override_constants/shadow_outline_size = 4
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 20
 text = "День 0"
 
 [node name="Back" type="Button" parent="."]
+custom_minimum_size = Vector2(0, 39)
 offset_left = 24.0
 offset_top = 24.0
 offset_right = 208.0
 offset_bottom = 56.0
-theme = SubResource("Theme_nw4ga")
+theme_override_font_sizes/font_size = 25
 text = "Сохранить и выйти"
 
 [node name="ClockAnim" type="AnimatedSprite2D" parent="."]

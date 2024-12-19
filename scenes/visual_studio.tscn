@@ -314,11 +314,11 @@ texture = ExtResource("25_ykosl")
 
 [node name="Label" type="Label" parent="TZPanel"]
 layout_mode = 0
-offset_left = 26.0
-offset_top = -1.0
-offset_right = 99.0
-offset_bottom = 27.0
-theme_override_font_sizes/font_size = 20
+offset_left = 27.0
+offset_top = 3.0
+offset_right = 100.0
+offset_bottom = 31.0
+theme_override_font_sizes/font_size = 22
 text = "Задача"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="TZPanel"]
@@ -328,7 +328,7 @@ offset_top = 37.0
 offset_right = 386.5
 offset_bottom = 128.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 20
 
 [node name="tzUpGrab" type="Button" parent="TZPanel"]
 self_modulate = Color(1, 1, 1, 0)
@@ -382,11 +382,11 @@ texture = ExtResource("25_ykosl")
 
 [node name="Label" type="Label" parent="WinXpHelp"]
 layout_mode = 0
-offset_left = 23.0
-offset_top = -1.0
-offset_right = 112.0
-offset_bottom = 27.0
-theme_override_font_sizes/font_size = 20
+offset_left = 26.0
+offset_top = 3.0
+offset_right = 115.0
+offset_bottom = 31.0
+theme_override_font_sizes/font_size = 22
 text = "Правила"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="WinXpHelp"]
@@ -396,7 +396,7 @@ offset_top = 37.0
 offset_right = 386.5
 offset_bottom = 128.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 20
 bbcode_enabled = true
 text = "1. Задача считается выполненой, если все блоки кода стоят в допустимых значениях.
 2. Все языки программирования(ЯП) имеют два параметра - отступы и строки. 

@@ -56,11 +56,13 @@ stream = ExtResource("6_3xosl")
 
 [node name="money" type="Label" parent="."]
 modulate = Color(0, 1, 0, 1)
-offset_left = 336.0
-offset_top = 64.0
-offset_right = 513.0
-offset_bottom = 87.0
+offset_left = 312.0
+offset_top = 58.0
+offset_right = 560.0
+offset_bottom = 85.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 26
 text = "Ваши средства: 0 руб."
 
 [node name="Timer" type="Timer" parent="."]

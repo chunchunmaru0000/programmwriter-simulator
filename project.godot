@@ -27,6 +27,10 @@ window/size/mode=1
 window/size/resizable=false
 window/per_pixel_transparency/allowed=true
 
+[gui]
+
+theme/custom_font="res://fonts/MonomakhUnicode.otf"
+
 [input]
 
 ui_left={

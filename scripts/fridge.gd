@@ -70,12 +70,14 @@ func _ready() -> void:
 		garbage_but.custom_minimum_size.x = anim_height
 		garbage_but.custom_minimum_size.y = but_height
 		garbage_but.connect("button_down", func(): toss_owned_product(garbage_but, product))
+		garbage_but.add_theme_font_size_override('font_size', 22)
 		
 		var eat_but = Button.new()
 		eat_but.text = "Съесть " + str(product.eatings) + "/" + str(product.eatings_max)
 		eat_but.custom_minimum_size.x = cont_wide - anim_height
 		eat_but.custom_minimum_size.y = but_height
 		eat_but.connect("button_down", func(): eat_owned_product(eat_but, product))
+		eat_but.add_theme_font_size_override('font_size', 22)
 		
 		var butsBox = HBoxContainer.new()
 		butsBox.custom_minimum_size.x = cont_wide
@@ -89,6 +91,7 @@ func _ready() -> void:
 		expr_rect.custom_minimum_size = Vector2(cont_wide, but_height)
 		expr_rect.color = Color(0.2, 0.2, 0.5, 0.5)
 		expr_rect.add_child(expr)
+		expr.add_theme_font_size_override('font_size', 22)
 		
 		var text_butsBox = VBoxContainer.new()
 		text_butsBox.custom_minimum_size.x = cont_wide
@@ -103,8 +106,12 @@ func _ready() -> void:
 		anim.custom_minimum_size.x = anim_wide
 		anim.custom_minimum_size.y = anim_height
 		
-		var info = Label.new()
+		var info = RichTextLabel.new()
+		info.bbcode_enabled = true
+		info.custom_minimum_size.x = info_wide
+		info.add_theme_font_size_override('normal_font_size', 24)
 		info.custom_minimum_size.y = anim_height
+
 		var effects_strs: Array = []
 		for effect in product.effects:
 			var str_eff: String = str(effect.value)
@@ -124,22 +131,15 @@ func _ready() -> void:
 			"\n".join(effects_strs)] if product.effects.size() > 0 else []))
 		var info_rect = ColorRect.new()
 		info_rect.custom_minimum_size.x = info_wide - 8
-		info_rect.custom_minimum_size.y = info.get_combined_minimum_size().y
+		info_rect.custom_minimum_size.y = anim_height
 		info_rect.color = Color(0.2, 0.2, 0.5, 0.5)
 		info_rect.add_child(info)
-		
-		var infoCont = ScrollContainer.new()
-		infoCont.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		infoCont.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_ALWAYS
-		infoCont.custom_minimum_size.x = info_wide
-		infoCont.custom_minimum_size.y = anim_height
-		infoCont.add_child(info_rect)
 		
 		var anim_infoBox = HBoxContainer.new()
 		anim_infoBox.custom_minimum_size.x = cont_wide
 		anim_infoBox.custom_minimum_size.y = anim_wide
 		anim_infoBox.add_child(anim)
-		anim_infoBox.add_child(infoCont)
+		anim_infoBox.add_child(info_rect)
 		
 		var mainBox = VBoxContainer.new()
 		mainBox.custom_minimum_size.x = cont_wide

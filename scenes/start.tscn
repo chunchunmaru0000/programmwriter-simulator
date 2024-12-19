@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cuhny837yqar6"]
+[gd_scene load_steps=4 format=3 uid="uid://cuhny837yqar6"]
 
 [ext_resource type="Script" path="res://scripts/menu.gd" id="1_0h66i"]
 [ext_resource type="Texture2D" uid="uid://bbsxisx01amrs" path="res://images/start_back.png" id="1_url06"]
+[ext_resource type="FontFile" uid="uid://cv865jid5q3ee" path="res://fonts/MonomakhUnicode.otf" id="3_t03cp"]
 
 [node name="Start" type="Node2D"]
 
@@ -28,25 +29,26 @@ theme_override_constants/separation = 8
 metadata/_edit_group_ = true
 
 [node name="NewGame" type="Button" parent="Menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-text = "
-Новая игра
-
+theme_override_fonts/font = ExtResource("3_t03cp")
+theme_override_font_sizes/font_size = 40
+text = "Новая игра
 "
 
 [node name="Load" type="Button" parent="Menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
-text = "
-Загрузить
-
-"
+theme_override_fonts/font = ExtResource("3_t03cp")
+theme_override_font_sizes/font_size = 30
+text = "Загрузить"
 
 [node name="Quit" type="Button" parent="Menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
-text = "
-Выйти
-
-"
+theme_override_fonts/font = ExtResource("3_t03cp")
+theme_override_font_sizes/font_size = 30
+text = "Выйти"
 
 [node name="FileDialog" type="FileDialog" parent="."]
 transparent_bg = true
@@ -66,6 +68,7 @@ offset_top = 88.0
 offset_right = 602.0
 offset_bottom = 207.0
 theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("3_t03cp")
 theme_override_font_sizes/font_size = 42
 text = "Симулятор  Разработчика 
 Программного Кода"

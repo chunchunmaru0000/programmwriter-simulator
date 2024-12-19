@@ -42,6 +42,8 @@ var chooser_exists: bool = false
 func _on_sleep_pressed() -> void:
 	if not chooser_exists:
 		chooser_exists = true
+		var ask_pos_x = $VBoxContainer.global_position.x - 125
+		var but_size_x = 44
 		
 		var trans_but = Button.new()
 		trans_but.size = Vector2(668, 868)
@@ -58,15 +60,15 @@ func _on_sleep_pressed() -> void:
 		
 		var ask: Label = Label.new()
 		ask.text = "Спать\n" + str(1) + "час?"
-		ask.position = Vector2(360, 746)
-		ask.add_theme_font_size_override('font_size', 18)
+		ask.position = Vector2(ask_pos_x, 746)
+		ask.add_theme_font_size_override('font_size', 22)
 		add_child(ask)
 		
 		var sleep_chooser: VScrollBar = VScrollBar.new()
 		#sleep_chooser.size = Vector2(24, 24 * 24)
 		#sleep_chooser.position = Vector2(448, 254)#566)
 		sleep_chooser.size = Vector2(24, 24 * 12)
-		sleep_chooser.position = Vector2(448, 254 + 24 * 12)#566)
+		sleep_chooser.position = Vector2(ask_pos_x + but_size_x * 2 + 6, 254 + 24 * 12)#448#566)
 		sleep_chooser.min_value = 1
 		sleep_chooser.max_value = 25
 		sleep_chooser.step = 1
@@ -93,9 +95,10 @@ func _on_sleep_pressed() -> void:
 		add_child(sleep_chooser)
 		
 		var yes: Button = Button.new()
+		yes.add_theme_font_size_override('font_size', 22)
 		yes.text = 'Да'
-		yes.size = Vector2(44, 20)
-		yes.position = Vector2(360, 800)
+		yes.size = Vector2(but_size_x, 22)
+		yes.position = Vector2(ask_pos_x, 800)
 		add_child(yes)
 		yes.connect('button_up', func():
 			Singleton.add_time(sleep_chooser.value, false)
@@ -103,9 +106,10 @@ func _on_sleep_pressed() -> void:
 		)
 		
 		var no: Button = Button.new()
+		no.add_theme_font_size_override('font_size', 22)
 		no.text = 'Нет'
 		no.size = yes.size
-		no.position = Vector2(360 + 44, 800)
+		no.position = Vector2(ask_pos_x + but_size_x, 800)
 		add_child(no)
 		
 		no.connect('button_up', func():

@@ -418,7 +418,7 @@ func draw_lang_learn(lang: Lang) -> void:
 			lang.name.to_lower().replace(' ', '_') + '.org\n' + \
 			'https://www.' + lang.name.to_lower().replace(' ', '_') + '/' + site.topic.to_lower().replace(' ', '_') + '.org > doc\n'
 		name_link.add_theme_color_override('font_color', Color('#bfbfbf'))
-		name_link.add_theme_font_size_override('font_size', 11)
+		name_link.add_theme_font_size_override('font_size', 13)
 		
 		var hup: HBoxContainer = HBoxContainer.new()
 		hup.add_child(icon)
@@ -431,7 +431,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		title.add_theme_color_override('font_pressed_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		title.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
-		title.add_theme_font_size_override('font_size', 18)
+		title.add_theme_font_size_override('font_size', 21)
 
 		var desc: RichTextLabel = RichTextLabel.new()
 		desc.remove_child(desc.get_v_scroll_bar())
@@ -440,7 +440,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		desc.add_theme_color_override('default_color', Color('#bfbfbf'))
-		desc.add_theme_font_size_override('normal_font_size', 14)
+		desc.add_theme_font_size_override('normal_font_size', 17)
 		desc.custom_minimum_size.y = 3 * desc_line_size
 		#desc.max_lines_visible = 3
 		desc.text = do_some_text_magic(site.text.replace('\r', ''), lang)
@@ -453,7 +453,7 @@ func draw_lang_learn(lang: Lang) -> void:
 		more.add_theme_color_override('font_pressed_color', Color('#c07ddd'))
 		more.add_theme_color_override('font_hover_color', Color('#c07ddd'))
 		more.add_theme_color_override('font_hover_pressed_color', Color('#c07ddd'))
-		more.add_theme_font_size_override('font_size', 12)
+		more.add_theme_font_size_override('font_size', 15)
 		more.connect('button_down', func(): more_text(desc, title, more, desc_line_size))
 		title.connect('button_down', func(): more_text(desc, title, more, desc_line_size))
 		
@@ -498,7 +498,7 @@ func draw_learn() -> void:
 	var combo_box_style: StyleBoxFlat = load("res://pc_images/chrome/learn/combo_box_def.tres")
 	var combo_box: OptionButton = OptionButton.new() 
 	combo_box.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
-	combo_box.add_theme_font_size_override('font_size', 12)
+	combo_box.add_theme_font_size_override('font_size', 14)
 	combo_box.position = Vector2(150, 30)
 	combo_box.custom_minimum_size.x = 69
 	combo_box.add_theme_stylebox_override('normal', combo_box_style)
@@ -510,7 +510,7 @@ func draw_learn() -> void:
 	
 	combo_box_learns = OptionButton.new() 
 	combo_box_learns.text_overrun_behavior = TextServer.OVERRUN_TRIM_CHAR
-	combo_box_learns.add_theme_font_size_override('font_size', 12)
+	combo_box_learns.add_theme_font_size_override('font_size', 14)
 	combo_box_learns.position = Vector2(315, 30)
 	combo_box_learns.custom_minimum_size.x = 90
 	combo_box_learns.add_theme_stylebox_override('normal', combo_box_style)
@@ -577,13 +577,13 @@ func do_combo_box() -> OptionButton:
 	return combo_box
 	
 
-func do_label(text: String, font_size: int=14, color: Color=Color('#000000')) -> Label:
+func do_label(text: String, font_size: int=20, color: Color=Color('#000000')) -> Label:
 	var label: Label = Label.new()
 	label.text = text
 	label.add_theme_color_override('font_color', color)
 	label.add_theme_font_size_override('font_size', font_size)
 	return label
-	
+
 
 func do_box(type, children: Array):
 	var box = type.new()
@@ -621,8 +621,10 @@ func draw_money() -> void:
 	var combo_box_style: StyleBoxFlat = panel_style
 	
 	var title: Label = do_label('Фильтры', 26)
+	title.add_theme_font_size_override('font_size', 25)
 	#title.custom_minimum_size = Vector2(text_wide, 30)
 	var budget: Label = do_label('Баланс: ' + str(Singleton.money) + '₽')
+	budget.add_theme_font_size_override('font_size', 16)
 	var tbh: HBoxContainer = HBoxContainer.new()
 	tbh.custom_minimum_size = Vector2(text_wide, 30)
 	title.size_flags_horizontal = Control.SIZE_EXPAND
@@ -634,21 +636,25 @@ func draw_money() -> void:
 	
 	
 	combo_box_lan = do_combo_box()
+	combo_box_lan.add_theme_font_size_override('font_size', 20)
 	var hbox_lan: HBoxContainer = HBoxContainer.new()
 	hbox_lan.add_child(do_label("Язык: "))
 	hbox_lan.add_child(combo_box_lan)
 	
 	combo_box_hard = do_combo_box()
+	combo_box_hard.add_theme_font_size_override('font_size', 20)
 	var hbox_hard: HBoxContainer = HBoxContainer.new()
 	hbox_hard.add_child(do_label("Сложность: "))
 	hbox_hard.add_child(combo_box_hard)
 	
 	combo_box_exp = do_combo_box()
+	combo_box_exp.add_theme_font_size_override('font_size', 20)
 	var hbox_exp: HBoxContainer = HBoxContainer.new()
 	hbox_exp.add_child(do_label("Стаж языка: "))
 	hbox_exp.add_child(combo_box_exp)
 	
 	combo_box_money = do_combo_box()
+	combo_box_money.add_theme_font_size_override('font_size', 20)
 	var hbox_money: HBoxContainer = HBoxContainer.new()
 	hbox_money.add_child(do_label("Бюджет: "))
 	hbox_money.add_child(combo_box_money)
@@ -733,7 +739,7 @@ func draw_money_of(tasks: Array) -> void:
 		title.text = task.title
 		title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		title.add_theme_color_override('font_color', Color('#009400'))
-		title.add_theme_font_size_override('font_size', 20)
+		title.add_theme_font_size_override('font_size', 26)
 		
 		
 		var desc: Label = Label.new()
@@ -741,17 +747,17 @@ func draw_money_of(tasks: Array) -> void:
 		desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		desc.text = task.text
 		desc.add_theme_color_override('font_color', Color('#000000'))
-		desc.add_theme_font_size_override('font_size', 14)
+		desc.add_theme_font_size_override('font_size', 20)
 		
 		
 		var price_low: Label = Label.new()
 		price_low.text = 'Бюджет: '
 		price_low.add_theme_color_override('font_color', Color('#009400'))
-		price_low.add_theme_font_size_override('font_size', 12)
+		price_low.add_theme_font_size_override('font_size', 16)
 		var price_big: Label = Label.new()
 		price_big.text = str(task.price) + '₽'
 		price_big.add_theme_color_override('font_color', Color('#009400'))
-		price_big.add_theme_font_size_override('font_size', 20)
+		price_big.add_theme_font_size_override('font_size', 22)
 		var price: HBoxContainer = HBoxContainer.new()
 		price.add_child(price_low)
 		price.add_child(price_big)
@@ -762,7 +768,7 @@ func draw_money_of(tasks: Array) -> void:
 			'\nСтаж языка: ' + str(task.lang.data.exp) + \
 			'\nСложность задания: ' + str(task.code_name)
 		vbox_labels.add_theme_color_override('font_color', Color('#000000')) 
-		vbox_labels.add_theme_font_size_override('font_size', 14)
+		vbox_labels.add_theme_font_size_override('font_size', 16)
 		
 		
 		var icon: TextureRect = TextureRect.new()
@@ -789,6 +795,7 @@ func draw_money_of(tasks: Array) -> void:
 		to_do_but.add_theme_stylebox_override('focus',         preload("res://pc_images/chrome/money/to_do_but_act.tres"))
 		to_do_but.add_theme_stylebox_override('normal',        preload("res://pc_images/chrome/money/to_do_but_def.tres"))
 		to_do_but.connect("button_down", func(): take_task(task))
+		to_do_but.add_theme_font_size_override('font_size', 22)
 		
 		var vbox: VBoxContainer = VBoxContainer.new()
 		vbox.add_theme_constant_override('separation', 4)

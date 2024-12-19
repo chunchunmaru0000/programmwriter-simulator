@@ -109,6 +109,7 @@ func _ready() -> void:
 		else:
 			label.text = product.name
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override('font_size', 22)
 		
 		
 		var color_rect = ColorRect.new()
@@ -121,6 +122,7 @@ func _ready() -> void:
 		but.text = str(product.price) + "руб."
 		but.custom_minimum_size.x = column_wide
 		but.custom_minimum_size.y = 24
+		but.add_theme_font_size_override('font_size', 22)
 		
 		but.connect("button_down", func(): remove_owned_product(but, product))
 

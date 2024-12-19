@@ -198,6 +198,7 @@ func clone_but(sender: Button) -> Button:
 	clone.text = sender.text
 	clone.custom_minimum_size = sender.size
 	but_add_themes(clone)
+	clone.add_theme_font_size_override('font_size', 20)
 	return clone
 
 
@@ -287,6 +288,7 @@ func create_but(hcont: HBoxContainer, word: String) -> void:
 	but.text = '  ' + word + '  '
 	but_add_themes(but)
 	
+	but.add_theme_font_size_override('font_size', 20)
 	but.connect("button_down", func(): but_down(but))
 	but.connect("button_up", func(): but_up(but))
 	hcont.add_child(but)
